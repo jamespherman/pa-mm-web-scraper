@@ -1,18 +1,15 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+# --- Project-Specific ---
 
-# Other files and folders
-.settings/
+# Google API Credentials
+# !! DO NOT EVER COMMIT THIS FILE !!
+credentials.json
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
+# Python Virtual Environment
+.venv/
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+# Original MATLAB files
+*.mat
+*.m
+
+# OS-specific (if on macOS)
+.DS_Store
