@@ -3,7 +3,7 @@
 
 import pandas as pd
 from scrapers.iheartjane_scraper import fetch_iheartjane_data
-from scrapers.dutchie_scraper import get_dutchie_data # <-- ADD THIS
+from scrapers.dutchie_scraper import fetch_dutchie_data
 # from google_sheets_writer import write_to_google_sheet # We'll use this later
 
 # --- Define Stores ---
@@ -11,8 +11,8 @@ from scrapers.dutchie_scraper import get_dutchie_data # <-- ADD THIS
 IHEARTJANE_STORES = {
     "Maitri (PGH)": 2913,
     "Liberty (PGH)": 4909,
-    # "Rise": 2266, # Let's add more after we know this works
-    # "OR McKnight": 3906,
+    "Rise": 2266,
+    "OR McKnight": 3906,
 }
 
 def main():
@@ -29,7 +29,7 @@ def main():
             
     # --- 2. Run Dutchie Scraper ---
     print("\nStarting Dutchie Scraper...")
-    dutchie_df = get_dutchie_data()
+    dutchie_df = fetch_dutchie_data()
     if not dutchie_df.empty:
         all_dataframes.append(dutchie_df)
 

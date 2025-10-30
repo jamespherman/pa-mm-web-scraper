@@ -70,12 +70,12 @@ def extract_weight_from_cresco_name(name):
     name_lower = name.lower()
     
     # Pattern for 'g'
-    g_match = re.search(r'(\d+\.?\d*)\s*g', name_lower)
+    g_match = re.search(r'(\.?\d+\.?\d*)\s*g', name_lower)
     if g_match:
         return float(g_match.group(1))
         
     # Pattern for 'mg'
-    mg_match = re.search(r'(\d+\.?\d*)\s*mg', name_lower)
+    mg_match = re.search(r'(\.?\d+\.?\d*)\s*mg', name_lower)
     if mg_match:
         return float(mg_match.group(1)) / 1000.0
         
