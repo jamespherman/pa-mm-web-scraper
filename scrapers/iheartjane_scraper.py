@@ -143,17 +143,31 @@ def fetch_iheartjane_data(store_id, store_name):
         'jdm_version': '2.12.0'
     }
     
+    # This is the full list of facets the browser requested
+    # We will send the same list to look like a real request
+    full_search_facets = [
+        "activities", "aggregate_rating", "applicable_special_ids",
+        "available_weights", "brand_subtype", "brand", "bucket_price",
+        "category", "feelings", "has_brand_discount", "kind",
+        "percent_cbd", "percent_thc", "root_types", "compound_names"
+    ]
+
     while True:
-        # This is the payload we send, based on your "Request" payload
-        # We set "search_query" to "" to get ALL items
+        # This payload now much more closely matches the real browser request
         payload = {
+            "app_mode": "embedded",
+            "jane_device_id": "me7dtQx8hW9YlcYmnHPys", # Static ID from your request
+            "search_attributes": ["*"],
             "store_id": store_id,
+            "disable_ads": False,
+            "num_columns": 1,
+            "page_size": 60,
             "page": current_page,
-            "page_size": 60, # Get 60 at a time
-            "search_query": "",
-            "search_filter": f"store_id = {store_id}", # Filter for this store
-            "search_sort": "recommendation", # Default sort
-             "search_facets": ["kind"], # We don't need all facets, just ask for one
+            "placement": "menu_inline_table",
+            "search_facets": full_search_facets, # Use the full list
+            "search_filter": f"store_id = {store_id}",
+            "search_query": "", # Empty query to get ALL products
+            "search_sort": "recommendation"
         }
         
         try:
