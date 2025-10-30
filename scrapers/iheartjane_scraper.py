@@ -17,6 +17,49 @@ TERPENE_LIST = [
     'Guaiol', 'Humulene', 'alpha-Bisabolol', 'Camphene', 'Ocimene'
 ]
 
+# Map all possible name variations to the official terpene name
+TERPENE_MAPPING = {
+    # beta-Myrcene
+    'beta-myrcene': 'beta-Myrcene',
+    'myrcene': 'beta-Myrcene',
+    'b-myrcene': 'beta-Myrcene',
+    # Limonene
+    'limonene': 'Limonene',
+    'd-limonene': 'Limonene',
+    # beta-Caryophyllene
+    'beta-caryophyllene': 'beta-Caryophyllene',
+    'caryophyllene': 'beta-Caryophyllene',
+    'b-caryophyllene': 'beta-Caryophyllene',
+    # Terpinolene
+    'terpinolene': 'Terpinolene',
+    # Linalool
+    'linalool': 'Linalool',
+    # alpha-Pinene
+    'alpha-pinene': 'alpha-Pinene',
+    'a-pinene': 'alpha-Pinene',
+    # beta-Pinene
+    'beta-pinene': 'beta-Pinene',
+    'b-pinene': 'beta-Pinene',
+    # Caryophyllene Oxide
+    'caryophyllene oxide': 'Caryophyllene Oxide',
+    # Guaiol
+    'guaiol': 'Guaiol',
+    # Humulene
+    'humulene': 'Humulene',
+    'alpha-humulene': 'Humulene',
+    'a-humulene': 'Humulene',
+    # alpha-Bisabolol
+    'alpha-bisabolol': 'alpha-Bisabolol',
+    'bisabolol': 'alpha-Bisabolol',
+    'a-bisabolol': 'alpha-Bisabolol',
+    # Camphene
+    'camphene': 'Camphene',
+    # Ocimene
+    'ocimene': 'Ocimene',
+    'beta-ocimene': 'Ocimene',
+    'b-ocimene': 'Ocimene'
+}
+
 def parse_terpenes_from_text(text):
     """
     Uses regular expressions (regex) to find all terpenes in
@@ -25,30 +68,43 @@ def parse_terpenes_from_text(text):
     terp_data = {}
     if not text:
         return terp_data
-    
-    # This pattern looks for "Name : 1.234%"
-    # (?:...) is a non-capturing group
-    # ([\w-]+) captures the terpene name (e.g., "beta-Caryophyllene")
-    # [\s:]* matches the space or colon after the name
-    # ([\d\.]+) captures the number (e.g., "1.234")
-    pattern = r"([\w-]+)[\s:]*([\d\.]+)%"
-    
+
+    # This pattern now captures names with spaces and hyphens.
+    # e.g., "beta-Myrcene", "beta Myrcene", "b Myrcene"
+    pattern = r"([a-zA-Z\s-]+)[\s:]*([\d\.]+)%"
+
     matches = re.findall(pattern, text, re.IGNORECASE)
-    
+
     total_terps = 0
     for name, value in matches:
-        # Check if this is a terpene we're looking for
-        for official_name in TERPENE_LIST:
-            if official_name.lower() in name.lower():
-                val = float(value)
+        # Clean up the name and look it up in our mapping
+        clean_name = name.strip().lower()
+        official_name = TERPENE_MAPPING.get(clean_name)
+
+        if official_name:
+            val = float(value)
+            # Avoid double-counting if a name is matched twice
+            if official_name not in terp_data:
                 terp_data[official_name] = val
                 total_terps += val
-                break # Found it, move to the next match
-    
+
     if total_terps > 0:
-        terp_data['Total_Terps'] = total_terps
-        
+        # Round to 3 decimal places
+        terp_data['Total_Terps'] = round(total_terps, 3)
+
     return terp_data
+
+# --- Cannabinoid Definitions ---
+
+CANNABINOID_MAPPING = {
+    'thca_potency': 'THCa',
+    'cbd_potency': 'CBD',
+    'cbg_potency': 'CBG',
+    'cbn_potency': 'CBN',
+    'thc_potency': 'THC',
+    'delta_9_thc_potency': 'THC', # Map Delta-9 to THC
+    'delta_8_thc_potency': 'Delta-8 THC'
+}
 
 def parse_jane_product(product_hit, store_name):
     """
@@ -69,10 +125,32 @@ def parse_jane_product(product_hit, store_name):
         'Type': attrs.get('kind'),
         'Subtype': attrs.get('kind_subtype'),
         'Store': store_name,
-        'THC': attrs.get('percent_thc'), # Simpler!
-        'THCa': attrs.get('percent_thca'),
-        'CBD': attrs.get('percent_cbd'),
+        'THC': attrs.get('percent_thc'), # Default value
     }
+
+    # 1a. Get Potency Data from the Correct Field
+    # The data is in 'inventory_potencies', not the top level!
+    inventory_potencies = attrs.get('inventory_potencies', [])
+
+    # We prefer the 'gram' or 'eighth_ounce' potency data if available
+    target_potencies = {}
+    for pot in inventory_potencies:
+        # The 'price_id' is 'gram', 'eighth_ounce', 'half_ounce', etc.
+        price_id = pot.get('price_id', '')
+        if price_id in ['gram', 'eighth_ounce']:
+            target_potencies = pot
+            break # Found our preferred one, stop looking
+
+    # If we didn't find a preferred one, use the first available
+    if not target_potencies and inventory_potencies:
+        target_potencies = inventory_potencies[0]
+
+    # Now, extract all cannabinoids using our mapping
+    if target_potencies:
+        for api_field, our_field in CANNABINOID_MAPPING.items():
+            value = target_potencies.get(api_field)
+            if value is not None:
+                common_data[our_field] = value
 
     # 2. Get lab data (terpenes)
     # We'll parse the 'store_notes' or 'description' field
