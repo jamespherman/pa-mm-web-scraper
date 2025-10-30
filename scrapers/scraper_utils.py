@@ -8,9 +8,8 @@ import re
 
 def convert_to_grams(weight_str):
     """
-    Migrated from the MATLAB 'convertToGrams' function.
-    Takes a weight string (e.g., '1g', '1/8oz', '3.5g')
-    and returns the weight in grams as a float.
+    Converts a weight string (e.g., '1g', '1/8oz', '3.5g')
+    to a float representing the weight in grams.
     """
     if not isinstance(weight_str, str):
         return None
@@ -37,9 +36,5 @@ def convert_to_grams(weight_str):
     match_mg = re.match(r'([\d\.]+)\s*mg', weight_str)
     if match_mg:
         return float(match_mg.group(1)) / 1000.0
-        
-    # Handle 'half gram'
-    if weight_str in ['half gram', '0.5g', '0.5 g']:
-        return 0.5
-        
-    return None # Return None if no match
+
+    return None
