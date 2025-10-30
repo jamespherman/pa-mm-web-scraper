@@ -3,6 +3,7 @@
 
 import pandas as pd
 from scrapers.iheartjane_scraper import fetch_iheartjane_data
+from scrapers.dutchie_scraper import get_dutchie_data # <-- ADD THIS
 # from google_sheets_writer import write_to_google_sheet # We'll use this later
 
 # --- Define Stores ---
@@ -26,8 +27,14 @@ def main():
         if not df.empty:
             all_dataframes.append(df)
             
-    # --- 2. Run Other Scrapers (Future) ---
-    # ... (we will add dutchie, cresco, etc. here) ...
+    # --- 2. Run Dutchie Scraper ---
+    print("\nStarting Dutchie Scraper...")
+    dutchie_df = get_dutchie_data()
+    if not dutchie_df.empty:
+        all_dataframes.append(dutchie_df)
+
+    # --- 3. Run Other Scrapers (Future) ---
+    # ... (we will add cresco, etc. here) ...
 
     if not all_dataframes:
         print("\nNo data was scraped from any source. Exiting.")
