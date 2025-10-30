@@ -18,6 +18,8 @@ def convert_to_grams(weight_str):
     weight_str = weight_str.lower().strip()
     
     # Handle specific cases first
+    if weight_str == 'gram':
+        return 1.0
     if weight_str in ['1/8oz', 'eighth ounce', '1/8 oz', '3.5g', '3.5 g']:
         return 3.5
     if weight_str in ['1/4oz', 'quarter ounce', '1/4 oz', '7g', '7 g']:
