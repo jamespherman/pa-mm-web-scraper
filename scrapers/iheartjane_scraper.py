@@ -1,16 +1,14 @@
 # scrapers/iheartjane_scraper.py
-# This is the iHeartJane scraper.
+# This is the iHeartJane scraper, rebuilt with the new API.
 
 import requests
 import pandas as pd
+import re # Import the regular expression library
 from .scraper_utils import convert_to_grams # Import our new util function
 
-# --- Constants from your MATLAB code ---
-ALGOLIA_URL = "https://VFM4X0N23A-dsn.algolia.net/1/indexes/menu-products-production/query"
-ALGOLIA_HEADERS = {
-    'x-algolia-api-key': 'edc5435c65d771cecbd98bbd488aa8d3',
-    'x-algolia-application-id': 'VFM4X0N23A',
-}
+# --- New API Constants ---
+NEW_JANE_URL = "https://dmerch.iheartjane.com/v2/smart"
+NEW_JANE_API_KEY = "ce5f15c9-3d09-441d-9bfd-26e87aff5925"
 
 # Define the terpenes we want to extract
 TERPENE_LIST = [
@@ -19,131 +17,174 @@ TERPENE_LIST = [
     'Guaiol', 'Humulene', 'alpha-Bisabolol', 'Camphene', 'Ocimene'
 ]
 
-def parse_lab_data(lab_results):
+def parse_terpenes_from_text(text):
     """
-    Parses the 'lab_results' list from a product hit
-    and returns a clean dictionary of cannabinoids and terpenes.
+    Uses regular expressions (regex) to find all terpenes in
+    a block of text (like the 'store_notes' field).
     """
-    data = {}
-    if not lab_results:
-        return data
-
-    # Extract cannabinoids
-    data['THC'] = lab_results.get('THC', {}).get('value')
-    data['CBD'] = lab_results.get('CBD', {}).get('value')
-    data['THCa'] = lab_results.get('THCA', {}).get('value')
+    terp_data = {}
+    if not text:
+        return terp_data
     
-    # Extract terpenes
-    terpenes = lab_results.get('Terpenes', {})
-    if terpenes:
-        total_terps = 0
-        for terp_name in TERPENE_LIST:
-            # Terpene names in the API might not match our list exactly
-            # We'll try to find a close match
-            for api_terp_name, terp_data in terpenes.items():
-                if terp_name.lower() in api_terp_name.lower():
-                    value = terp_data.get('value')
-                    data[terp_name] = value
-                    if value:
-                        total_terps += value
-                    break # Found our match
-        data['Total_Terps'] = total_terps
+    # This pattern looks for "Name : 1.234%"
+    # (?:...) is a non-capturing group
+    # ([\w-]+) captures the terpene name (e.g., "beta-Caryophyllene")
+    # [\s:]* matches the space or colon after the name
+    # ([\d\.]+) captures the number (e.g., "1.234")
+    pattern = r"([\w-]+)[\s:]*([\d\.]+)%"
+    
+    matches = re.findall(pattern, text, re.IGNORECASE)
+    
+    total_terps = 0
+    for name, value in matches:
+        # Check if this is a terpene we're looking for
+        for official_name in TERPENE_LIST:
+            if official_name.lower() in name.lower():
+                val = float(value)
+                terp_data[official_name] = val
+                total_terps += val
+                break # Found it, move to the next match
+    
+    if total_terps > 0:
+        terp_data['Total_Terps'] = total_terps
         
-    return data
+    return terp_data
 
-def parse_iheartjane_product(hit, store_name):
+def parse_jane_product(product_hit, store_name):
     """
-    Parses a single product 'hit' from the Algolia response
-    and returns a list of dictionaries (one for each weight variant).
+    Parses a single product from the new "smart" API response.
     """
     product_variants = []
     
-    # 1. Get common data for this product
+    # All the good data is in 'search_attributes'
+    try:
+        attrs = product_hit['search_attributes']
+    except KeyError:
+        print("  ...skipped a product hit with missing 'search_attributes'")
+        return []
+
+    # 1. Get common data
     common_data = {
-        'Name': hit.get('name'),
-        'Brand': hit.get('brand'),
-        'Type': hit.get('kind'),
-        'Subtype': hit.get('kind_subtype'),
+        'Name': attrs.get('name'),
+        'Brand': attrs.get('brand'),
+        'Type': attrs.get('kind'),
+        'Subtype': attrs.get('kind_subtype'),
         'Store': store_name,
+        'THC': attrs.get('percent_thc'), # Simpler!
+        'THCa': attrs.get('percent_thca'),
+        'CBD': attrs.get('percent_cbd'),
     }
 
-    # 2. Get lab data
-    lab_data = parse_lab_data(hit.get('lab_results'))
-    common_data.update(lab_data) # Add lab data to the common data
+    # 2. Get lab data (terpenes)
+    # We'll parse the 'store_notes' or 'description' field
+    notes = attrs.get('store_notes', '')
+    if not notes:
+        notes = attrs.get('description', '')
+        
+    terpene_data = parse_terpenes_from_text(notes)
+    common_data.update(terpene_data) # Add all found terpenes
 
     # 3. Process price/weight variants
-    # The 'prices' dict maps weight to price (e.g., {"Gram": 15, "Eighth Ounce": 45})
-    if 'prices' in hit and hit['prices']:
-        for weight_str, price in hit['prices'].items():
-            if not price: # Skip if price is missing
-                continue
-
+    available_weights = attrs.get('available_weights', [])
+    if not available_weights:
+        # Fallback for "each" items
+        if attrs.get('price_each'):
             variant_data = common_data.copy()
-            variant_data['Price'] = float(price)
-            variant_data['Weight_Str'] = weight_str
-            # Use our utility function to standardize the weight
-            variant_data['Weight'] = convert_to_grams(weight_str)
-            
+            variant_data['Price'] = attrs.get('price_each')
+            # Check for specials
+            special_price = attrs.get('special_price_each', {}).get('discount_price')
+            if special_price:
+                variant_data['Price'] = float(special_price)
+                
+            variant_data['Weight_Str'] = "Each"
+            variant_data['Weight'] = None
             product_variants.append(variant_data)
-            
-    # Handle products with no 'prices' dict (e.g., some "Each" items)
-    elif hit.get('price_each'):
-        variant_data = common_data.copy()
-        variant_data['Price'] = float(hit['price_each'])
-        variant_data['Weight_Str'] = "Each"
-        variant_data['Weight'] = None # Can't determine grams for "Each"
-        product_variants.append(variant_data)
+        return product_variants # Return what we have
 
+    # Loop through the weights that are actually available
+    for weight_str in available_weights:
+        # e.g., "gram" -> "price_gram"
+        price_field = f"price_{weight_str.replace(' ', '_')}"
+        # e.g., "gram" -> "special_price_gram"
+        special_price_field = f"special_price_{weight_str.replace(' ', '_')}"
+
+        price = attrs.get(price_field)
+        
+        # Check for a special price
+        special_price_data = attrs.get(special_price_field, {})
+        if special_price_data and special_price_data.get('discount_price'):
+            price = float(special_price_data['discount_price'])
+
+        if not price:
+            continue # Skip if no price for this weight
+
+        variant_data = common_data.copy()
+        variant_data['Price'] = float(price)
+        variant_data['Weight_Str'] = weight_str
+        variant_data['Weight'] = convert_to_grams(weight_str)
+        product_variants.append(variant_data)
+            
     return product_variants
 
 def fetch_iheartjane_data(store_id, store_name):
     """
-    Fetches all product data for a specific iHeartJane store ID.
+    Fetches all product data for a specific iHeartJane store ID
+    using the new v2/smart API.
     """
     print(f"Fetching data for iHeartJane store: {store_name} (ID: {store_id})...")
     
     all_products = []
     current_page = 0
     
+    # These are the URL parameters, including our new API key
+    params = {
+        'jdm_api_key': NEW_JANE_API_KEY,
+        'jdm_source': 'monolith',
+        'jdm_version': '2.12.0'
+    }
+    
     while True:
-        # This is the payload (data) we send with our request
+        # This is the payload we send, based on your "Request" payload
+        # We set "search_query" to "" to get ALL items
         payload = {
-            "query": "",
-            "filters": f"store_id:{store_id}",
-            "hitsPerPage": 1000, # Get max hits per page
+            "store_id": store_id,
             "page": current_page,
-            "facets": ["*"]
+            "page_size": 60, # Get 60 at a time
+            "search_query": "",
+            "search_filter": f"store_id = {store_id}", # Filter for this store
+            "search_sort": "recommendation", # Default sort
+             "search_facets": ["kind"], # We don't need all facets, just ask for one
         }
         
         try:
-            # Make the POST request to the Algolia API
-            response = requests.post(ALGOLIA_URL, headers=ALGOLIA_HEADERS, json=payload)
-            response.raise_for_status() # Raise an error for bad responses (4xx, 5xx)
+            # Make the POST request
+            response = requests.post(NEW_JANE_URL, params=params, json=payload)
+            response.raise_for_status() # Raise an error for bad responses
             
             data = response.json()
-            hits = data.get('hits', [])
+            hits = data.get('products', [])
             
             if not hits:
-                print("No more hits found.")
-                break # Exit the loop if no more products
+                print("  ...No more hits found.")
+                break # Exit the loop
                 
             print(f"  ...retrieved page {current_page} with {len(hits)} products.")
 
-            # Process each product 'hit' from the response
+            # Process each product hit
             for hit in hits:
-                product_variants = parse_iheartjane_product(hit, store_name)
-                all_products.extend(product_variants) # Add the list of variants
+                product_variants = parse_jane_product(hit, store_name)
+                all_products.extend(product_variants)
 
-            # Check if we are on the last page
-            if data.get('page') >= data.get('nbPages', 0) - 1:
-                print("All pages processed.")
+            # Check if this was the last page
+            if len(hits) < payload['page_size']:
+                print("  ...All pages processed (last page was not full).")
                 break
                 
             current_page += 1
             
         except requests.exceptions.RequestException as e:
             print(f"Error fetching data for store {store_id}: {e}")
-            break # Exit loop on error
+            break 
             
     if all_products:
         print(f"Successfully fetched {len(all_products)} product variants for {store_name}.")
@@ -152,3 +193,4 @@ def fetch_iheartjane_data(store_id, store_name):
     else:
         print(f"No data fetched for {store_name}.")
         return pd.DataFrame()
+
