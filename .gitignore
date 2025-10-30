@@ -7,6 +7,10 @@ credentials.json
 # Python Virtual Environment
 .venv/
 
+# Python build artifacts
+__pycache__/
+*.pyc
+
 # Original MATLAB files
 *.mat
 *.m
