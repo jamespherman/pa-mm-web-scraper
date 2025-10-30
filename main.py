@@ -4,15 +4,15 @@
 import pandas as pd
 from scrapers.iheartjane_scraper import fetch_iheartjane_data
 from scrapers.dutchie_scraper import fetch_dutchie_data
+from scrapers.trulieve_scraper import fetch_trulieve_data
+from scrapers.cresco_scraper import fetch_cresco_data
 # from google_sheets_writer import write_to_google_sheet # We'll use this later
 
 # --- Define Stores ---
 # We can build out this list from your MATLAB file
 IHEARTJANE_STORES = {
     "Maitri (PGH)": 2913,
-    "Liberty (PGH)": 4909,
     "Rise": 2266,
-    "OR McKnight": 3906,
 }
 
 def main():
@@ -33,8 +33,17 @@ def main():
     if not dutchie_df.empty:
         all_dataframes.append(dutchie_df)
 
-    # --- 3. Run Other Scrapers (Future) ---
-    # ... (we will add cresco, etc. here) ...
+    # --- 3. Run Trulieve Scraper ---
+    print("\nStarting Trulieve Scraper...")
+    trulieve_df = fetch_trulieve_data()
+    if not trulieve_df.empty:
+        all_dataframes.append(trulieve_df)
+
+    # --- 4. Run Cresco Scraper ---
+    print("\nStarting Cresco Scraper...")
+    cresco_df = fetch_cresco_data()
+    if not cresco_df.empty:
+        all_dataframes.append(cresco_df)
 
     if not all_dataframes:
         print("\nNo data was scraped from any source. Exiting.")
@@ -47,7 +56,7 @@ def main():
     # --- 4. Clean and Standardize Data (Future) ---
     # Let's create our desired column order
     final_columns = [
-        'Name', 'Brand', 'Store', 'Price', 'Weight', 'Weight_Str',
+        'Name', 'Brand', 'Store', 'Price', 'Weight', 'Weight_Str', 'dpg',
         'Type', 'Subtype', 'THC', 'THCa', 'CBD', 'Total_Terps',
         # Add all the terpenes
         'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
