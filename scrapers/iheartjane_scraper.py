@@ -54,14 +54,13 @@ def parse_jane_product(product_hit, store_name):
     """
     Parses a single product from the new "smart" API response.
     """
+    if 'search_attributes' not in product_hit:
+        return []
+
     product_variants = []
     
     # All the good data is in 'search_attributes'
-    try:
-        attrs = product_hit['search_attributes']
-    except KeyError:
-        print("  ...skipped a product hit with missing 'search_attributes'")
-        return []
+    attrs = product_hit['search_attributes']
 
     # 1. Get common data
     common_data = {
