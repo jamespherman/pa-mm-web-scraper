@@ -1,1 +1,5 @@
-pandas requests gspread gspread-dataframe oauth2client
+pandas
+requests
+gspread
+gspread-dataframe
+oauth2client

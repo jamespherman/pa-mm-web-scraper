@@ -133,7 +133,6 @@ def fetch_iheartjane_data(store_id, store_name):
     print(f"Fetching data for iHeartJane store: {store_name} (ID: {store_id})...")
     
     all_products = []
-    current_page = 0
     
     # These are the URL parameters, including our new API key
     params = {
@@ -151,53 +150,40 @@ def fetch_iheartjane_data(store_id, store_name):
         "percent_cbd", "percent_thc", "root_types", "compound_names"
     ]
 
-    while True:
-        # This payload now much more closely matches the real browser request
-        payload = {
-            "app_mode": "embedded",
-            "jane_device_id": "me7dtQx8hW9YlcYmnHPys", # Static ID from your request
-            "search_attributes": ["*"],
-            "store_id": store_id,
-            "disable_ads": False,
-            "num_columns": 1,
-            "page_size": 60,
-            "page": current_page,
-            "placement": "menu_inline_table",
-            "search_facets": full_search_facets, # Use the full list
-            "search_filter": f"store_id = {store_id}",
-            "search_query": "", # Empty query to get ALL products
-            "search_sort": "recommendation"
-        }
+    # This payload now much more closely matches the real browser request
+    payload = {
+        "app_mode": "embedded",
+        "jane_device_id": "me7dtQx8hW9YlcYmnHPys", # Static ID from your request
+        "search_attributes": ["*"],
+        "store_id": store_id,
+        "disable_ads": False,
+        "num_columns": 1,
+        "page_size": 60,
+        "page": 0,
+        "placement": "menu_inline_table",
+        "search_facets": full_search_facets, # Use the full list
+        "search_filter": f"store_id = {store_id}",
+        "search_query": "", # Empty query to get ALL products
+        "search_sort": "recommendation"
+    }
+
+    try:
+        # Make the POST request
+        response = requests.post(NEW_JANE_URL, params=params, json=payload)
+        response.raise_for_status() # Raise an error for bad responses
         
-        try:
-            # Make the POST request
-            response = requests.post(NEW_JANE_URL, params=params, json=payload)
-            response.raise_for_status() # Raise an error for bad responses
-            
-            data = response.json()
-            hits = data.get('products', [])
-            
-            if not hits:
-                print("  ...No more hits found.")
-                break # Exit the loop
-                
-            print(f"  ...retrieved page {current_page} with {len(hits)} products.")
+        data = response.json()
+        hits = data.get('products', [])
 
-            # Process each product hit
-            for hit in hits:
-                product_variants = parse_jane_product(hit, store_name)
-                all_products.extend(product_variants)
+        print(f"  ...retrieved {len(hits)} products in a single call.")
 
-            # Check if this was the last page
-            if len(hits) < payload['page_size']:
-                print("  ...All pages processed (last page was not full).")
-                break
-                
-            current_page += 1
+        # Process each product hit
+        for hit in hits:
+            product_variants = parse_jane_product(hit, store_name)
+            all_products.extend(product_variants)
             
-        except requests.exceptions.RequestException as e:
-            print(f"Error fetching data for store {store_id}: {e}")
-            break 
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data for store {store_id}: {e}")
             
     if all_products:
         print(f"Successfully fetched {len(all_products)} product variants for {store_name}.")
