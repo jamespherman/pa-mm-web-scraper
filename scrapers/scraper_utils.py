@@ -15,40 +15,20 @@ def convert_to_grams(weight_str):
         return None
 
     weight_str = weight_str.lower().strip()
-
-    weight_map = {
-        'gram': 1.0,
-        '1g': 1.0,
-        'half gram': 0.5,
-        '0.5g': 0.5,
-        'eighth ounce': 3.5,
-        '3.5g': 3.5,
-        'quarter ounce': 7.0,
-        '7g': 7.0,
-        'half ounce': 14.0,
-        '14g': 14.0,
-        'ounce': 28.0,
-        '28g': 28.0,
-        # also handle cases from the original function
-        '1/8oz': 3.5,
-        '1/8 oz': 3.5,
-        '3.5 g': 3.5,
-        '1/4oz': 7.0,
-        '1/4 oz': 7.0,
-        '7 g': 7.0,
-        '1/2oz': 14.0,
-        '1/2 oz': 14.0,
-        '14 g': 14.0,
-        '1oz': 28.0,
-        '1 oz': 28.0,
-        '28 g': 28.0,
-        '0.5 g': 0.5,
-    }
-
-    if weight_str in weight_map:
-        return weight_map[weight_str]
-
-    # Handle simple 'g' and 'mg' from the original function
+    
+    # Handle specific cases first
+    if weight_str == 'gram':
+        return 1.0
+    if weight_str in ['1/8oz', 'eighth ounce', '1/8 oz', '3.5g', '3.5 g']:
+        return 3.5
+    if weight_str in ['1/4oz', 'quarter ounce', '1/4 oz', '7g', '7 g']:
+        return 7.0
+    if weight_str in ['1/2oz', 'half ounce', '1/2 oz', '14g', '14 g']:
+        return 14.0
+    if weight_str in ['1oz', 'ounce', '1 oz', '28g', '28 g']:
+        return 28.0
+    
+    # Handle simple 'g' and 'mg'
     match_g = re.match(r'([\d\.]+)\s*g', weight_str)
     if match_g:
         return float(match_g.group(1))
