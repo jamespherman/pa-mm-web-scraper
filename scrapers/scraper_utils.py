@@ -26,11 +26,11 @@ def convert_to_grams(weight_str):
         'half gram': 0.5,
         '0.5g': 0.5,
         # Eighth Ounce
-        'eighth ounce': 3.5,
-        '1/8oz': 3.5,
-        '1/8 oz': 3.5,
-        '3.5g': 3.5,
-        '3.5 g': 3.5,
+        'eighth ounce': 3.54369,
+        '1/8oz': 3.54369,
+        '1/8 oz': 3.54369,
+        '3.5g': 3.54369,
+        '3.5 g': 3.54369,
         # Quarter Ounce
         'quarter ounce': 7.0,
         '1/4oz': 7.0,
