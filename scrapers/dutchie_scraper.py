@@ -312,7 +312,7 @@ def parse_product_details(product, store_name):
             name = terp.get('name', terp.get('libraryTerpene', {}).get('name'))
             value = terp.get('value')
             if name and value is not None:
-                clean_name = name.strip().lower().replace('-', '')
+                clean_name = name.strip().lower()
                 standard_name = TERPENE_MAPPING.get(clean_name)
                 
                 if standard_name:
