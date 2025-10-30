@@ -11,21 +11,19 @@ The scraper is designed with a modular, platform-based architecture. Each scrape
 The following platforms are currently being scraped:
 
 *   **iHeartJane (`iheartjane_scraper.py`)**
-    *   Maitri (PGH)
-    *   Liberty (PGH)
+    *   Maitri
     *   Rise
-    *   OR McKnight
 
 *   **Dutchie (`dutchie_scraper.py`)**
-    *   Ethos (Harmar, Pleasant Hills, North Fayette)
-    *   Liberty (PGH)
-    *   Ascend (Cranberry) - *Note: Currently blocked by Cloudflare*
+    *   Ethos
+    *   Liberty
+    *   Ascend
 
 *   **Trulieve API (`trulieve_scraper.py`)**
-    *   Trulieve (Squirrel Hill, North Shore)
+    *   Trulieve
 
 *   **Cresco/Sunnyside API (`cresco_scraper.py`)**
-    *   Sunnyside (PGH)
+    *   Sunnyside
 
 ## Usage
 
