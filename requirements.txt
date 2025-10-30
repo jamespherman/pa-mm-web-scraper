@@ -2,4 +2,5 @@ pandas
 requests
 gspread
 gspread-dataframe
-oauth2client
+google-auth-oauthlib
+numpy
