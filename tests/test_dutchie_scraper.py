@@ -136,24 +136,13 @@ class TestDutchieScraper(unittest.TestCase):
         }
 
         # Set the side_effect to return responses in order
-        # It will be called for each store and each category for slugs
-        # then for each slug for details
         num_stores = len(DUTCHIE_STORES)
-        num_categories = 3 # As defined in dutchie_scraper.py
 
-        # We have 2 slugs per store. So we'll have 2 detail calls per store.
-        num_slugs_per_store = 2
+        # Slugs are fetched once per store, with a second call for an empty page to stop pagination.
+        slug_calls = [mock_slugs_response, mock_empty_response] * num_stores
 
-        # Slugs are fetched for each store and category.
-        # For each category, we have one response with slugs and one empty response to terminate the loop.
-        slug_calls = []
-        for _ in range(num_stores):
-            for _ in range(num_categories):
-                slug_calls.append(mock_slugs_response)
-                slug_calls.append(mock_empty_response)
-
-        # Details are fetched for each slug.
-        detail_calls = [mock_detail_response_1, mock_detail_response_2] * num_stores * num_categories
+        # Details are fetched for each slug (2 slugs per store).
+        detail_calls = [mock_detail_response_1, mock_detail_response_2] * num_stores
 
         mock_get.side_effect = slug_calls + detail_calls
 
@@ -162,8 +151,8 @@ class TestDutchieScraper(unittest.TestCase):
 
         # --- Assertions ---
         self.assertIsInstance(df, pd.DataFrame)
-        # Expected: 2 products per category * 3 categories * number of stores
-        self.assertEqual(len(df), 2 * 3 * num_stores)
+        # Expected: 2 products per store * number of stores
+        self.assertEqual(len(df), 2 * num_stores)
 
         # Check data from the first product
         self.assertEqual(df.iloc[0]['Name'], 'Test Kush')

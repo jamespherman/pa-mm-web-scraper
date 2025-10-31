@@ -16,7 +16,7 @@ from .scraper_utils import convert_to_grams
 # Each store needs its own API base, headers, and store ID
 DUTCHIE_STORES = {
     "Ethos (Harmar)": {
-        "api_url": "https://harmarville.ethoscannabis.com/api-4/graphql",
+        "api_url": "https://dutchie.com/api-4/graphql",
         "store_id": "621900cebbc5580e15476deb",
         "headers": {
             "accept": "*/*",
@@ -24,11 +24,11 @@ DUTCHIE_STORES = {
             "content-type": "application/json",
             "referer": "https://harmarville.ethoscannabis.com/stores/ethos-harmarville/products/flower",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
-            "x-dutchie-session": "eyJpZCI6Ijk0YTNhOWU4LTZkNzctNDY2OC04MzFjLTA2YmFlOWU5ODdmYSIsImV4cGlyZXMiOjE3NjI0NTc3MTk4Mjl9"
+            "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
         }
     },
     "Ethos (Pleasant Hills)": {
-        "api_url": "https://harmarville.ethoscannabis.com/api-4/graphql",
+        "api_url": "https://dutchie.com/api-4/graphql",
         "store_id": "607dc27bfde18500b5e8dd52",
         "headers": {
             "accept": "*/*",
@@ -36,11 +36,11 @@ DUTCHIE_STORES = {
             "content-type": "application/json",
             "referer": "https://harmarville.ethoscannabis.com/stores/ethos-pleasant-hills",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
-            "x-dutchie-session": "eyJpZCI6Ijk0YTNhOWU4LTZkNzctNDY2OC04MzFjLTA2YmFlOWU5ODdmYSIsImV4cGlyZXMiOjE3NjI0NTc3MTk4Mjl9"
+            "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
         }
     },
     "Ethos (North Fayette)": {
-        "api_url": "https://harmarville.ethoscannabis.com/api-4/graphql",
+        "api_url": "https://dutchie.com/api-4/graphql",
         "store_id": "5fa0829005bb2400cfc4b694",
         "headers": {
             "accept": "*/*",
@@ -48,7 +48,7 @@ DUTCHIE_STORES = {
             "content-type": "application/json",
             "referer": "https://harmarville.ethoscannabis.com/stores/ethos-north-fayette",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
-            "x-dutchie-session": "eyJpZCI6Ijk0YTNhOWU4LTZkNzctNDY2OC04MzFjLTA2YmFlOWU5ODdmYSIsImV4cGlyZXMiOjE3NjI0NTc3MTk4Mjl9"
+            "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
         }
     },
     "Liberty (PGH)": {
@@ -60,12 +60,34 @@ DUTCHIE_STORES = {
             "content-type": "application/json",
             "referer": "https://dutchie.com/embedded-menu/liberty-pittsburgh",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
-            "x-dutchie-session": "eyJpZCI6IjFiMThiZjYwLTFlYjItNDM3MS1iNTQ0LTI5ZTUyYjUzMWM5ZiIsImV4cGlyZXMiOjE3NjI0NTk4NDQzODN9"
+            "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
+        }
+    },
+    "Ascend (Cranberry)": {
+        "api_url": "https://letsascend.com/api-4/graphql",
+        "store_id": "66fef50576b5d1b3703a1890",
+        "headers": {
+            "accept": "*/*",
+            "apollographql-client-name": "Marketplace (production)",
+            "content-type": "application/json",
+            "referer": "https://letsascend.com/stores/cranberry-pennsylvania",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
+        }
+    },
+    "Ascend (Monaca)": {
+        "api_url": "https://letsascend.com/api-4/graphql",
+        "store_id": "66fef58038ff55ae0d700b55",
+        "headers": {
+            "accept": "*/*",
+            "apollographql-client-name": "Marketplace (production)",
+            "content-type": "application/json",
+            "referer": "https://letsascend.com/stores/monaca-pennsylvania",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
         }
     }
 }
-
-CATEGORIES = ["Flower", "Vaporizers", "Concentrate"]
 
 KNOWN_TERPENES = [
     'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
@@ -114,72 +136,71 @@ def get_all_product_slugs(store_name, store_config):
     store_id = store_config['store_id']
     headers = store_config['headers']
 
-    for category in CATEGORIES:
-        page = 0
-        while True:
-            variables = {
-                "includeEnterpriseSpecials": False,
-                "productsFilter": {
-                    "dispensaryId": store_id,
-                    "pricingType": "med",
-                    "strainTypes": [],
-                    "subcategories": [],
-                    "Status": "Active",
-                    "types": [category],
-                    "useCache": False,
-                    "isDefaultSort": True,
-                    "sortBy": "popularSortIdx",
-                    "sortDirection": 1,
-                    "bypassOnlineThresholds": False,
-                    "isKioskMenu": False,
-                    "removeProductsBelowOptionThresholds": True
-                },
-                "page": page,
-                "perPage": 100
+    page = 0
+    while True:
+        variables = {
+            "includeEnterpriseSpecials": False,
+            "productsFilter": {
+                "dispensaryId": store_id,
+                "pricingType": "med",
+                "strainTypes": [],
+                "subcategories": [],
+                "Status": "Active",
+                "types": [],
+                "useCache": False,
+                "isDefaultSort": True,
+                "sortBy": "popularSortIdx",
+                "sortDirection": 1,
+                "bypassOnlineThresholds": False,
+                "isKioskMenu": False,
+                "removeProductsBelowOptionThresholds": True
+            },
+            "page": page,
+            "perPage": 100
+        }
+
+        extensions = {
+            "persistedQuery": {
+                "version": 1,
+                "sha256Hash": "ee29c060826dc41c527e470e9ae502c9b2c169720faa0a9f5d25e1b9a530a4a0"
             }
+        }
+
+        params = {
+            'operationName': 'FilteredProducts',
+            'variables': json.dumps(variables),
+            'extensions': json.dumps(extensions)
+        }
+
+        try:
+            response = requests.get(api_url, headers=headers, params=params)
+            response.raise_for_status()
             
-            extensions = {
-                "persistedQuery": {
-                    "version": 1,
-                    "sha256Hash": "f3b8a3820696e2a6d06487ebb4d86df454a90ed863185c1a659e7a126f391644"
-                }
-            }
-            
-            params = {
-                'operationName': 'FilteredProducts',
-                'variables': json.dumps(variables),
-                'extensions': json.dumps(extensions)
-            }
-            
-            try:
-                response = requests.get(api_url, headers=headers, params=params)
-                response.raise_for_status()
+            json_response = response.json()
+            if 'errors' in json_response:
+                print(f"GraphQL Error in product slugs for {store_name}: {json_response['errors']}")
+                break
                 
-                json_response = response.json()
-                if 'errors' in json_response:
-                    print(f"GraphQL Error in product slugs for {store_name} ({category}): {json_response['errors']}")
-                    break
-                    
-                products = json_response['data']['filteredProducts']['products']
+            products = json_response['data']['filteredProducts']['products']
 
-                if not products:
-                    break  # Exit loop if no more products
+            if not products:
+                break  # Exit loop if no more products
 
-                for product in products:
-                    all_products.append({
-                        "cName": product['cName'],
-                        "DispensaryID": store_id,
-                        "StoreName": store_name,
-                        "StoreConfig": store_config # Pass config for detail request
-                    })
-                page += 1
-            except requests.exceptions.RequestException as e:
-                print(f"Error fetching product slugs for {store_name} ({category}): {e}")
-                break
-            except KeyError:
-                print(f"Unexpected JSON structure for {store_name} ({category}). Skipping.")
-                print(f"Response was: {response.text}")
-                break
+            for product in products:
+                all_products.append({
+                    "cName": product['cName'],
+                    "DispensaryID": store_id,
+                    "StoreName": store_name,
+                    "StoreConfig": store_config # Pass config for detail request
+                })
+            page += 1
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching product slugs for {store_name}: {e}")
+            break
+        except KeyError:
+            print(f"Unexpected JSON structure for {store_name}. Skipping.")
+            print(f"Response was: {response.text}")
+            break
 
     print(f"  ...found {len(all_products)} total product slugs for {store_name}.")
     return all_products
@@ -218,7 +239,7 @@ def get_detailed_product_info(product_slugs):
         extensions = {
             "persistedQuery": {
                 "version": 1,
-                "sha256Hash": "7e321b76b73d96861462a1c4f676cab46e7a0745f6ac63538498d51f0aae1507"
+                "sha256Hash": "47369a02fc8256aaf1ed70d0c958c88514acdf55c5810a5be8e0ee1a19617cda"
             }
         }
         
