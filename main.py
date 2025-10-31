@@ -6,7 +6,7 @@ from scrapers.iheartjane_scraper import fetch_iheartjane_data
 from scrapers.dutchie_scraper import fetch_dutchie_data
 from scrapers.trulieve_scraper import fetch_trulieve_data
 from scrapers.cresco_scraper import fetch_cresco_data
-# from google_sheets_writer import write_to_google_sheet # We'll use this later
+from google_sheets_writer import write_to_google_sheet # We'll use this later
 
 # --- Define Stores ---
 # We can build out this list from your MATLAB file
@@ -80,9 +80,13 @@ def main():
     combined_df.info()
 
     # --- 6. Write to Google Sheets (Future) ---
-    # print("\nWriting to Google Sheets...")
-    # sheet_title = f"PA Product Data - {pd.Timestamp.now().strftime('%Y-%m-%d')}"
-    # write_to_google_sheet(combined_df, sheet_title)
+    print("\nWriting to Google Sheets...")
+    # !!! IMPORTANT !!!
+    # You must create a Google Sheet and share it with the service account's email address.
+    # Then, paste the long ID from the Google Sheet's URL here.
+    SPREADSHEET_ID = "YOUR_SPREADSHEET_ID_HERE"
+
+    write_to_google_sheet(combined_df, SPREADSHEET_ID, "Latest Data", "Archived Data")
     
     print("\nScraping complete!")
 
