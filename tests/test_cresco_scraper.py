@@ -78,6 +78,9 @@ class TestCrescoScraper(unittest.TestCase):
     def test_fetch_cresco_data_flow(self, mock_get):
         """Test the end-to-end data fetching and parsing flow for Cresco."""
 
+        # Define a mock store for the test
+        STORES = {"Test Store": "123"}
+
         # Mock response for a page with data
         mock_response_with_data = Mock()
         mock_response_with_data.json.return_value = {"data": self.mock_products_json}
@@ -94,7 +97,7 @@ class TestCrescoScraper(unittest.TestCase):
             mock_response_no_data    # concentrates
         ]
 
-        df = fetch_cresco_data()
+        df = fetch_cresco_data(STORES)
 
         self.assertIsInstance(df, pd.DataFrame)
         self.assertEqual(len(df), 2)

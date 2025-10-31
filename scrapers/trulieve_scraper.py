@@ -25,11 +25,6 @@ HEADERS = {
 
 CATEGORIES = ["flower", "vaporizers", "concentrates", "tinctures", "edibles"]
 
-STORES = {
-    "Trulieve (Squirrel Hill)": "86",
-    "Trulieve (North Shore)": "90"
-}
-
 # Define known terpenes to look for (copied from iheartjane)
 KNOWN_TERPENES = [
     'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
@@ -168,7 +163,7 @@ def parse_trulieve_products(products, store_name):
     return parsed_variants
 
 
-def fetch_trulieve_data():
+def fetch_trulieve_data(stores):
     """
     Main function to orchestrate the Trulieve scraping process.
     """
@@ -176,7 +171,7 @@ def fetch_trulieve_data():
 
     print("Starting Trulieve Scraper (api.trulieve.com)...")
 
-    for store_name, store_id in STORES.items():
+    for store_name, store_id in stores.items():
         print(f"Fetching data for Trulieve store: {store_name} (ID: {store_id})...")
         for category in CATEGORIES:
             page = 1

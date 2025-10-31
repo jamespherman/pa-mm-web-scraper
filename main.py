@@ -14,6 +14,14 @@ IHEARTJANE_STORES = {
     "Maitri (PGH)": 2913,
     "Rise": 2266,
 }
+TRULIEVE_STORES = {
+    "Trulieve (Squirrel Hill)": "86",
+    "Trulieve (North Shore)": "90"
+}
+CRESCO_STORES = {
+    "Sunnyside (PGH)": "203"
+    # We can add more stores here later using their store_id
+}
 
 def main():
     print("Starting the PA Dispensary Scraper...")
@@ -35,13 +43,13 @@ def main():
 
     # --- 3. Run Trulieve Scraper ---
     print("\nStarting Trulieve Scraper...")
-    trulieve_df = fetch_trulieve_data()
+    trulieve_df = fetch_trulieve_data(TRULIEVE_STORES)
     if not trulieve_df.empty:
         all_dataframes.append(trulieve_df)
 
     # --- 4. Run Cresco Scraper ---
     print("\nStarting Cresco Scraper...")
-    cresco_df = fetch_cresco_data()
+    cresco_df = fetch_cresco_data(CRESCO_STORES)
     if not cresco_df.empty:
         all_dataframes.append(cresco_df)
 
