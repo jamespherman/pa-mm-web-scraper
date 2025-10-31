@@ -32,11 +32,6 @@ HEADERS = {
 }
 
 # Define store configurations
-STORES = {
-    "Sunnyside (PGH)": "203"
-    # We can add more stores here later using their store_id
-}
-
 CATEGORIES = ["flower", "vapes", "concentrates"]
 
 KNOWN_TERPENES = [
@@ -149,7 +144,7 @@ def parse_cresco_products(products, store_name):
             
     return parsed_products
 
-def fetch_cresco_data():
+def fetch_cresco_data(stores):
     """
     Main function to orchestrate the Cresco scraping process.
     """
@@ -157,7 +152,7 @@ def fetch_cresco_data():
     
     print("Starting Cresco (Sunnyside) Scraper (api.crescolabs.com)...")
 
-    for store_name, store_id in STORES.items():
+    for store_name, store_id in stores.items():
         print(f"Fetching data for Sunnyside store: {store_name} (ID: {store_id})...")
         
         # Create a headers copy and set the specific store_id

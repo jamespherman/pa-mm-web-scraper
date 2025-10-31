@@ -108,7 +108,11 @@ class TestTrulieveScraper(unittest.TestCase):
             mock_response_no_data    # Edibles
         ]
 
-        df = fetch_trulieve_data()
+        STORES = {
+            "Trulieve (Squirrel Hill)": "86",
+            "Trulieve (North Shore)": "90"
+        }
+        df = fetch_trulieve_data(STORES)
 
         self.assertIsInstance(df, pd.DataFrame)
         # We expect 3 rows per store (2 stores total)
