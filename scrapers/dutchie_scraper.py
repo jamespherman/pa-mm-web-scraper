@@ -16,39 +16,39 @@ from .scraper_utils import convert_to_grams
 # Each store needs its own API base, headers, and store ID
 DUTCHIE_STORES = {
     "Ethos (Harmar)": {
-        "api_url": "https://dutchie.com/api-4/graphql",
+        "api_url": "https://harmarville.ethoscannabis.com/api-4/graphql",
         "store_id": "621900cebbc5580e15476deb",
         "headers": {
             "accept": "*/*",
             "apollographql-client-name": "Marketplace (production)",
             "content-type": "application/json",
-            "referer": "https://harmarville.ethoscannabis.com/stores/ethos-harmarville/products/flower",
+            "referer": "https://harmarville.ethoscannabis.com/stores/ethos-harmarville",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
-            "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
+            "x-dutchie-session": "eyJpZCI6ImM1MDc2NGI5LTAyZWUtNDU2ZS05ODc0LTZmNzkyOTQwYzc2NiIsImV4cGlyZXMiOjE3NjI0Mjc5MTU5NzR9"
         }
     },
     "Ethos (Pleasant Hills)": {
-        "api_url": "https://dutchie.com/api-4/graphql",
+        "api_url": "https://pleasanthills.ethoscannabis.com/api-4/graphql",
         "store_id": "607dc27bfde18500b5e8dd52",
         "headers": {
             "accept": "*/*",
             "apollographql-client-name": "Marketplace (production)",
             "content-type": "application/json",
-            "referer": "https://harmarville.ethoscannabis.com/stores/ethos-pleasant-hills",
+            "referer": "https://pleasanthills.ethoscannabis.com/stores/ethos-pleasant-hills",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
-            "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
+            "x-dutchie-session": "eyJpZCI6ImM1MDc2NGI5LTAyZWUtNDU2ZS05ODc0LTZmNzkyOTQwYzc2NiIsImV4cGlyZXMiOjE3NjI0Mjc5MTU5NzR9"
         }
     },
     "Ethos (North Fayette)": {
-        "api_url": "https://dutchie.com/api-4/graphql",
+        "api_url": "https://northfayette.ethoscannabis.com/api-4/graphql",
         "store_id": "5fa0829005bb2400cfc4b694",
         "headers": {
             "accept": "*/*",
             "apollographql-client-name": "Marketplace (production)",
             "content-type": "application/json",
-            "referer": "https://harmarville.ethoscannabis.com/stores/ethos-north-fayette",
+            "referer": "https://northfayette.ethoscannabis.com/stores/ethos-north-fayette",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
-            "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
+            "x-dutchie-session": "eyJpZCI6ImM1MDc2NGI5LTAyZWUtNDU2ZS05ODc0LTZmNzkyOTQwYzc2NiIsImV4cGlyZXMiOjE3NjI0Mjc5MTU5NzR9"
         }
     },
     "Liberty (PGH)": {
@@ -60,7 +60,7 @@ DUTCHIE_STORES = {
             "content-type": "application/json",
             "referer": "https://dutchie.com/embedded-menu/liberty-pittsburgh",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
-            "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
+            "x-dutchie-session": "eyJpZCI6ImFiMGRlMWMyLWNhNWUtNGM4Zi05NDA1LTRhZWQ5MGNhZTQzOCIsImV4cGlyZXMiOjE3NjI0ODE2MDE3Mjd9"
         }
     },
     "Ascend (Cranberry)": {
@@ -315,8 +315,10 @@ def parse_product_details(product, store_name):
             if 'name' in cannabinoid and 'value' in cannabinoid:
                 cannabinoid_data[cannabinoid['name']] = cannabinoid['value']
 
-    thc_range = product.get('THCContent', {}).get('range', [])
-    cbd_range = product.get('CBDContent', {}).get('range', [])
+    thc_content = product.get('THCContent') or {}
+    thc_range = thc_content.get('range', [])
+    cbd_content = product.get('CBDContent') or {}
+    cbd_range = cbd_content.get('range', [])
     
     if 'THC' not in cannabinoid_data and thc_range and thc_range[0] is not None:
         cannabinoid_data['THC'] = thc_range[0]
@@ -387,4 +389,3 @@ def fetch_dutchie_data():
 
     print("\nScraping complete for Dutchie stores. DataFrame created.")
     return df
-
