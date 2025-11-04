@@ -1,12 +1,19 @@
 # main.py
 # This is the main script to run everything.
 
+import datetime
+import gspread
+import os.path
 import pandas as pd
 from scrapers.iheartjane_scraper import fetch_iheartjane_data
 from scrapers.dutchie_scraper import fetch_dutchie_data
 from scrapers.trulieve_scraper import fetch_trulieve_data
 from scrapers.cresco_scraper import fetch_cresco_data
 from google_sheets_writer import write_to_google_sheet # We'll use this later
+
+# --- Define Scopes for Google API ---
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets',
+          'https://www.googleapis.com/auth/drive.file']
 
 # --- Define Stores ---
 # We can build out this list from your MATLAB file
@@ -24,6 +31,34 @@ CRESCO_STORES = {
 }
 
 def main():
+    # --- Google Sheets Authentication and Setup ---
+    print("Authenticating with Google Sheets...")
+    # Get current date for filename
+    today_str = datetime.date.today().strftime('%Y-%m-%d')
+    spreadsheet_title = f"PA_Scraped_Data_{today_str}"
+
+    try:
+        # Use gspread's OAuth2 flow
+        gc = gspread.oauth()
+
+        # Check if a spreadsheet with today's date already exists
+        try:
+            spreadsheet = gc.open(spreadsheet_title)
+            print(f"Spreadsheet '{spreadsheet_title}' already exists. Exiting.")
+            return # Exit if the file exists
+        except gspread.exceptions.SpreadsheetNotFound:
+            print(f"Creating new spreadsheet: '{spreadsheet_title}'")
+            # Create the new spreadsheet
+            spreadsheet = gc.create(spreadsheet_title)
+            # Share it with the specified user
+            spreadsheet.share('billyherman@gmail.com', perm_type='user', role='writer')
+            print(f"Spreadsheet shared with 'billyherman@gmail.com'.")
+
+    except Exception as e:
+        print(f"An error occurred during Google Sheets setup: {e}")
+        print("Please ensure your 'credentials.json' and 'token.json' are set up correctly.")
+        return # Exit if authentication fails
+
     print("Starting the PA Dispensary Scraper...")
     
     all_dataframes = [] # A list to hold all our DataFrames
@@ -87,14 +122,10 @@ def main():
     print("\nData columns and types:")
     combined_df.info()
 
-    # --- 6. Write to Google Sheets (Future) ---
+    # --- 6. Write to Google Sheets ---
     print("\nWriting to Google Sheets...")
-    # !!! IMPORTANT !!!
-    # You must create a Google Sheet and share it with the service account's email address.
-    # Then, paste the long ID from the Google Sheet's URL here.
-    SPREADSHEET_ID = "YOUR_SPREADSHEET_ID_HERE"
-
-    write_to_google_sheet(combined_df, SPREADSHEET_ID, "Latest Data", "Archived Data")
+    # The new function takes the spreadsheet object and the dataframe
+    write_to_google_sheet(spreadsheet, combined_df)
     
     print("\nScraping complete!")
 
@@ -102,4 +133,3 @@ def main():
 # when this script is executed directly"
 if __name__ == "__main__":
     main()
-

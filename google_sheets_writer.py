@@ -1,33 +1,10 @@
 # google_sheets_writer.py
-# This file will contain all the logic for authenticating
-# with the Google Sheets API and writing our data.
+# This file will contain all the logic for writing our data to Google Sheets.
 
 import gspread
 import pandas as pd
 from gspread_dataframe import set_with_dataframe
-from google.oauth2.service_account import Credentials
-import os.path
 import datetime
-
-# Define the scopes (what we want to access)
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets',
-          'https://www.googleapis.com/auth/drive.file']
-
-def get_google_creds():
-    """
-    Handles the Google authentication flow using a service account.
-    Returns authenticated credentials.
-    """
-    if not os.path.exists('credentials.json'):
-        print("ERROR: credentials.json not found. Please follow the setup instructions in README.md.")
-        return None
-
-    try:
-        creds = Credentials.from_service_account_file('credentials.json', scopes=SCOPES)
-        return creds
-    except Exception as e:
-        print(f"Error loading credentials: {e}")
-        return None
 
 def get_or_create_worksheet(spreadsheet, sheet_name):
     """
@@ -37,23 +14,20 @@ def get_or_create_worksheet(spreadsheet, sheet_name):
         return spreadsheet.worksheet(sheet_name)
     except gspread.WorksheetNotFound:
         print(f"Creating new worksheet: '{sheet_name}'")
-        return spreadsheet.add_worksheet(title=sheet_name, rows="100", cols="30") # Increased default cols
+        return spreadsheet.add_worksheet(title=sheet_name, rows="100", cols="30")
 
-def write_to_google_sheet(dataframe, spreadsheet_id, latest_sheet_name, archive_sheet_name):
+def write_to_google_sheet(spreadsheet, dataframe):
     """
-    Authenticates with Google and writes a pandas DataFrame to two separate sheets
-    in a Google Spreadsheet: one for the latest data (overwrite) and one for
-    archived data (append).
+    Writes a pandas DataFrame to two separate sheets in a Google Spreadsheet:
+    one for the latest data (overwrite) and one for archived data (append).
+    The 'spreadsheet' object is already authenticated and passed from main.py.
     """
-    creds = get_google_creds()
-    if not creds:
-        return
-
     try:
-        client = gspread.authorize(creds)
-        spreadsheet = client.open_by_key(spreadsheet_id)
+        # --- 1. Define Sheet Names ---
+        latest_sheet_name = "Latest Data"
+        archive_sheet_name = "Archived Data"
 
-        # --- 1. Write to "Latest Data" Sheet (Overwrite) ---
+        # --- 2. Write to "Latest Data" Sheet (Overwrite) ---
         print(f"\n--- Writing to '{latest_sheet_name}' (Overwrite) ---")
         latest_sheet = get_or_create_worksheet(spreadsheet, latest_sheet_name)
         
@@ -67,7 +41,7 @@ def write_to_google_sheet(dataframe, spreadsheet_id, latest_sheet_name, archive_
         set_with_dataframe(latest_sheet, dataframe, resize=True)
         print("Write to 'Latest Data' successful!")
 
-        # --- 2. Write to "Archived Data" Sheet (Append) ---
+        # --- 3. Write to "Archived Data" Sheet (Append) ---
         print(f"\n--- Writing to '{archive_sheet_name}' (Append) ---")
         archive_df = dataframe.copy()
         archive_df['ScrapeDate'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -78,28 +52,26 @@ def write_to_google_sheet(dataframe, spreadsheet_id, latest_sheet_name, archive_
         try:
             existing_headers = archive_sheet.row_values(1)
         except gspread.exceptions.APIError:
-             existing_headers = [] # Sheet is likely empty
+            existing_headers = [] # Sheet is likely empty
 
-        all_headers = archive_df.columns.tolist()
-
-        # If the sheet is empty or headers are missing, write them
+        # If the sheet is empty, write headers first
         if not existing_headers:
             print("Writing headers to new archive sheet...")
-            archive_sheet.append_row(all_headers, value_input_option='USER_ENTERED')
-            existing_headers = all_headers # Set headers for the next step
+            # Use the columns from the dataframe with ScrapeDate
+            headers_to_write = archive_df.columns.tolist()
+            archive_sheet.append_row(headers_to_write, value_input_option='USER_ENTERED')
+            existing_headers = headers_to_write
 
-        # Reorder archive_df to match the sheet's header order
-        archive_df = archive_df[existing_headers]
-        
-        print(f"Appending {len(archive_df)} new rows...")
+        # Reorder archive_df to match the sheet's header order before appending
+        # This handles cases where columns might have been manually reordered in the sheet
+        final_archive_df = archive_df.reindex(columns=existing_headers).fillna('')
+
+        print(f"Appending {len(final_archive_df)} new rows...")
         # Convert df to list of lists to append
-        rows_to_append = archive_df.astype(str).values.tolist()
+        rows_to_append = final_archive_df.astype(str).values.tolist()
         archive_sheet.append_rows(rows_to_append, value_input_option='USER_ENTERED')
         print("Append to 'Archived Data' successful!")
 
-    except gspread.exceptions.SpreadsheetNotFound:
-        print(f"ERROR: Spreadsheet with ID '{spreadsheet_id}' not found.")
-        print("Please make sure the ID is correct and the sheet has been shared with the service account email.")
     except Exception as e:
         print(f"An error occurred while writing to Google Sheets: {e}")
-        print("Please check your Google Cloud credentials and API permissions.")
+        print("Please check your permissions for the spreadsheet.")
