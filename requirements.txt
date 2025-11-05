@@ -4,3 +4,5 @@ gspread
 gspread-dataframe
 google-auth-oauthlib
 numpy
+matplotlib
+seaborn

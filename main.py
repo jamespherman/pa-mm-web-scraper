@@ -9,6 +9,7 @@ from scrapers.dutchie_scraper import fetch_dutchie_data
 from scrapers.trulieve_scraper import fetch_trulieve_data
 from scrapers.cresco_scraper import fetch_cresco_data
 from google_sheets_writer import write_to_google_sheet # We'll use this later
+from analysis import run_analysis
 
 # --- Define Scopes for Google API ---
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets',
@@ -149,10 +150,19 @@ def main():
 # when this script is executed directly"
 if __name__ == "__main__":
     combined_df = main()
-    # --- Final Analysis ---
-    if combined_df is not None:
-        print("\n--- Data Analysis ---")
-        print("DataFrame shape:", combined_df.shape)
+
+    # --- Analysis Handoff ---
+    if combined_df is not None and not combined_df.empty:
+        print("\n--- Handing off to Analysis Module ---")
+        # Pass the loaded/scraped dataframe to the new module
+        cleaned_df = run_analysis(combined_df)
+
+        print("\n--- Data Analysis (Post-Module) ---")
+        print("DataFrame shape:", cleaned_df.shape)
         print("\nColumns and data types:")
-        print(combined_df.info())
+        print(cleaned_df.info())
+    else:
+        # This handles cases where main() returns None or an empty df
+        print("\nNo data found or loaded. Skipping analysis.")
+
     print("\n--- Script Finished ---")
