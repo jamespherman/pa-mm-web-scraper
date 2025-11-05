@@ -34,35 +34,26 @@ def main():
     combined_df = None
     # --- Google Sheets Authentication and Setup ---
     print("Authenticating with Google Sheets...")
-    # Define the spreadsheet title
-    # Get today's date as a string
-    today_str = datetime.date.today().strftime('%Y-%m-%d')
+    # Define a single, static spreadsheet title
+    spreadsheet_title = "PA_Dispensary_Database"
 
-    # Define the new sheet name
-    spreadsheet_title = f'PA_Scraped_Data_{today_str}'  
+    # Use gspread's OAuth2 flow
+    gc = gspread.oauth(
+        credentials_filename='credentials.json',
+        authorized_user_filename='token.json',
+        scopes=SCOPES
+    )
 
     try:
-        # Use gspread's OAuth2 flow
-        gc = gspread.oauth(
-            credentials_filename='credentials.json',
-            authorized_user_filename='token.json',
-            scopes=SCOPES
-        )
-
         # Try to open the spreadsheet
         spreadsheet = gc.open(spreadsheet_title)
         print(f"Found existing sheet: '{spreadsheet_title}'. Loading data.")
 
-        # Load data from the first worksheet
+        # Load data from the "Sheet1" worksheet (to match google_sheets_writer.py)
         worksheet = spreadsheet.worksheet("Sheet1")
         data = worksheet.get_all_records()
-        # --- ADD THESE LINES FOR DEBUGGING ---
-        print(f"Type of 'data' variable: {type(data)}")
-        print(f"Number of records (rows) found: {len(data)}")
-        print(f"First 5 records: {data[0:5]}")
-        # --- END OF DEBUGGING LINES ---
         combined_df = pd.DataFrame(data)
-        print("Data loaded successfully from Google Sheet.")
+        print(f"Data loaded successfully from Google Sheet ({len(combined_df)} rows).")
 
     except gspread.exceptions.SpreadsheetNotFound:
         # This is now the "scrape" part of our "load-or-scrape" logic
