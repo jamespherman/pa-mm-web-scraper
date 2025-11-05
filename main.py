@@ -30,11 +30,10 @@ CRESCO_STORES = {
 }
 
 def main():
+    combined_df = None
     # --- Google Sheets Authentication and Setup ---
     print("Authenticating with Google Sheets...")
-    # Get current date for filename
-    today_str = datetime.date.today().strftime('%Y-%m-%d')
-    spreadsheet_title = f"PA_Scraped_Data_{today_str}"
+    spreadsheet_title = "Latest Data"
 
     try:
         # Use gspread's OAuth2 flow
@@ -61,10 +60,6 @@ def main():
         # Create the new spreadsheet
         spreadsheet = gc.create(spreadsheet_title)
         print(f"Sheet created: {spreadsheet.url}")
-
-        # Share the spreadsheet with the specified user
-        spreadsheet.share('billyherman@gmail.com', perm_type='user', role='writer')
-        print(f"Sheet shared with billyherman@gmail.com")
 
         print("Starting the PA Dispensary Scraper...")
     
@@ -138,15 +133,16 @@ def main():
         print("Please ensure your 'credentials.json' and 'token.json' are set up correctly.")
         return # Exit if authentication fails
     
-    # --- Final Analysis ---
-    print("\n--- Data Analysis ---")
-    print("DataFrame shape:", combined_df.shape)
-    print("\nColumns and data types:")
-    print(combined_df.info())
-    print("\n--- Script Finished ---")
-
+    return combined_df
 
 # This standard Python snippet means "run the main() function
 # when this script is executed directly"
 if __name__ == "__main__":
-    main()
+    combined_df = main()
+    # --- Final Analysis ---
+    if combined_df is not None:
+        print("\n--- Data Analysis ---")
+        print("DataFrame shape:", combined_df.shape)
+        print("\nColumns and data types:")
+        print(combined_df.info())
+    print("\n--- Script Finished ---")
