@@ -33,7 +33,12 @@ def main():
     combined_df = None
     # --- Google Sheets Authentication and Setup ---
     print("Authenticating with Google Sheets...")
-    spreadsheet_title = "Sheet1"
+    # Define the spreadsheet title
+    # Get today's date as a string
+    today_str = datetime.date.today().strftime('%Y-%m-%d')
+
+    # Define the new sheet name
+    spreadsheet_title = f'PA_Scraped_Data_{today_str}'  
 
     try:
         # Use gspread's OAuth2 flow
@@ -50,6 +55,11 @@ def main():
         # Load data from the first worksheet
         worksheet = spreadsheet.worksheet("Sheet1")
         data = worksheet.get_all_records()
+        # --- ADD THESE LINES FOR DEBUGGING ---
+        print(f"Type of 'data' variable: {type(data)}")
+        print(f"Number of records (rows) found: {len(data)}")
+        print(f"First 5 records: {data[0:5]}")
+        # --- END OF DEBUGGING LINES ---
         combined_df = pd.DataFrame(data)
         print("Data loaded successfully from Google Sheet.")
 

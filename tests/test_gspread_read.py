@@ -8,8 +8,11 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets',
           'https://www.googleapis.com/auth/drive.file']
 
 # The name of the file that main.py just created
-# (You might need to change 'Sheet1' to 'Latest Data' if you changed it back)
-spreadsheet_title = "Sheet1" 
+# Get today's date as a string
+today_str = datetime.date.today().strftime('%Y-%m-%d')
+
+# Define the new sheet name
+spreadsheet_title = f'PA_Scraped_Data_{today_str}'
 
 try:
     print("Authenticating with Google Sheets...")
