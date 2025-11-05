@@ -33,7 +33,7 @@ def main():
     combined_df = None
     # --- Google Sheets Authentication and Setup ---
     print("Authenticating with Google Sheets...")
-    spreadsheet_title = "Latest Data"
+    spreadsheet_title = "Sheet1"
 
     try:
         # Use gspread's OAuth2 flow
@@ -48,7 +48,7 @@ def main():
         print(f"Found existing sheet: '{spreadsheet_title}'. Loading data.")
 
         # Load data from the first worksheet
-        worksheet = spreadsheet.worksheet("Latest Data")
+        worksheet = spreadsheet.worksheet("Sheet1")
         data = worksheet.get_all_records()
         combined_df = pd.DataFrame(data)
         print("Data loaded successfully from Google Sheet.")
