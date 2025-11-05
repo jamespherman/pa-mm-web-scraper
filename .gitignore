@@ -17,3 +17,4 @@ __pycache__/
 
 # OS-specific (if on macOS)
 .DS_Store\n# Python build artifacts\n__pycache__/\n*.pyc
+token.json
