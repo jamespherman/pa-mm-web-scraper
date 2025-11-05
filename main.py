@@ -26,8 +26,8 @@ TRULIEVE_STORES = {
     "Trulieve (North Shore)": "90"
 }
 CRESCO_STORES = {
-    "Sunnyside (PGH)": "203"
-    # We can add more stores here later using their store_id
+    "Sunnyside (Penn Ave)": "203",
+    "Sunnyside (Lawrenceville)": "89"
 }
 
 def main():
@@ -38,21 +38,25 @@ def main():
     spreadsheet_title = f"PA_Scraped_Data_{today_str}"
 
     try:
-        # Use gspread's OAuth2 flow
-        gc = gspread.oauth()
+        # Use gspread's OAuth2 flow (Desktop App method)
+        # This uses credentials.json and token.json
+        gc = gspread.oauth(
+            credentials_filename='credentials.json',
+            authorized_user_filename='token.json',
+            scopes=SCOPES
+        )
 
         # Check if a spreadsheet with today's date already exists
         try:
             spreadsheet = gc.open(spreadsheet_title)
             print(f"Spreadsheet '{spreadsheet_title}' already exists. Exiting.")
-            return # Exit if the file exists
+            return  # Use return to stop the script immediately
         except gspread.exceptions.SpreadsheetNotFound:
+            # If it doesn't exist, create it.
+            # It will be in your "My Drive" by default.
             print(f"Creating new spreadsheet: '{spreadsheet_title}'")
-            # Create the new spreadsheet
             spreadsheet = gc.create(spreadsheet_title)
-            # Share it with the specified user
-            spreadsheet.share('billyherman@gmail.com', perm_type='user', role='writer')
-            print(f"Spreadsheet shared with 'billyherman@gmail.com'.")
+            print(f"Spreadsheet created in 'My Drive': {spreadsheet.url}")
 
     except Exception as e:
         print(f"An error occurred during Google Sheets setup: {e}")
