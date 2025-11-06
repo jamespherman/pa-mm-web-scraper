@@ -34,8 +34,9 @@ def main():
     combined_df = None
     # --- Google Sheets Authentication and Setup ---
     print("Authenticating with Google Sheets...")
-    # Define a single, static spreadsheet title
-    spreadsheet_title = "PA_Dispensary_Database"
+    # Define the spreadsheet title dynamically based on today's date
+    today_str = datetime.date.today().strftime('%Y-%m-%d')
+    spreadsheet_title = f'PA_Scraped_Data_{today_str}'
 
     # Use gspread's OAuth2 flow
     gc = gspread.oauth(
