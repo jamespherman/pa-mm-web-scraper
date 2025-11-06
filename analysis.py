@@ -1,6 +1,10 @@
 import pandas as pd
 import warnings
 import re
+import os
+import datetime
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Define known terpene columns
 TERPENE_COLUMNS = [
@@ -152,33 +156,84 @@ def _clean_item_names(df):
     )
     return df
 
-def run_analysis(dataframe):
-    """
-    Main function to clean, analyze, and plot the scraped data.
-    """
-    print("\n--- Starting Data Analysis Module ---")
+def _standardize_types(df):
+    """ Standardizes the 'Type' column to ensure consistent categories. Converts to lowercase and maps variations. """
+    print("Standardizing product types...")
+    if 'Type' not in df.columns:
+        print("Warning: 'Type' column not found. Skipping type standardization.")
+        return df
+    # Ensure 'Type' is string and lowercase
+    df['Type'] = df['Type'].astype(str).str.lower()
+    # Define mappings for variations
+    type_map = {
+        'vape': 'vaporizers',
+        'vapes': 'vaporizers',
+        'concentrate': 'concentrates'
+        # 'flower' is already consistent
+    }
+    df['Type'] = df['Type'].replace(type_map)
+    return df
 
+def run_analysis(dataframe):
+    """ Main function to clean, analyze, and plot the scraped data. """
+    print("\n--- Starting Data Analysis Module ---")
     # Suppress common warnings from pandas/seaborn for cleaner output
     warnings.filterwarnings('ignore', category=FutureWarning)
     warnings.filterwarnings('ignore', category=UserWarning)
-
-    # --- Step 2: Data Cleaning ---
+    # --- Step 1: Data Cleaning ---
     # Create a new, cleaned dataframe to avoid modifying the original
     cleaned_df = dataframe.copy()
-
     # Convert types first (critical for all other operations)
     cleaned_df = _convert_to_numeric(cleaned_df)
-
+    # Standardize product types (e.g., 'vape' -> 'vaporizers')
+    cleaned_df = _standardize_types(cleaned_df)
     # Consolidate brand names
     cleaned_df = _consolidate_brands(cleaned_df)
-
     # Clean item names
     cleaned_df = _clean_item_names(cleaned_df)
-
     print(f"Data cleaning complete. New column 'Name_Clean' added.")
-
-    # --- Placeholder for Plotting Functions ---
-    print("Analysis module executed.")
-
+    # --- Step 2: Plotting Orchestration ---
+    # Create the date-stamped save directory
+    today_str = datetime.date.today().strftime('%Y-%m-%d')
+    save_dir = os.path.join('figures', today_str)
+    os.makedirs(save_dir, exist_ok=True)
+    print(f"\nSaving all plots to: {save_dir}")
+    # Define the product categories we want to generate plots for
+    CATEGORIES_TO_PLOT = ['flower', 'concentrates', 'vaporizers']
+    for category in CATEGORIES_TO_PLOT:
+        print(f"\n--- Analyzing Category: {category.upper()} ---")
+        # Filter the DataFrame for the specific category
+        category_df = cleaned_df[cleaned_df['Type'] == category].copy()
+        if category_df.empty:
+            print(f"No data found for category '{category}'. Skipping plots.")
+            continue
+        # --- Call plotting functions ---
+        # Plot 1: Brand vs. Total Terpenes Violin Plot
+        plot_brand_violin(category_df, category, save_dir)
+        # Plot 2: Top 50 Terpiest Products Heatmap
+        plot_top_50_heatmap(category_df, category, save_dir)
+        # Plot 3: Dominant Terpene Summary Figure
+        plot_dominant_terp_summary(category_df, category, save_dir)
+        # Close any open figures to conserve memory
+        plt.close('all')
+    print("\nAnalysis module executed.")
     # Return the cleaned dataframe
     return cleaned_df
+
+def plot_brand_violin(data, category_name, save_dir):
+    """ Generates and saves a violin plot of Total Terps vs. Brand. (Implementation for Step 2) """
+    print(f" > Plotting Brand Violin for {category_name}...")
+    # TODO: Implement violin plot logic here
+    pass
+
+def plot_top_50_heatmap(data, category_name, save_dir):
+    """ Generates and saves a heatmap of the top 50 terpiest products. (Implementation for Step 3) """
+    print(f" > Plotting Top 50 Heatmap for {category_name}...")
+    # TODO: Implement heatmap logic here
+    pass
+
+def plot_dominant_terp_summary(data, category_name, save_dir):
+    """ Generates and saves the dominant terpene pie chart and top 10 lists. (Implementation for Step 4) """
+    print(f" > Plotting Dominant Terp Summary for {category_name}...")
+    # TODO: Implement pie chart and text list logic here
+    pass
