@@ -1,47 +1,74 @@
 # google_sheets_writer.py
-# This file will contain all the logic for writing our data to Google Sheets.
+# This module provides a dedicated interface for interacting with Google Sheets.
+# It encapsulates the logic for creating worksheets and writing pandas DataFrames
+# to a specified Google Sheet, handling formatting and clearing of existing data.
 
 import gspread
 import pandas as pd
 from gspread_dataframe import set_with_dataframe
-import datetime
 
 def get_or_create_worksheet(spreadsheet, sheet_name):
     """
-    Gets a worksheet by name, creating it if it doesn't exist.
+    Retrieves a worksheet by its name from a given spreadsheet.
+
+    If the worksheet does not exist, it will be created with a default
+    size of 100 rows and 30 columns.
+
+    Args:
+        spreadsheet (gspread.Spreadsheet): The authenticated gspread Spreadsheet object.
+        sheet_name (str): The name of the worksheet to find or create.
+
+    Returns:
+        gspread.Worksheet: The worksheet object.
     """
     try:
+        # Attempt to retrieve the worksheet by its title.
         return spreadsheet.worksheet(sheet_name)
     except gspread.WorksheetNotFound:
-        print(f"Creating new worksheet: '{sheet_name}'")
+        # If the worksheet doesn't exist, create it.
+        print(f"Worksheet '{sheet_name}' not found. Creating a new one.")
         return spreadsheet.add_worksheet(title=sheet_name, rows="100", cols="30")
 
 def write_to_google_sheet(spreadsheet, dataframe):
     """
-    Writes a pandas DataFrame to a single worksheet, overwriting any
-    existing data.
-    The 'spreadsheet' object is already authenticated and passed from main.py.
+    Writes a pandas DataFrame to a specified worksheet within a Google Sheet.
+
+    This function will completely overwrite any existing data in the target worksheet.
+    It uses the `gspread_dataframe` library for efficient writing. The function
+    also handles the creation of the worksheet if it doesn't already exist.
+
+    Args:
+        spreadsheet (gspread.Spreadsheet): The authenticated gspread Spreadsheet
+            object where the data will be written. This is passed from `main.py`.
+        dataframe (pd.DataFrame): The pandas DataFrame containing the data to write.
     """
     try:
-        # --- 1. Define Sheet Name ---
+        # Define the target worksheet name.
         sheet_name = "Sheet1"
 
-        # --- 2. Write to "Sheet1" (Overwrite) ---
-        print(f"\n--- Writing to '{sheet_name}' (Overwrite) ---")
+        print(f"\n--- Preparing to write data to worksheet: '{sheet_name}' ---")
         
-        # Get or create the worksheet
-        data_sheet = get_or_create_worksheet(spreadsheet, sheet_name)
+        # Get the worksheet object, creating it if it doesn't exist.
+        worksheet = get_or_create_worksheet(spreadsheet, sheet_name)
         
-        print("Clearing existing data...")
-        data_sheet.clear()
+        # Clear all existing data from the worksheet to ensure a clean slate.
+        print("Clearing any existing data from the worksheet...")
+        worksheet.clear()
 
-        # Ensure NaN is written as empty string
-        dataframe.fillna('', inplace=True)
+        # Replace any pandas `NaN` values with empty strings. This is because
+        # `gspread` writes `NaN` as the string "#N/A" into the sheet, while
+        # an empty string results in an empty cell.
+        dataframe_filled = dataframe.fillna('')
 
-        print(f"Writing {len(dataframe)} rows...")
-        set_with_dataframe(data_sheet, dataframe, resize=True)
-        print(f"Write to '{sheet_name}' successful!")
+        # Use the `set_with_dataframe` function from the `gspread_dataframe`
+        # library to write the entire DataFrame to the worksheet.
+        # `resize=True` automatically adjusts the worksheet's dimensions to fit the DataFrame.
+        print(f"Writing {len(dataframe_filled)} rows and {len(dataframe_filled.columns)} columns...")
+        set_with_dataframe(worksheet, dataframe_filled, resize=True)
+
+        print(f"Successfully wrote data to '{sheet_name}'!")
 
     except Exception as e:
-        print(f"An error occurred while writing to Google Sheets: {e}")
-        print("Please check your permissions for the spreadsheet.")
+        print(f"\nERROR: An error occurred while writing to Google Sheets: {e}")
+        print("Please ensure you have 'Editor' permissions for the target spreadsheet.")
+        print(f"Spreadsheet URL: {spreadsheet.url}")

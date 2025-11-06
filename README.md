@@ -4,68 +4,81 @@ This project is a Python-based tool to scrape product data (cannabinoids, terpen
 
 ## Architecture
 
-The scraper is designed with a modular, platform-based architecture. Each scraper file in the `scrapers/` directory corresponds to a specific dispensary platform API. The `main.py` script orchestrates the process, running each scraper in sequence and combining the data into a single, clean dataset.
+The project is designed with a modular, multi-stage architecture:
+
+1.  **Scraping (`scrapers/`)**: Each scraper file in the `scrapers/` directory corresponds to a specific dispensary platform API (e.g., iHeartJane, Dutchie). These modules are responsible for fetching raw product data.
+
+2.  **Orchestration (`main.py`)**: The `main.py` script serves as the central controller. It performs the following key functions:
+    *   **Google Authentication**: It handles the initial authentication with Google APIs.
+    *   **Load or Scrape Logic**: It checks if a Google Sheet with today's date already exists. If it does, it loads the data directly from the sheet. If not, it runs the individual scrapers.
+    *   **Data Aggregation**: It collects the data from all scrapers and combines them into a single pandas DataFrame.
+    *   **Data Writing**: It passes the combined data to `google_sheets_writer.py` to be saved.
+    *   **Analysis Handoff**: It passes the final DataFrame to the `analysis.py` module for cleaning and visualization.
+
+3.  **Data Storage (`google_sheets_writer.py`)**: This module is responsible for all interactions with the Google Sheets API. It handles the creation of new spreadsheets and worksheets, and it writes the scraped data to the sheet.
+
+4.  **Analysis & Visualization (`analysis.py`)**: This module takes the raw, combined data and performs several cleaning and standardization steps. It then generates and saves a series of plots and heatmaps to the `figures/` directory, providing insights into the scraped data.
 
 ### Scraped Platforms and Dispensaries
 
-The following platforms are currently being scraped:
+The following platforms are currently supported:
 
-*   **iHeartJane (`iheartjane_scraper.py`)**
-    *   Maitri
-    *   Rise
-
-*   **Dutchie (`dutchie_scraper.py`)**
-    *   Ethos
-    *   Liberty
-    *   Ascend
-
-*   **Trulieve API (`trulieve_scraper.py`)**
-    *   Trulieve
-
-*   **Cresco/Sunnyside API (`cresco_scraper.py`)**
-    *   Sunnyside
+*   **iHeartJane (`iheartjane_scraper.py`)**: Maitri, Rise
+*   **Dutchie (`dutchie_scraper.py`)**: Ethos, Liberty, Ascend
+*   **Trulieve API (`trulieve_scraper.py`)**: Trulieve
+*   **Cresco/Sunnyside API (`cresco_scraper.py`)**: Sunnyside
 
 ## Usage
 
-1.  **Install Dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+### 1. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
-2. **Set up Google Sheets Integration (One-Time Setup):**
-    a. **Create a Google Cloud Project:** Go to the [Google Cloud Console](https://console.cloud.google.com/) and create a new project.
-    b. **Enable APIs:** In your new project, enable the **Google Drive API** and the **Google Sheets API**.
-    c. **Create Service Account Credentials:**
-        - Go to "APIs & Services" > "Credentials".
-        - Click "Create Credentials" and select "Service Account".
-        - Give the service account a name (e.g., "dispensary-scraper").
-        - Grant the service account the "Editor" role to allow it to edit files.
-        - Click "Done".
-    d. **Generate a JSON Key:**
-        - Find the service account you just created in the Credentials list.
-        - Click on it, go to the "Keys" tab, and click "Add Key" > "Create new key".
-        - Select "JSON" as the key type and click "Create". A `credentials.json` file will be downloaded.
-    e. **Place the Credentials File:** Move the downloaded JSON file into the root directory of this project and rename it to `credentials.json`.
-    f. **Create a Google Sheet:**
-        - Create a new Google Sheet in your Google Drive.
-        - Click the "Share" button in the top right.
-        - Find the `client_email` from your `credentials.json` file and share the sheet with that email address, giving it "Editor" permissions.
-    g. **Update `main.py`:**
-        - Open `main.py` and replace the placeholder `"YOUR_SPREADSHEET_ID_HERE"` with the actual ID from your Google Sheet's URL. The ID is the long string of characters in the middle of the URL (e.g., `.../d/THIS_IS_THE_ID/edit...`).
+### 2. Set up Google Sheets Integration (Optional)
 
+This project uses the Google Sheets API to store and retrieve scraped data. The script is configured to automatically create a new sheet for each day's scrape, titled `PA_Scraped_Data_YYYY-MM-DD`.
 
-3.  **Run the Scraper:**
-    ```bash
-    python main.py
-    ```
-    The first time you run this, you will be prompted to authenticate with Google in your browser. This will create a `token.json` file that will be used for future runs.
+The authentication process uses an **OAuth 2.0 "Desktop App" flow**. The first time you run the script, it will open a browser window and ask you to log in to your Google account and grant permissions. This process will create a `token.json` file in the project directory, which will be used to automatically re-authenticate on subsequent runs.
 
-4.  **View the Data:**
-    The script will write data to two sheets in your Google Sheet:
-    *   **Latest Data:** This sheet is completely overwritten with the newest data every time the script runs.
-    *   **Archived Data:** This sheet appends the new data from each run, along with a "ScrapeDate" column, creating a historical record.
+To set this up, you need to provide your own Google Cloud API credentials:
 
-5.  **Run Unit Tests:**
-    ```bash
-    python -m unittest discover tests
-    ```
+1.  **Create a Google Cloud Project**: Go to the [Google Cloud Console](https://console.cloud.google.com/) and create a new project.
+2.  **Enable APIs**: In your new project, go to the "APIs & Services" dashboard and enable the **Google Drive API** and the **Google Sheets API**.
+3.  **Configure OAuth Consent Screen**:
+    *   Go to "APIs & Services" > "OAuth consent screen".
+    *   Choose **External** and click "Create".
+    *   Fill in the required fields (App name, User support email, Developer contact).
+    *   On the "Scopes" page, you can leave it blank.
+    *   On the "Test users" page, add the email address of the Google account you intend to use for authentication.
+4.  **Create OAuth 2.0 Credentials**:
+    *   Go to "APIs & Services" > "Credentials".
+    *   Click "+ CREATE CREDENTIALS" and select **OAuth client ID**.
+    *   For the "Application type", select **Desktop app**.
+    *   Give it a name (e.g., "Dispensary Scraper Client").
+    *   After creation, a modal will appear. Click **DOWNLOAD JSON**.
+5.  **Place the Credentials File**: Move the downloaded JSON file into the root directory of this project and rename it to `credentials.json`.
+
+### 3. Run the Scraper
+
+```bash
+python main.py
+```
+*   **With Google Sheets**: If you completed the setup above, the script will authenticate and then either load today's data or run the scrapers and save the new data to a new Google Sheet.
+*   **Without Google Sheets**: If you want to run the scraper and analyze the data locally without saving to the cloud, you can comment out the line `write_to_google_sheet(spreadsheet, combined_df)` in `main.py`. The script will still run the scrapers, perform the analysis, and save the plots to the `figures/` directory.
+
+### 4. View the Data and Analysis
+
+*   **Google Sheets**: A new spreadsheet titled `PA_Scraped_Data_YYYY-MM-DD` will be created in the Google Drive of the account you used to authenticate.
+*   **Local Plots**: The analysis script will create a new date-stamped sub-directory inside the `figures/` folder (e.g., `figures/2023-10-27/`). This folder will contain all the generated plots, including:
+    *   **Violin Plots**: Showing the distribution of total terpenes by brand for each product category.
+    *   **Heatmaps**: Displaying the terpene profiles of the top 50 most potent products.
+    *   **Scatter Plots**: Visualizing the "value" (price per gram vs. total terpenes) for different brands.
+    *   **Summary Figures**: Including pie charts of dominant terpenes and top 10 product lists.
+
+### 5. Run Unit Tests
+
+To ensure all components are working as expected, you can run the test suite:
+```bash
+python -m unittest discover tests
+```
