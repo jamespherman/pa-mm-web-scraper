@@ -752,21 +752,22 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
     # Create the pie chart
     patches, texts, autotexts = ax_pie.pie(
         pie_data,
-        labels=pie_data.index,
         autopct='%1.1f%%',
         colors=pie_colors,
-        startangle=90,
-        pctdistance=0.85
+        startangle=90
     )
 
     # Style the text
     for text in texts:
         text.set_fontsize(10)
     for autotext in autotexts:
-        autotext.set_fontsize(9)
+        autotext.set_fontsize(10)
         autotext.set_color('white')
 
-    ax_pie.set_title(f'Dominant Terpene Profile for {category_name.title()}', fontsize=16, pad=20)
+    legend_labels = [f"{name} ({perc:.1f}%)" for name, perc in zip(pie_data.index, (pie_data / pie_data.sum() * 100))]
+    ax_pie.legend(patches, legend_labels, loc="upper center", bbox_to_anchor=(0.5, -0.05), fontsize=10, ncol=3)
+
+    ax_pie.set_title(f'Dominant Terpene Profile for {category_name.title()}', fontsize=18, pad=20)
 
     # --- B. Text List Axes (Right Side) ---
     ax_text = fig.add_axes([0.42, 0.0, 0.58, 1.0])
@@ -792,12 +793,12 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
 
             # Draw Header (e.g., "beta-Myrcene")
             ax_text.text(x_pos, y_pos, terp_name,
-                         fontweight='bold', fontsize=10, color=color_map[terp_name])
+                         fontweight='bold', fontsize=12, color=color_map[terp_name])
             y_pos -= (y_step_line * 1.5) # Extra space after header
 
             # Draw Top 10 List
             for line in top_10_lists[terp_name]:
-                ax_text.text(x_pos, y_pos, line, fontsize=8, family='monospace')
+                ax_text.text(x_pos, y_pos, line, fontsize=10, family='monospace')
                 y_pos -= y_step_line
 
             y_pos -= y_step_header # Extra space between lists
