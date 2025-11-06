@@ -5,6 +5,7 @@ import os
 import datetime
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 # Define known terpene columns
 TERPENE_COLUMNS = [
@@ -221,10 +222,91 @@ def run_analysis(dataframe):
     return cleaned_df
 
 def plot_brand_violin(data, category_name, save_dir):
-    """ Generates and saves a violin plot of Total Terps vs. Brand. (Implementation for Step 2) """
+    """
+    Generates and saves a violin plot of Total Terps vs. Brand.
+    (Implementation for Step 2)
+    """
     print(f" > Plotting Brand Violin for {category_name}...")
-    # TODO: Implement violin plot logic here
-    pass
+
+    # Define the minimum number of products a brand must have to be included
+    MIN_SAMPLES = 5
+
+    # --- 1. Filter and Prepare Data ---
+
+    # Calculate product counts for each brand
+    brand_counts = data['Brand'].value_counts()
+
+    # Get a list of brands that meet the minimum sample requirement
+    brands_to_keep = brand_counts[brand_counts >= MIN_SAMPLES].index
+
+    if len(brands_to_keep) < 2:
+        print(f" SKIPPING: Not enough brands (min 2) with >{MIN_SAMPLES} samples for {category_name}.")
+        return
+
+    # Filter the main DataFrame to only include these brands
+    df_filtered = data[data['Brand'].isin(brands_to_keep)].copy()
+
+    # --- 2. Create Sorting Order ---
+
+    # Calculate the median 'Total_Terps' for each brand and sort
+    brand_order = df_filtered.groupby('Brand')['Total_Terps'].median().sort_values().index
+
+    # --- 3. Create Brand Labels with Counts (e.g., "Brand (N=5)") ---
+
+    # Get the counts for the *filtered* list of brands
+    final_counts = df_filtered['Brand'].value_counts()
+
+    # Create new labels
+    new_labels = [f"{brand} (N={final_counts[brand]})" for brand in brand_order]
+
+    # --- 4. Plotting ---
+
+    # Set plot style
+    sns.set_style("whitegrid")
+
+    # Define figure size
+    # Adjust height dynamically based on the number of brands
+    plot_height = max(7, len(brand_order) * 0.5)
+    plt.figure(figsize=(12, plot_height))
+
+    # Create the violin plot
+    ax = sns.violinplot(
+        data=df_filtered,
+        x='Total_Terps', # Use Total_Terps on x-axis for horizontal plot
+        y='Brand', # Use Brand on y-axis
+        order=brand_order, # Apply the sorted brand order
+        palette='viridis',
+        inner='box', # Show a boxplot inside the violins
+        orient='h' # Specify horizontal orientation
+    )
+
+    # Update y-tick labels to include counts
+    ax.set_yticklabels(new_labels)
+
+    # --- 5. Style and Save ---
+
+    # Set titles and labels
+    plt.title(f'Total Terpenes by Brand for {category_name.title()}', fontsize=16)
+    plt.xlabel('Total Terpenes (%)', fontsize=12)
+    plt.ylabel('Brand', fontsize=12)
+    plt.xticks(fontsize=10)
+    plt.yticks(fontsize=10)
+
+    # Ensure layout is tight
+    plt.tight_layout()
+
+    # Define the output filename
+    filename = os.path.join(save_dir, f'brand_terp_violin_{category_name}.png')
+
+    # Save the figure
+    try:
+        plt.savefig(filename, dpi=150)
+        print(f" SUCCESS: Saved plot to {filename}")
+    except Exception as e:
+        print(f" ERROR: Failed to save plot to {filename}. Reason: {e}")
+
+    # Close the plot to free memory
+    plt.close()
 
 def plot_top_50_heatmap(data, category_name, save_dir):
     """ Generates and saves a heatmap of the top 50 terpiest products. (Implementation for Step 3) """
