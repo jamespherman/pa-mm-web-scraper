@@ -431,7 +431,167 @@ def plot_top_50_heatmap(data, category_name, save_dir):
     plt.close()
 
 def plot_dominant_terp_summary(data, category_name, save_dir):
-    """ Generates and saves the dominant terpene pie chart and top 10 lists. (Implementation for Step 4) """
+    """
+    Generates and saves the dominant terpene pie chart and top 10 lists.
+    (Implementation for Step 4)
+    """
     print(f" > Plotting Dominant Terp Summary for {category_name}...")
-    # TODO: Implement pie chart and text list logic here
-    pass
+
+    # --- 1. Define Terpenes and Apply Filters ---
+
+    # Define the subset of terpenes we want to analyze
+    TERPS_TO_PLOT = [
+        'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
+        'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Humulene',
+        'alpha-Bisabolol', 'Ocimene'
+    ]
+
+    # Use the same category-specific filters as the heatmap
+    filters = {
+        'flower': (
+            (data['Total_Terps'] > 2) &
+            (data['Total_Terps'] < 6) &
+            (data['THC'] < 40) &
+            (~data['Subtype'].str.contains('Infused', case=False, na=False))
+        ),
+        'concentrates': (
+            (data['Total_Terps'] > 5)
+        ),
+        'vaporizers': (
+            (data['Total_Terps'] > 5)
+        )
+    }
+
+    if category_name not in filters:
+        print(f" SKIPPING: No filter logic defined for category '{category_name}'.")
+        return
+
+    df_filtered = data[filters[category_name]].copy()
+
+    # Ensure we only have data for the terpenes we want to plot
+    df_terpenes = df_filtered[TERPS_TO_PLOT].copy()
+
+    if df_terpenes.empty:
+        print(f" SKIPPING: No products met the filter criteria for {category_name}.")
+        return
+
+    # --- 2. Calculate Data for Pie Chart ---
+
+    # Find the name of the dominant (highest value) terpene for each product
+    dominant_terpenes = df_terpenes.idxmax(axis=1)
+
+    # Count the occurrences of each dominant terpene
+    pie_data = dominant_terpenes.value_counts()
+
+    # Create a color map for consistent colors across plots
+    terp_palette = sns.color_palette('viridis', n_colors=len(TERPS_TO_PLOT))
+    color_map = {terp: color for terp, color in zip(TERPS_TO_PLOT, terp_palette)}
+
+    # Get colors in the correct order for the pie chart
+    pie_colors = [color_map.get(terp, '#B0B0B0') for terp in pie_data.index]
+
+    # --- 3. Calculate "Top 10" Lists ---
+
+    top_10_lists = {}
+    for terp in TERPS_TO_PLOT:
+        # Sort by the current terpene, descending
+        df_sorted = df_filtered.sort_values(terp, ascending=False)
+
+        # Get unique products by 'Name_Clean'
+        df_unique = df_sorted.drop_duplicates('Name_Clean')
+
+        # Get the top 10
+        top_10 = df_unique.nlargest(10, terp)
+
+        # Format the strings
+        product_strings = []
+        for _, row in top_10.iterrows():
+            brand_short = row['Brand'][:10] # Abbreviate brand name
+            name_short = row['Name_Clean'][:25] # Abbreviate strain name
+
+            s = (f"{row[terp]:.2f}% | {brand_short} | "
+                 f"{name_short} | {row['THC']:.1f}% THC")
+            product_strings.append(s)
+
+        top_10_lists[terp] = product_strings
+
+    # --- 4. Plotting ---
+
+    sns.set_style("white")
+    fig = plt.figure(figsize=(20, 12))
+
+    # --- A. Pie Chart Axes (Left Side) ---
+    # Replicates MATLAB's: ax = axes('Position', [0.01 0.17 0.3 1])
+    ax_pie = fig.add_axes([0.01, 0.1, 0.4, 0.8])
+
+    # Create the pie chart
+    patches, texts, autotexts = ax_pie.pie(
+        pie_data,
+        labels=pie_data.index,
+        autopct='%1.1f%%',
+        colors=pie_colors,
+        startangle=90,
+        pctdistance=0.85
+    )
+
+    # Style the text
+    for text in texts:
+        text.set_fontsize(10)
+    for autotext in autotexts:
+        autotext.set_fontsize(9)
+        autotext.set_color('white')
+
+    ax_pie.set_title(f'Dominant Terpene Profile for {category_name.title()}', fontsize=16, pad=20)
+
+    # --- B. Text List Axes (Right Side) ---
+    # Replicates MATLAB's: ax(2) = axes('Position', [0.325 0.02 0.55 0.925])
+    ax_text = fig.add_axes([0.42, 0.0, 0.58, 1.0])
+    ax_text.axis('off') # Hide axes
+
+    # --- C. Draw the Text Lists ---
+    # Replicates the nested text loop from MATLAB
+
+    num_columns = 2 # We will lay out the 10 lists in 2 columns
+    terps_per_column = len(TERPS_TO_PLOT) // num_columns
+
+    x_start_positions = [0.0, 0.5] # X-position for Column 1, Column 2
+    y_pos = 0.95 # Start at the top
+    y_step_header = 0.04
+    y_step_line = 0.02
+
+    current_terp_index = 0
+
+    for col in range(num_columns):
+        x_pos = x_start_positions[col]
+        y_pos = 0.95 # Reset Y for each new column
+
+        for i in range(terps_per_column):
+            terp_name = TERPS_TO_PLOT[current_terp_index]
+
+            # Draw Header (e.g., "beta-Myrcene")
+            ax_text.text(x_pos, y_pos, terp_name,
+                         fontweight='bold', fontsize=10, color=color_map[terp_name])
+            y_pos -= (y_step_line * 1.5) # Extra space after header
+
+            # Draw Top 10 List
+            for line in top_10_lists[terp_name]:
+                ax_text.text(x_pos, y_pos, line, fontsize=8, family='monospace')
+                y_pos -= y_step_line
+
+            y_pos -= y_step_header # Extra space between lists
+            current_terp_index += 1
+
+    # --- 5. Save Figure ---
+
+    # Define the output filename
+    filename = os.path.join(save_dir, f'dominant_terp_summary_{category_name}.png')
+
+    # Save the figure
+    try:
+        plt.savefig(filename, dpi=150, bbox_inches='tight')
+        print(f" SUCCESS: Saved plot to {filename}")
+    except Exception as e:
+        print(f" ERROR: Failed to save plot to {filename}. Reason: {e}")
+
+    # Close the plot to free memory
+    plt.close()
