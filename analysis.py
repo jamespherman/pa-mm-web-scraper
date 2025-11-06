@@ -277,7 +277,8 @@ def plot_brand_violin(data, category_name, save_dir):
         order=brand_order, # Apply the sorted brand order
         palette='viridis',
         inner='box', # Show a boxplot inside the violins
-        orient='h' # Specify horizontal orientation
+        orient='h', # Specify horizontal orientation
+	cut=0
     )
 
     # Update y-tick labels to include counts
