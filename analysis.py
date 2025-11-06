@@ -87,7 +87,7 @@ def _consolidate_brands(df):
         # Variations of GTI
         'Good Green': 'GTI', '&Shine': 'GTI', 'Rythm': 'GTI', 'Rhythm': 'GTI',
         # Variations of Jushi
-        'The Bank': 'Jushi', 'The Lab': 'Jushi', 'Seche': 'Jushi',
+        'The Bank': 'Jushi', 'The Lab': 'Jushi', 'Seche': 'Jushi', 'Lab': 'Jushi',
         # Variations of Trulieve
         'TruFlower': 'Trulieve', 'Cultivar Collection': 'Trulieve',
         'Modern Flower': 'Trulieve', 'Avenue': 'Trulieve', 'Muse': 'Trulieve',
@@ -100,9 +100,11 @@ def _consolidate_brands(df):
         'Supply/Cresco': 'Cresco', 'FloraCal': 'Cresco',
         'Cresco Labs': 'Cresco', 'Sunnyside': 'Cresco', # Store name also used as brand
         # Variations of Curaleaf
-        'Grass Roots': 'Curaleaf', 'Blades': 'Curaleaf',
+        'Grass Roots': 'Curaleaf', 'Blades': 'Curaleaf', 'Select': 'Curaleaf', 'Select Briq': 'Curaleaf',
         # Variations of Verano
         'Essence': 'Verano', 'Savvy': 'Verano', 'Muv': 'Verano',
+        # Variations of Vytal
+        'Vytal Options': 'Vytal', 'mood by Vytal': 'Vytal', # Consolidate to Vytal
         # Misc
         'The Woods': 'Terrapin',
         'Cookies': 'Kind Tree', 'Gage': 'Kind Tree',
@@ -114,6 +116,7 @@ def _consolidate_brands(df):
         'Organic Remedies': 'Organic Remedies',
         'Penn Health Group': 'PHG',
         'Prime Wellness': 'Prime',
+        'SupplyTM': 'Supply', # New addition
     }
     # The `.replace()` method on a pandas Series is highly efficient for this kind of mapping.
     df['Brand'] = df['Brand'].replace(brand_map)
