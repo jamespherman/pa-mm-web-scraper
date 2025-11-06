@@ -15,6 +15,7 @@ import datetime
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import matplotlib.patches as mpatches
 
 # A predefined list of known terpene columns. This ensures consistency
 # when processing and plotting terpene-related data.
@@ -389,100 +390,140 @@ def plot_brand_violin(data, category_name, save_dir):
     plt.close()
 
 def plot_value_scatterplot(data, category_name, save_dir):
-    """
-    Generates a scatter plot of Price per Gram (DPG) vs. Total Terpenes.
+"""
+Generates a scatter plot of Price per Gram (DPG) vs. Total Terpenes,
+using custom bi-colored markers for brand discrimination.
+(Implementation for Step 5d - FINAL)
+"""
+print(f" > Plotting Value Scatter Plot for {category_name}...")
 
-    This plot helps identify which brands offer the best "value" in terms
-    of terpene content for the price.
+# --- 1. Filter Data for Plotting ---
 
-    Args:
-        data (pd.DataFrame): The data for a specific product category.
-        category_name (str): The name of the category.
-        save_dir (str): The directory to save the plot.
-    """
-    print(f" > Plotting Value Scatter Plot for {category_name}...")
+# We must have valid DPG and Total_Terps to plot
+df_filtered = data[
+(data['dpg'].notna()) & (data['dpg'] > 0) &
+(data['Total_Terps'].notna()) & (data['Total_Terps'] > 0)
+].copy()
 
-    # --- 1. Filter Data for Plotting ---
+# --- 2. Remove Extreme Outliers for Readability ---
 
-    # We must have valid DPG and Total_Terps to plot
-    df_filtered = data[
-        (data['dpg'].notna()) & (data['dpg'] > 0) &
-        (data['Total_Terps'].notna()) & (data['Total_Terps'] > 0)
-    ].copy()
+# Calculate the 95th percentile for DPG and Terps
+dpg_limit = df_filtered['dpg'].quantile(0.95)
+terp_limit = df_filtered['Total_Terps'].quantile(0.95)
 
-    # --- 2. Remove Extreme Outliers for Readability ---
+# Filter to keep only data within these "reasonable" limits
+df_plot = df_filtered[
+(df_filtered['dpg'] <= dpg_limit) &
+(df_filtered['Total_Terps'] <= terp_limit)
+]
 
-    # Calculate the 95th percentile for DPG and Terps
-    dpg_limit = df_filtered['dpg'].quantile(0.95)
-    terp_limit = df_filtered['Total_Terps'].quantile(0.95)
+if df_plot.empty:
+print(f" SKIPPING: No valid DPG vs. Terpene data found for {category_name}.")
+return
 
-    # Filter to keep only data within these "reasonable" limits
-    df_plot = df_filtered[
-        (df_filtered['dpg'] <= dpg_limit) &
-        (df_filtered['Total_Terps'] <= terp_limit)
-    ]
+# --- 3. Create Bi-Color & Fillstyle Map ---
 
-    if df_plot.empty:
-        print(f" SKIPPING: No valid DPG vs. Terpene data found for {category_name}.")
-        return
+unique_brands = sorted(df_plot['Brand'].unique())
+n_brands = len(unique_brands)
 
-    # --- 3. Plotting ---
+# Define the user-provided custom color lists
+# 11 Custom Colors (Primary)
+custom_colors = [
+(0.2941, 0, 0.5725),
+(0.3647, 0.2275, 0.6078),
+(0, 0.3529, 0.7098),
+(0.1020, 0.5216, 1.0000),
+(0.2510, 0.6902, 0.6510),
+(0.1020, 1.0000, 0.1020),
+(1.0000, 0.7608, 0.0392),
+(0.6000, 0.3098, 0),
+(0.8627, 0.1961, 0.1255),
+(0.9020, 0.3804, 0.3529),
+(0.8275, 0.3725, 0.7176)
+]
 
-    sns.set_style("whitegrid")
-    plt.figure(figsize=(15, 10))
+# 3 Grays (Secondary)
+grays = [
+(0.2, 0.2, 0.2), # User "light gray"
+(0.5, 0.5, 0.5), # User "mid gray"
+(0.8, 0.8, 0.8) # User "dark gray"
+]
 
-    # Create the scatter plot
-    ax = sns.scatterplot(
-        data=df_plot,
-        x='dpg',
-        y='Total_Terps',
-        hue='Brand', # Color-code by Brand
-        size='Weight', # Vary point size by Weight
-        sizes=(50, 250),
-        alpha=0.7,
-        palette='viridis'
-    )
+# We will use 'left' and 'right' fillstyles
+fillstyles = ['left', 'right']
 
-    # --- 4. Style and Save ---
+# Create the map for each brand
+brand_style_map = {}
+for i, brand in enumerate(unique_brands):
+brand_style_map[brand] = {
+# Cycle through the 11 custom colors
+'c': custom_colors[i % len(custom_colors)],
+# Cycle through the 3 grays
+'markerfacecoloralt': grays[i % len(grays)],
+# Alternate 'left' and 'right' fillstyles
+'fillstyle': fillstyles[i % len(fillstyles)]
+}
 
-    plt.title(f'Value Plot: Price per Gram vs. Total Terpenes for {category_name.title()}', fontsize=16)
-    plt.xlabel('Price per Gram (DPG)', fontsize=12)
-    plt.ylabel('Total Terpenes (%)', fontsize=12)
+# --- 4. Plotting (Manual Loop per Brand) ---
 
-    # Move the legend outside the plot (it will be very busy)
-    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+sns.set_style("whitegrid")
+fig, ax = plt.subplots(figsize=(15, 10))
 
-    # Add annotations for the "Value Quadrants"
-    # Get plot limits
-    xlim = ax.get_xlim()
-    ylim = ax.get_ylim()
+# Loop once per brand (fast) and plot its data
+for brand in unique_brands:
+brand_df = df_plot[df_plot['Brand'] == brand]
+if brand_df.empty:
+continue
 
-    # Calculate midpoints
-    x_mid = (xlim[0] + xlim[1]) / 2
-    y_mid = (ylim[0] + ylim[1]) / 2
+style = brand_style_map[brand]
 
-    # Add quadrant labels
-    ax.text(xlim[0] + (x_mid * 0.05), y_mid, 'Higher\nValue\n(High Terps,\nLow Price)',
-            fontsize=12, color='gray', ha='left', va='center', alpha=0.5)
-    ax.text(xlim[1] - (x_mid * 0.05), y_mid, 'Lower\nValue\n(Low Terps,\nHigh Price)',
-            fontsize=12, color='gray', ha='right', va='center', alpha=0.5)
+ax.scatter(
+brand_df['dpg'],
+brand_df['Total_Terps'],
+marker='o',
+s=80, # Consistent, medium dot size
+alpha=0.7,
+label=brand,
+c=[style['c']], # This is `markerfacecolor`. Needs to be in a list for a single color.
+fillstyle=style['fillstyle'],
+markerfacecoloralt=style['markerfacecoloralt']
+)
 
-    # Ensure layout accounts for the external legend
-    plt.tight_layout()
+# --- 5. Style and Save ---
 
-    # Define the output filename
-    filename = os.path.join(save_dir, f'value_scatterplot_{category_name}.png')
+ax.set_title(f'Value Plot: Price per Gram vs. Total Terpenes for {category_name.title()}', fontsize=16)
+ax.set_xlabel('Price per Gram (DPG)', fontsize=12)
+ax.set_ylabel('Total Terpenes (%)', fontsize=12)
 
-    # Save the figure
-    try:
-        # Use bbox_inches='tight' to include the legend in the saved file
-        plt.savefig(filename, dpi=150, bbox_inches='tight')
-        print(f" SUCCESS: Saved plot to {filename}")
-    except Exception as e:
-        print(f" ERROR: Failed to save plot to {filename}. Reason: {e}")
+# Move the legend outside the plot
+ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
 
-    # Close the plot to free memory
-    plt.close()
+# Add annotations for the "Value Quadrants"
+xlim = ax.get_xlim()
+ylim = ax.get_ylim()
+x_mid = (xlim[0] + xlim[1]) / 2
+y_mid = (ylim[0] + ylim[1]) / 2
+
+ax.text(xlim[0] + (x_mid * 0.05), y_mid, 'Higher\nValue\n(High Terps,\nLow Price)',
+fontsize=12, color='gray', ha='left', va='center', alpha=0.5)
+ax.text(xlim[1] - (x_mid * 0.05), y_mid, 'Lower\nValue\n(Low Terps,\nHigh Price)',
+fontsize=12, color='gray', ha='right', va='center', alpha=0.5)
+
+# Ensure layout accounts for the external legend
+plt.tight_layout()
+
+# Define the output filename
+filename = os.path.join(save_dir, f'value_scatterplot_{category_name}.png')
+
+# Save the figure
+try:
+plt.savefig(filename, dpi=150, bbox_inches='tight')
+print(f" SUCCESS: Saved plot to {filename}")
+except Exception as e:
+print(f" ERROR: Failed to save plot to {filename}. Reason: {e}")
+
+# Close the plot to free memory
+plt.close()
 
 def plot_top_50_heatmap(data, category_name, save_dir):
     """
