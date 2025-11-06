@@ -28,7 +28,7 @@ DUTCHIE_STORES = {
         }
     },
     "Ethos (Pleasant Hills)": {
-        "api_url": "https://pleasanthills.ethoscannabis.com/api-4/graphql",
+        "api_url": "https://pittsburgh.ethoscannabis.com/api-4/graphql",
         "store_id": "607dc27bfde18500b5e8dd52",
         "headers": {
             "accept": "*/*",
@@ -40,7 +40,7 @@ DUTCHIE_STORES = {
         }
     },
     "Ethos (North Fayette)": {
-        "api_url": "https://northfayette.ethoscannabis.com/api-4/graphql",
+        "api_url": "https://pittsburgh.ethoscannabis.com/api-4/graphql",
         "store_id": "5fa0829005bb2400cfc4b694",
         "headers": {
             "accept": "*/*",
@@ -51,18 +51,18 @@ DUTCHIE_STORES = {
             "x-dutchie-session": "eyJpZCI6ImM1MDc2NGI5LTAyZWUtNDU2ZS05ODc0LTZmNzkyOTQwYzc2NiIsImV4cGlyZXMiOjE3NjI0Mjc5MTU5NzR9"
         }
     },
-    "Liberty (PGH)": {
-        "api_url": "https://dutchie.com/api-1/graphql",
-        "store_id": "63dab2d8ab202100548dbaf5",
-        "headers": {
-            "accept": "*/*",
-            "apollographql-client-name": "Marketplace (production)",
-            "content-type": "application/json",
-            "referer": "https://dutchie.com/embedded-menu/liberty-pittsburgh",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
-            "x-dutchie-session": "eyJpZCI6ImFiMGRlMWMyLWNhNWUtNGM4Zi05NDA1LTRhZWQ5MGNhZTQzOCIsImV4cGlyZXMiOjE3NjI0ODE2MDE3Mjd9"
-        }
-    },
+#    "Liberty (PGH)": {
+#        "api_url": "https://dutchie.com/api-1/graphql",
+#        "store_id": "63dab2d8ab202100548dbaf5",
+#        "headers": {
+#            "accept": "*/*",
+#            "apollographql-client-name": "Marketplace (production)",
+#            "content-type": "application/json",
+#            "referer": "https://dutchie.com/embedded-menu/liberty-pittsburgh",
+#            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
+#            "x-dutchie-session": "eyJpZCI6ImFiMGRlMWMyLWNhNWUtNGM4Zi05NDA1LTRhZWQ5MGNhZTQzOCIsImV4cGlyZXMiOjE3NjI0ODE2MDE3Mjd9"
+#        }
+#    },
     "Ascend (Cranberry)": {
         "api_url": "https://letsascend.com/api-4/graphql",
         "store_id": "66fef50576b5d1b3703a1890",

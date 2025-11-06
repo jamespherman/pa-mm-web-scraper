@@ -16,7 +16,6 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets',
           'https://www.googleapis.com/auth/drive.file']
 
 # --- Define Stores ---
-# We can build out this list from your MATLAB file
 IHEARTJANE_STORES = {
     "Maitri (PGH)": 2913,
     "Rise": 2266,
