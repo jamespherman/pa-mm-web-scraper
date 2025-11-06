@@ -15,11 +15,8 @@ try:
         scopes=SCOPES
     )
 
-    # Get today's date as a string
-    today_str = datetime.date.today().strftime('%Y-%m-%d')
-
     # Define the new sheet name
-    sheet_name = f'PA_Scraped_Data_{today_str}'
+    sheet_name = f'PA_Scraped_Data_TEST'
 
     # Create the new spreadsheet
     spreadsheet = client.create(sheet_name)
