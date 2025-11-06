@@ -1,3 +1,12 @@
+# analysis.py
+# This module is responsible for all post-scraping data processing.
+# It takes the combined, raw DataFrame from main.py and performs:
+# 1. Data Cleaning: Converting data types, standardizing values.
+# 2. Brand Consolidation: Merging brand name variations.
+# 3. Product Name Cleaning: Removing clutter from product names.
+# 4. Plotting and Visualization: Generating various plots to analyze the data,
+#    which are then saved to the `figures/` directory.
+
 import pandas as pd
 import warnings
 import re
@@ -7,7 +16,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-# Define known terpene columns
+# A predefined list of known terpene columns. This ensures consistency
+# when processing and plotting terpene-related data.
 TERPENE_COLUMNS = [
     'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
     'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Caryophyllene Oxide',
@@ -15,13 +25,24 @@ TERPENE_COLUMNS = [
     'Total_Terps'
 ]
 
-# Define other key numeric columns
+# A predefined list of key cannabinoid columns.
 CANNABINOID_COLUMNS = ['THC', 'THCa', 'CBD']
 
 def _convert_to_numeric(df):
     """
-    Converts all cannabinoid, terpene, and weight columns to numeric.
-    Replaces empty strings and non-numeric values with NaN.
+    Converts key columns to a numeric type for calculations and analysis.
+
+    This function iterates through predefined lists of columns (terpenes,
+    cannabinoids, weight, price) and forces them to a numeric type. Any
+    value that cannot be converted (e.g., an empty string) becomes `NaN`.
+    It then calculates the 'dollars per gram' (dpg) metric and fills `NaN`
+    values in terpene columns with 0.
+
+    Args:
+        df (pd.DataFrame): The DataFrame to process.
+
+    Returns:
+        pd.DataFrame: The DataFrame with specified columns converted to numeric types.
     """
     print("Converting data types to numeric...")
     numeric_cols = TERPENE_COLUMNS + CANNABINOID_COLUMNS + ['Weight', 'Price']
@@ -32,23 +53,36 @@ def _convert_to_numeric(df):
 
     for col in numeric_cols:
         if col in df.columns:
-            # errors='coerce' turns non-numeric strings (like '') into NaN
+            # `pd.to_numeric` with `errors='coerce'` is a robust way to convert.
+            # It handles various data types and turns failures into Not a Number (NaN).
             df[col] = pd.to_numeric(df[col], errors='coerce')
 
     # Calculate 'dpg' only after Price and Weight are numeric
     df['dpg'] = df['Price'] / df['Weight']
 
-    # Fill NaN in terpene columns with 0 for aggregation/analysis
+    # For aggregation and analysis, NaN in terpene columns is not useful.
+    # We replace it with 0, assuming that a missing value means zero concentration.
     df[TERPENE_COLUMNS] = df[TERPENE_COLUMNS].fillna(0)
     return df
 
 def _consolidate_brands(df):
     """
-    Merges variations of brand names into a single, standard name.
-    Based on logic from readAndClean.m.
+    Standardizes brand names by mapping variations to a single canonical name.
+
+    Dispensary menus often list the same brand under different names (e.g.,
+    "&Shine", "Rythm", "Good Green" are all part of GTI). This function
+    uses a predefined dictionary to consolidate these variations, making
+    brand-level analysis more accurate.
+
+    Args:
+        df (pd.DataFrame): The DataFrame with the 'Brand' column to clean.
+
+    Returns:
+        pd.DataFrame: The DataFrame with consolidated brand names.
     """
     print("Consolidating brand names...")
-    # Define brand mappings
+    # The `brand_map` dictionary defines the desired transformations.
+    # Key: The name found in the raw data. Value: The standardized name.
     brand_map = {
         # Variations of GTI
         'Good Green': 'GTI', '&Shine': 'GTI', 'Rythm': 'GTI', 'Rhythm': 'GTI',
@@ -81,15 +115,23 @@ def _consolidate_brands(df):
         'Penn Health Group': 'PHG',
         'Prime Wellness': 'Prime',
     }
-    # Use .replace() on the 'Brand' column to apply the mapping
-    # This is much faster than looping
+    # The `.replace()` method on a pandas Series is highly efficient for this kind of mapping.
     df['Brand'] = df['Brand'].replace(brand_map)
     return df
 
 def _clean_item_names(df):
     """
-    Cleans item 'Name' column based on MATALB 'removeList' and 'PAT' logic.
-    Removes weights, types, and other clutter.
+    Cleans product names by removing extraneous information like weight, type, etc.
+
+    This function uses a series of regular expressions to strip common, non-descriptive
+    terms from the 'Name' column, creating a new 'Name_Clean' column. This is
+    useful for identifying unique strains and comparing products across brands.
+
+    Args:
+        df (pd.DataFrame): The DataFrame with the 'Name' column to clean.
+
+    Returns:
+        pd.DataFrame: The DataFrame with a new 'Name_Clean' column.
     """
     print("Cleaning item names...")
     if 'Name' not in df.columns:
@@ -99,7 +141,7 @@ def _clean_item_names(df):
     names = df['Name'].copy()
 
     # 1. Translate MATLAB 'removeList' to a single regex 'or' (|) pattern
-    # This is a partial list for demonstration.
+    # A list of common strings to remove from product names.
     remove_strings = [
         "QUARTER IS SMALL BUDS", "Delta 9", "1/8", "Flower", "Postgame",
         "indica", "Indica", "Sativa", "sativa", "Halftime", "Cartridge",
@@ -129,8 +171,7 @@ def _clean_item_names(df):
     remove_list_regex = r'\b(' + '|'.join(re.escape(s) for s in remove_strings) + r')\b'
     names = names.str.replace(remove_list_regex, '', flags=re.IGNORECASE)
 
-    # 2. Translate MATLAB 'PAT' (patterns)
-    # This is a simplified subset of the 'PAT' logic
+    # 2. A dictionary of regex patterns to remove weights, percentages, etc.
     pattern_map = {
         r'\b\d{1,2}\.\d{1,2}g\b': '',  # e.g., 3.5g, 0.5g
         r'\b\d{1,2}g\b': '',          # e.g., 1g, 7g
@@ -147,10 +188,10 @@ def _clean_item_names(df):
     for pattern, replacement in pattern_map.items():
         names = names.str.replace(pattern, replacement, flags=re.IGNORECASE)
 
-    # 3. Final cleanup (like strtrim)
+    # 3. Add the cleaned names as a new column and trim whitespace.
     df['Name_Clean'] = names.str.strip()
 
-    # Replace empty strings with original name if cleaning blanked it
+    # If cleaning resulted in an empty string, revert to the original name.
     df['Name_Clean'] = df.apply(
         lambda row: row['Name'] if not row['Name_Clean'] else row['Name_Clean'],
         axis=1
@@ -158,7 +199,18 @@ def _clean_item_names(df):
     return df
 
 def _standardize_types(df):
-    """ Standardizes the 'Type' column to ensure consistent categories. Converts to lowercase and maps variations. """
+    """
+    Standardizes product 'Type' column for consistent categorization.
+
+    Maps variations like 'vape' or 'vapes' to a standard 'vaporizers' category.
+    This is crucial for grouping data correctly before plotting.
+
+    Args:
+        df (pd.DataFrame): The DataFrame with the 'Type' column.
+
+    Returns:
+        pd.DataFrame: The DataFrame with standardized 'Type' values.
+    """
     print("Standardizing product types...")
     if 'Type' not in df.columns:
         print("Warning: 'Type' column not found. Skipping type standardization.")
@@ -176,7 +228,17 @@ def _standardize_types(df):
     return df
 
 def run_analysis(dataframe):
-    """ Main function to clean, analyze, and plot the scraped data. """
+    """
+    The main orchestration function for the analysis module.
+
+    It executes the cleaning and plotting functions in the correct order.
+
+    Args:
+        dataframe (pd.DataFrame): The raw, combined DataFrame from the scrapers.
+
+    Returns:
+        pd.DataFrame: The fully cleaned and processed DataFrame.
+    """
     print("\n--- Starting Data Analysis Module ---")
     # Suppress common warnings from pandas/seaborn for cleaner output
     warnings.filterwarnings('ignore', category=FutureWarning)
@@ -228,7 +290,14 @@ def run_analysis(dataframe):
 def plot_brand_violin(data, category_name, save_dir):
     """
     Generates and saves a violin plot of Total Terps vs. Brand.
-    (Implementation for Step 2)
+
+    This plot helps visualize the distribution of terpene content for each brand.
+    Brands with fewer than a minimum number of samples are excluded.
+
+    Args:
+        data (pd.DataFrame): The data for a specific product category.
+        category_name (str): The name of the category (e.g., 'flower').
+        save_dir (str): The directory to save the plot image.
     """
     print(f" > Plotting Brand Violin for {category_name}...")
 
@@ -315,9 +384,15 @@ def plot_brand_violin(data, category_name, save_dir):
 
 def plot_value_scatterplot(data, category_name, save_dir):
     """
-    Generates a scatter plot of Price per Gram (DPG) vs. Total Terpenes,
-    hue-coded by Brand.
-    (Implementation for Step 5)
+    Generates a scatter plot of Price per Gram (DPG) vs. Total Terpenes.
+
+    This plot helps identify which brands offer the best "value" in terms
+    of terpene content for the price.
+
+    Args:
+        data (pd.DataFrame): The data for a specific product category.
+        category_name (str): The name of the category.
+        save_dir (str): The directory to save the plot.
     """
     print(f" > Plotting Value Scatter Plot for {category_name}...")
 
@@ -405,24 +480,28 @@ def plot_value_scatterplot(data, category_name, save_dir):
 
 def plot_top_50_heatmap(data, category_name, save_dir):
     """
-    Generates and saves a heatmap of the top 50 terpiest products
-    for a given category.
-    (Implementation for Step 3)
+    Generates a heatmap of the top 50 products with the highest total terpenes.
+
+    This provides a detailed look at the terpene profiles of the most potent
+    products available in a given category.
+
+    Args:
+        data (pd.DataFrame): The data for a specific product category.
+        category_name (str): The name of the category.
+        save_dir (str): The directory to save the plot.
     """
     print(f" > Plotting Top 50 Heatmap for {category_name}...")
 
     # --- 1. Define Terpenes and Category-Specific Filters ---
 
     # Define the subset of terpenes we want to plot in the heatmap
-    # (Based on the paCannabisDataAnalysis_all.m script)
     TERPS_TO_PLOT = [
         'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
         'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Humulene',
         'alpha-Bisabolol', 'Ocimene'
     ]
 
-    # Define category-specific filtering logic
-    # (Based on the paCannabisDataAnalysis_all.m script)
+    # Category-specific filters to remove outliers (e.g., infused flower)
     filters = {
         'flower': (
             (data['Total_Terps'] > 2) &
@@ -527,7 +606,13 @@ def plot_top_50_heatmap(data, category_name, save_dir):
 def plot_dominant_terp_summary(data, category_name, save_dir):
     """
     Generates and saves the dominant terpene pie chart and top 10 lists.
-    (Implementation for Step 4)
+
+    This provides a high-level overview of the terpene landscape for a product category.
+
+    Args:
+        data (pd.DataFrame): The data for a specific product category.
+        category_name (str): The name of the category.
+        save_dir (str): The directory to save the plot.
     """
     print(f" > Plotting Dominant Terp Summary for {category_name}...")
 
@@ -615,7 +700,6 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
     fig = plt.figure(figsize=(20, 12))
 
     # --- A. Pie Chart Axes (Left Side) ---
-    # Replicates MATLAB's: ax = axes('Position', [0.01 0.17 0.3 1])
     ax_pie = fig.add_axes([0.01, 0.1, 0.4, 0.8])
 
     # Create the pie chart
@@ -638,13 +722,10 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
     ax_pie.set_title(f'Dominant Terpene Profile for {category_name.title()}', fontsize=16, pad=20)
 
     # --- B. Text List Axes (Right Side) ---
-    # Replicates MATLAB's: ax(2) = axes('Position', [0.325 0.02 0.55 0.925])
     ax_text = fig.add_axes([0.42, 0.0, 0.58, 1.0])
     ax_text.axis('off') # Hide axes
 
     # --- C. Draw the Text Lists ---
-    # Replicates the nested text loop from MATLAB
-
     num_columns = 2 # We will lay out the 10 lists in 2 columns
     terps_per_column = len(TERPS_TO_PLOT) // num_columns
 

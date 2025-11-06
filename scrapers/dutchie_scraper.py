@@ -1,8 +1,8 @@
 # scrapers/dutchie_scraper.py
-# This scraper fetches data from the Dutchie GraphQL API.
-# It is designed to handle multiple Dutchie configurations:
-# 1. Proxy-based (e.g., Ethos)
-# 2. Direct-based (e.g., Liberty)
+# This scraper is designed to fetch data from the Dutchie GraphQL API.
+# Dutchie is a common platform for cannabis dispensaries, but each dispensary
+# often has its own unique API endpoint and configuration. This scraper is
+# built to handle these variations by using a detailed configuration dictionary.
 
 import requests
 import pandas as pd
@@ -12,8 +12,15 @@ from .scraper_utils import convert_to_grams
 
 # --- Constants ---
 
-# Define store configurations
-# Each store needs its own API base, headers, and store ID
+# The DUTCHIE_STORES dictionary is the core configuration for this scraper.
+# Each key is a user-friendly store name, and the value is a dictionary
+# containing the specific details needed to interact with that store's API.
+#
+# - `api_url`: The specific GraphQL endpoint for the dispensary.
+# - `store_id`: The unique identifier for the specific store location on the Dutchie platform.
+# - `headers`: A dictionary of HTTP headers. These are often crucial for mimicking
+#   a legitimate browser request to avoid being blocked. The `referer` and
+#   `x-dutchie-session` headers can be particularly important.
 DUTCHIE_STORES = {
     "Ethos (Harmar)": {
         "api_url": "https://harmarville.ethoscannabis.com/api-4/graphql",
@@ -89,12 +96,16 @@ DUTCHIE_STORES = {
     }
 }
 
+# A predefined list of known terpenes to ensure the final DataFrame has a consistent structure.
 KNOWN_TERPENES = [
     'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
     'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Caryophyllene Oxide',
     'Guaiol', 'Humulene', 'alpha-Bisabolol', 'Camphene', 'Ocimene'
 ]
 
+# A mapping to standardize terpene names. APIs often return variations
+# (e.g., 'b-myrcene', 'beta-myrcene'), and this ensures they are all mapped
+# to a single, canonical name.
 TERPENE_MAPPING = {
     'alpha-pinene': 'alpha-Pinene',
     'a-pinene': 'alpha-Pinene',
@@ -127,7 +138,18 @@ TERPENE_MAPPING = {
 
 def get_all_product_slugs(store_name, store_config):
     """
-    Step 1: Fetch all product cNames (slugs) for a specific store.
+    Fetches the unique identifiers (`cName` or slugs) for all products in a store.
+
+    This function paginates through the dispensary's menu, collecting the `cName`
+    for every product. This is the first step, as these slugs are required to
+    fetch the detailed information for each product.
+
+    Args:
+        store_name (str): The name of the store being scraped.
+        store_config (dict): The configuration dictionary for the store.
+
+    Returns:
+        list: A list of dictionaries, each containing a product's `cName` and store info.
     """
     all_products = []
     print(f"Step 1: Fetching product slugs for {store_name}...")
@@ -138,6 +160,10 @@ def get_all_product_slugs(store_name, store_config):
 
     page = 0
     while True:
+        # This is the GraphQL payload. It's sent as URL parameters.
+        # `extensions.persistedQuery.sha256Hash` is a key part of Dutchie's API.
+        # Instead of sending the full query text, the client sends a hash of the query.
+        # If this hash ever changes on their backend, this scraper will break.
         variables = {
             "includeEnterpriseSpecials": False,
             "productsFilter": {
@@ -207,7 +233,17 @@ def get_all_product_slugs(store_name, store_config):
 
 def get_detailed_product_info(product_slugs):
     """
-    Step 2 & 3: Fetch detailed info for each product and parse the data.
+    Fetches and parses detailed information for a list of product slugs.
+
+    This function iterates through the collected slugs, makes a new API call for
+    each one to get detailed data (terpenes, cannabinoids, price), and then
+    parses the complex JSON response into a simple, flat dictionary.
+
+    Args:
+        product_slugs (list): A list of product slug dictionaries from `get_all_product_slugs`.
+
+    Returns:
+        list: A list of dictionaries, where each dictionary represents a parsed product.
     """
     all_product_data = []
     print("\nStep 2: Fetching detailed product information from Dutchie...")
@@ -220,7 +256,8 @@ def get_detailed_product_info(product_slugs):
 
         if (i + 1) % 50 == 0:
             print(f"  ...processing product {i + 1}/{len(product_slugs)}")
-
+        # This is the second GraphQL query, for individual product details.
+        # Note the different `sha256Hash`.
         variables = {
             "includeTerpenes": True,
             "includeCannabinoids": True,
@@ -280,7 +317,17 @@ def get_detailed_product_info(product_slugs):
 
 def parse_product_details(product, store_name):
     """
-    Parses the detailed product JSON into a flat dictionary.
+    Parses the complex, nested JSON of a single product into a flat dictionary.
+
+    This function handles the extraction of key information and standardizes it.
+    It uses `.get()` extensively to avoid errors if a key is missing in the response.
+
+    Args:
+        product (dict): The JSON dictionary for a single product from the API.
+        store_name (str): The name of the store.
+
+    Returns:
+        dict: A flattened dictionary containing the key product information.
     """
     data = {
         'Name': product.get('Name', 'N/A'),
@@ -349,7 +396,13 @@ def parse_product_details(product, store_name):
 
 def fetch_dutchie_data():
     """
-    Main function to orchestrate the Dutchie scraping process.
+    The main orchestration function for the Dutchie scraper.
+
+    It calls the other functions in this module to get all product data from
+    all configured Dutchie stores and returns it as a single DataFrame.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing all scraped product data from Dutchie stores.
     """
     all_store_slugs = []
     
