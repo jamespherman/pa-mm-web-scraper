@@ -310,10 +310,125 @@ def plot_brand_violin(data, category_name, save_dir):
     plt.close()
 
 def plot_top_50_heatmap(data, category_name, save_dir):
-    """ Generates and saves a heatmap of the top 50 terpiest products. (Implementation for Step 3) """
+    """
+    Generates and saves a heatmap of the top 50 terpiest products
+    for a given category.
+    (Implementation for Step 3)
+    """
     print(f" > Plotting Top 50 Heatmap for {category_name}...")
-    # TODO: Implement heatmap logic here
-    pass
+
+    # --- 1. Define Terpenes and Category-Specific Filters ---
+
+    # Define the subset of terpenes we want to plot in the heatmap
+    # (Based on the paCannabisDataAnalysis_all.m script)
+    TERPS_TO_PLOT = [
+        'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
+        'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Humulene',
+        'alpha-Bisabolol', 'Ocimene'
+    ]
+
+    # Define category-specific filtering logic
+    # (Based on the paCannabisDataAnalysis_all.m script)
+    filters = {
+        'flower': (
+            (data['Total_Terps'] > 2) &
+            (data['Total_Terps'] < 6) &
+            (data['THC'] < 40) &
+            (~data['Subtype'].str.contains('Infused', case=False, na=False))
+        ),
+        'concentrates': (
+            (data['Total_Terps'] > 5)
+        ),
+        'vaporizers': (
+            (data['Total_Terps'] > 5)  # Use same logic as concentrates
+        )
+    }
+
+    # --- 2. Filter Data ---
+
+    if category_name not in filters:
+        print(f" SKIPPING: No filter logic defined for category '{category_name}'.")
+        return
+
+    df_filtered = data[filters[category_name]].copy()
+
+    if df_filtered.empty:
+        print(f" SKIPPING: No products met the filter criteria for {category_name}.")
+        return
+
+    # --- 3. Find Top 50 Unique Products ---
+
+    # First, get unique products by 'Name_Clean', keeping the one with the highest terps
+    df_unique = df_filtered.sort_values('Total_Terps', ascending=False) \
+        .drop_duplicates('Name_Clean')
+
+    # Now, get the top 50 from that unique list
+    top_50_df = df_unique.nlargest(50, 'Total_Terps').sort_values('Total_Terps', ascending=False)
+
+    if top_50_df.empty:
+        print(f" SKIPPING: No unique products available for heatmap in {category_name}.")
+        return
+
+    # --- 4. Prepare Data for Plotting ---
+
+    # Create the Y-axis labels (e.g., "Strain | Brand | 3.5% terps | 22.1% THC")
+    y_labels = [
+        f"{row['Name_Clean']} | {row['Brand']} | "
+        f"{row['Total_Terps']:.2f}% terps | {row['THC']:.1f}% THC"
+        for index, row in top_50_df.iterrows()
+    ]
+
+    # Get just the terpene data for the heatmap
+    heatmap_data = top_50_df[TERPS_TO_PLOT]
+
+    # Sort the terpene columns (X-axis) by their mean value, descending
+    # (This groups the most prominent terpenes together)
+    terp_order = heatmap_data.mean().sort_values(ascending=False).index
+    heatmap_data_sorted = heatmap_data[terp_order]
+
+    # --- 5. Plotting ---
+
+    sns.set_style("white")  # Use a white background for heatmaps
+
+    # Make plot height dynamic based on number of products
+    plot_height = max(10, len(top_50_df) * 0.3)
+    plt.figure(figsize=(15, plot_height))
+
+    # Create the heatmap
+    ax = sns.heatmap(
+        heatmap_data_sorted,
+        yticklabels=y_labels,
+        cmap='viridis',
+        annot=True,  # Show the values
+        fmt=".2f",  # Format values to 2 decimal places
+        linewidths=.5,
+        annot_kws={"size": 8}  # Smaller font for annotations
+    )
+
+    # --- 6. Style and Save ---
+
+    plt.title(f'Top {len(top_50_df)} Terpiest {category_name.title()} Products', fontsize=16)
+    plt.xlabel('Terpene', fontsize=12)
+    plt.ylabel('Product | Brand | Profile', fontsize=12)
+    plt.xticks(rotation=45, ha='right', fontsize=10)
+    plt.yticks(fontsize=9)
+    ax.xaxis.tick_top()  # Move X-axis labels to the top
+    ax.xaxis.set_label_position('top')
+
+    plt.tight_layout()
+
+    # Define the output filename
+    filename = os.path.join(save_dir, f'top_50_heatmap_{category_name}.png')
+
+    # Save the figure
+    try:
+        plt.savefig(filename, dpi=150)
+        print(f" SUCCESS: Saved plot to {filename}")
+    except Exception as e:
+        print(f" ERROR: Failed to save plot to {filename}. Reason: {e}")
+
+    # Close the plot to free memory
+    plt.close()
 
 def plot_dominant_terp_summary(data, category_name, save_dir):
     """ Generates and saves the dominant terpene pie chart and top 10 lists. (Implementation for Step 4) """
