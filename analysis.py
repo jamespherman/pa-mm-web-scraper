@@ -215,6 +215,10 @@ def run_analysis(dataframe):
         plot_top_50_heatmap(category_df, category, save_dir)
         # Plot 3: Dominant Terpene Summary Figure
         plot_dominant_terp_summary(category_df, category, save_dir)
+
+        # Plot 4: Value (DPG) vs. Terps Scatter Plot
+        plot_value_scatterplot(category_df, category, save_dir)
+
         # Close any open figures to conserve memory
         plt.close('all')
     print("\nAnalysis module executed.")
@@ -302,6 +306,96 @@ def plot_brand_violin(data, category_name, save_dir):
     # Save the figure
     try:
         plt.savefig(filename, dpi=150)
+        print(f" SUCCESS: Saved plot to {filename}")
+    except Exception as e:
+        print(f" ERROR: Failed to save plot to {filename}. Reason: {e}")
+
+    # Close the plot to free memory
+    plt.close()
+
+def plot_value_scatterplot(data, category_name, save_dir):
+    """
+    Generates a scatter plot of Price per Gram (DPG) vs. Total Terpenes,
+    hue-coded by Brand.
+    (Implementation for Step 5)
+    """
+    print(f" > Plotting Value Scatter Plot for {category_name}...")
+
+    # --- 1. Filter Data for Plotting ---
+
+    # We must have valid DPG and Total_Terps to plot
+    df_filtered = data[
+        (data['dpg'].notna()) & (data['dpg'] > 0) &
+        (data['Total_Terps'].notna()) & (data['Total_Terps'] > 0)
+    ].copy()
+
+    # --- 2. Remove Extreme Outliers for Readability ---
+
+    # Calculate the 95th percentile for DPG and Terps
+    dpg_limit = df_filtered['dpg'].quantile(0.95)
+    terp_limit = df_filtered['Total_Terps'].quantile(0.95)
+
+    # Filter to keep only data within these "reasonable" limits
+    df_plot = df_filtered[
+        (df_filtered['dpg'] <= dpg_limit) &
+        (df_filtered['Total_Terps'] <= terp_limit)
+    ]
+
+    if df_plot.empty:
+        print(f" SKIPPING: No valid DPG vs. Terpene data found for {category_name}.")
+        return
+
+    # --- 3. Plotting ---
+
+    sns.set_style("whitegrid")
+    plt.figure(figsize=(15, 10))
+
+    # Create the scatter plot
+    ax = sns.scatterplot(
+        data=df_plot,
+        x='dpg',
+        y='Total_Terps',
+        hue='Brand', # Color-code by Brand
+        size='Weight', # Vary point size by Weight
+        sizes=(50, 250),
+        alpha=0.7,
+        palette='viridis'
+    )
+
+    # --- 4. Style and Save ---
+
+    plt.title(f'Value Plot: Price per Gram vs. Total Terpenes for {category_name.title()}', fontsize=16)
+    plt.xlabel('Price per Gram (DPG)', fontsize=12)
+    plt.ylabel('Total Terpenes (%)', fontsize=12)
+
+    # Move the legend outside the plot (it will be very busy)
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+
+    # Add annotations for the "Value Quadrants"
+    # Get plot limits
+    xlim = ax.get_xlim()
+    ylim = ax.get_ylim()
+
+    # Calculate midpoints
+    x_mid = (xlim[0] + xlim[1]) / 2
+    y_mid = (ylim[0] + ylim[1]) / 2
+
+    # Add quadrant labels
+    ax.text(xlim[0] + (x_mid * 0.05), y_mid, 'Higher\nValue\n(High Terps,\nLow Price)',
+            fontsize=12, color='gray', ha='left', va='center', alpha=0.5)
+    ax.text(xlim[1] - (x_mid * 0.05), y_mid, 'Lower\nValue\n(Low Terps,\nHigh Price)',
+            fontsize=12, color='gray', ha='right', va='center', alpha=0.5)
+
+    # Ensure layout accounts for the external legend
+    plt.tight_layout()
+
+    # Define the output filename
+    filename = os.path.join(save_dir, f'value_scatterplot_{category_name}.png')
+
+    # Save the figure
+    try:
+        # Use bbox_inches='tight' to include the legend in the saved file
+        plt.savefig(filename, dpi=150, bbox_inches='tight')
         print(f" SUCCESS: Saved plot to {filename}")
     except Exception as e:
         print(f" ERROR: Failed to save plot to {filename}. Reason: {e}")
