@@ -281,6 +281,9 @@ def run_analysis(dataframe):
         # Plot 4: Value (DPG) vs. Terps Scatter Plot
         plot_value_scatterplot(category_df, category, save_dir)
 
+        # Plot 5: Top 25 Value Panel Chart
+        plot_value_panel_chart(category_df, category, save_dir)
+
         # Close any open figures to conserve memory
         plt.close('all')
     print("\nAnalysis module executed.")
@@ -764,6 +767,109 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
     # Save the figure
     try:
         plt.savefig(filename, dpi=150, bbox_inches='tight')
+        print(f" SUCCESS: Saved plot to {filename}")
+    except Exception as e:
+        print(f" ERROR: Failed to save plot to {filename}. Reason: {e}")
+
+    # Close the plot to free memory
+    plt.close()
+
+def plot_value_panel_chart(data, category_name, save_dir):
+    """
+    Generates a 3-panel chart of the Top 25 "Best Value" products,
+    showing Value Score, Price (DPG), and Total Terpenes.
+    (Implementation for Step 6)
+    """
+    print(f" > Plotting Top 25 Value Panel Chart for {category_name}...")
+
+    # --- 1. Define Filters and Calculate Value Score ---
+
+    # We must have valid DPG and Total_Terps to calculate value
+    df_filtered = data[
+    (data['dpg'].notna()) & (data['dpg'] > 0) &
+    (data['Total_Terps'].notna()) & (data['Total_Terps'] > 0)
+    ].copy()
+
+    # Calculate the "Value Score" (Terps per Dollar)
+    # A higher score is better
+    df_filtered['Value_Score'] = df_filtered['Total_Terps'] / df_filtered['dpg']
+
+    # --- 2. Get Top 25 Products ---
+
+    # Sort by the new Value_Score and get the top 25
+    df_top25 = df_filtered.nlargest(25, 'Value_Score')
+
+    if df_top25.empty:
+        print(f" SKIPPING: No products with valid Value Score for {category_name}.")
+        return
+
+    # Sort by score ascending for plotting (so #1 is at the top)
+    df_top25 = df_top25.sort_values('Value_Score', ascending=True)
+
+    # --- 3. Create Y-Axis Labels ---
+
+    # Create labels: "Brand | Name_Clean"
+    y_labels = [
+    f"{row['Brand']} | {row['Name_Clean']}"
+    for _, row in df_top25.iterrows()
+    ]
+
+    # --- 4. Plotting ---
+
+    sns.set_style("whitegrid")
+
+    # Create a figure with 3 subplots that share a Y-axis
+    fig, (ax1, ax2, ax3) = plt.subplots(
+    1, 3,
+    figsize=(20, 14),
+    sharey=True # This links all three Y-axes
+    )
+
+    # Set a main title for the entire figure
+    fig.suptitle(f'Top 25 "Best Value" Products: {category_name.title()}',
+    fontsize=20, y=1.02)
+
+    # --- Plot 1: Value Score (Terps per Dollar) ---
+    bars1 = ax1.barh(y_labels, df_top25['Value_Score'],
+    color=sns.color_palette('viridis', n_colors=len(y_labels)))
+    ax1.set_xlabel('Value Score (Terps per $)', fontsize=12)
+    ax1.tick_params(axis='x', labelsize=10)
+    ax1.grid(axis='x', linestyle='--', alpha=0.7)
+    # Add data labels
+    ax1.bar_label(bars1, fmt='%.2f', padding=2, fontsize=8)
+
+    # --- Plot 2: Price per Gram (DPG) ---
+    bars2 = ax2.barh(y_labels, df_top25['dpg'],
+    color=sns.color_palette('rocket', n_colors=len(y_labels)))
+    ax2.set_xlabel('Price per Gram (DPG $)', fontsize=12)
+    ax2.tick_params(axis='x', labelsize=10)
+    ax2.grid(axis='x', linestyle='--', alpha=0.7)
+    # Add data labels
+    ax2.bar_label(bars2, fmt='$%.2f', padding=2, fontsize=8)
+
+    # --- Plot 3: Total Terpenes ---
+    bars3 = ax3.barh(y_labels, df_top25['Total_Terps'],
+    color=sns.color_palette('mako', n_colors=len(y_labels)))
+    ax3.set_xlabel('Total Terpenes (%)', fontsize=12)
+    ax3.tick_params(axis='x', labelsize=10)
+    ax3.grid(axis='x', linestyle='--', alpha=0.7)
+    # Add data labels
+    ax3.bar_label(bars3, fmt='%.2f%%', padding=2, fontsize=8)
+
+    # --- 5. Style and Save ---
+
+    # Style Y-axis ticks (only visible on ax1)
+    ax1.tick_params(axis='y', labelsize=9)
+
+    # Ensure layout is tight
+    plt.tight_layout(rect=[0, 0.03, 1, 0.98]) # Adjust rect for suptitle
+
+    # Define the output filename
+    filename = os.path.join(save_dir, f'top_25_value_panel_{category_name}.png')
+
+    # Save the figure
+    try:
+        plt.savefig(filename, dpi=150)
         print(f" SUCCESS: Saved plot to {filename}")
     except Exception as e:
         print(f" ERROR: Failed to save plot to {filename}. Reason: {e}")
