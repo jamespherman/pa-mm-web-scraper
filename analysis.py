@@ -15,6 +15,7 @@ import datetime
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import matplotlib.patches as mpatches
 
 # A predefined list of known terpene columns. This ensures consistency
 # when processing and plotting terpene-related data.
@@ -305,7 +306,7 @@ def plot_brand_violin(data, category_name, save_dir):
         category_name (str): The name of the category (e.g., 'flower').
         save_dir (str): The directory to save the plot image.
     """
-    print(f" > Plotting Brand Violin for {category_name}...")
+    print(f"  > Plotting Brand Violin for {category_name}...")
 
     # Define the minimum number of products a brand must have to be included
     MIN_SAMPLES = 5
@@ -319,7 +320,7 @@ def plot_brand_violin(data, category_name, save_dir):
     brands_to_keep = brand_counts[brand_counts >= MIN_SAMPLES].index
 
     if len(brands_to_keep) < 2:
-        print(f" SKIPPING: Not enough brands (min 2) with >{MIN_SAMPLES} samples for {category_name}.")
+        print(f"    SKIPPING: Not enough brands (min 2) with >{MIN_SAMPLES} samples for {category_name}.")
         return
 
     # Filter the main DataFrame to only include these brands
@@ -357,7 +358,7 @@ def plot_brand_violin(data, category_name, save_dir):
         palette='viridis',
         inner='box', # Show a boxplot inside the violins
         orient='h', # Specify horizontal orientation
-	cut=0
+        cut=0
     )
 
     # Update y-tick labels to include counts
@@ -381,9 +382,9 @@ def plot_brand_violin(data, category_name, save_dir):
     # Save the figure
     try:
         plt.savefig(filename, dpi=150)
-        print(f" SUCCESS: Saved plot to {filename}")
+        print(f"    SUCCESS: Saved plot to {filename}")
     except Exception as e:
-        print(f" ERROR: Failed to save plot to {filename}. Reason: {e}")
+        print(f"    ERROR: Failed to save plot to {filename}. Reason: {e}")
 
     # Close the plot to free memory
     plt.close()
@@ -536,7 +537,7 @@ def plot_top_50_heatmap(data, category_name, save_dir):
         category_name (str): The name of the category.
         save_dir (str): The directory to save the plot.
     """
-    print(f" > Plotting Top 50 Heatmap for {category_name}...")
+    print(f"  > Plotting Top 50 Heatmap for {category_name}...")
 
     # --- 1. Define Terpenes and Category-Specific Filters ---
 
@@ -566,13 +567,13 @@ def plot_top_50_heatmap(data, category_name, save_dir):
     # --- 2. Filter Data ---
 
     if category_name not in filters:
-        print(f" SKIPPING: No filter logic defined for category '{category_name}'.")
+        print(f"    SKIPPING: No filter logic defined for category '{category_name}'.")
         return
 
     df_filtered = data[filters[category_name]].copy()
 
     if df_filtered.empty:
-        print(f" SKIPPING: No products met the filter criteria for {category_name}.")
+        print(f"    SKIPPING: No products met the filter criteria for {category_name}.")
         return
 
     # --- 3. Find Top 50 Unique Products ---
@@ -585,7 +586,7 @@ def plot_top_50_heatmap(data, category_name, save_dir):
     top_50_df = df_unique.nlargest(50, 'Total_Terps').sort_values('Total_Terps', ascending=False)
 
     if top_50_df.empty:
-        print(f" SKIPPING: No unique products available for heatmap in {category_name}.")
+        print(f"    SKIPPING: No unique products available for heatmap in {category_name}.")
         return
 
     # --- 4. Prepare Data for Plotting ---
@@ -642,9 +643,9 @@ def plot_top_50_heatmap(data, category_name, save_dir):
     # Save the figure
     try:
         plt.savefig(filename, dpi=150)
-        print(f" SUCCESS: Saved plot to {filename}")
+        print(f"    SUCCESS: Saved plot to {filename}")
     except Exception as e:
-        print(f" ERROR: Failed to save plot to {filename}. Reason: {e}")
+        print(f"    ERROR: Failed to save plot to {filename}. Reason: {e}")
 
     # Close the plot to free memory
     plt.close()
@@ -660,7 +661,7 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
         category_name (str): The name of the category.
         save_dir (str): The directory to save the plot.
     """
-    print(f" > Plotting Dominant Terp Summary for {category_name}...")
+    print(f"  > Plotting Dominant Terp Summary for {category_name}...")
 
     # --- 1. Define Terpenes and Apply Filters ---
 
@@ -688,7 +689,7 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
     }
 
     if category_name not in filters:
-        print(f" SKIPPING: No filter logic defined for category '{category_name}'.")
+        print(f"    SKIPPING: No filter logic defined for category '{category_name}'.")
         return
 
     df_filtered = data[filters[category_name]].copy()
@@ -697,7 +698,7 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
     df_terpenes = df_filtered[TERPS_TO_PLOT].copy()
 
     if df_terpenes.empty:
-        print(f" SKIPPING: No products met the filter criteria for {category_name}.")
+        print(f"    SKIPPING: No products met the filter criteria for {category_name}.")
         return
 
     # --- 2. Calculate Data for Pie Chart ---
@@ -748,24 +749,29 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
     # --- A. Pie Chart Axes (Left Side) ---
     ax_pie = fig.add_axes([0.01, 0.1, 0.4, 0.8])
 
-    # Create the pie chart
-    patches, texts, autotexts = ax_pie.pie(
+    # Move pie chart up to make space for the legend
+    patches, texts = ax_pie.pie(
         pie_data,
-        autopct='%1.1f%%',
         colors=pie_colors,
         startangle=90,
+        center=(0.5, 0.5) # Center the pie in the axis
     )
 
-    # Style the text
-    for autotext in autotexts:
-        autotext.set_fontsize(10)
-        autotext.set_color('white')
+    # Add descriptive text
+    ax_pie.set_title(f'Dominant Terpene for {category_name.title()}', fontsize=36, pad=30)
+    ax_pie.text(0.5, 1, 'Pie shows the % of products where a given terpene is dominant.',
+                ha='center', va='center', transform=ax_pie.transAxes,
+                fontsize=18, style='italic', color='#555555')
+
 
     # Add the legend below the chart
     legend_labels = [f"{name} ({perc:.1f}%)" for name, perc in zip(pie_data.index, (pie_data / pie_data.sum() * 100))]
-    ax_pie.legend(patches, legend_labels, loc="upper center", bbox_to_anchor=(0.5, -0.05), fontsize=10, ncol=3)
-
-    ax_pie.set_title(f'Dominant Terpene Profile for {category_name.title()}', fontsize=18, pad=20)
+    ax_pie.legend(patches, legend_labels, 
+                  loc="upper center", # Position legend at bottom
+                  bbox_to_anchor=(0.5, -0.1), # Place it below the axis
+                  fontsize=36,
+                  ncol=1, # Use 3 columns
+                  frameon=False) # No bounding box
 
     # --- B. Text List Axes (Right Side) ---
     ax_text = fig.add_axes([0.42, 0.0, 0.58, 1.0])
@@ -791,12 +797,12 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
 
             # Draw Header (e.g., "beta-Myrcene")
             ax_text.text(x_pos, y_pos, terp_name,
-                         fontweight='bold', fontsize=12, color=color_map[terp_name])
+                         fontweight='bold', fontsize=24, color=color_map[terp_name])
             y_pos -= (y_step_line * 1.5) # Extra space after header
 
             # Draw Top 10 List
             for line in top_10_lists[terp_name]:
-                ax_text.text(x_pos, y_pos, line, fontsize=10, family='monospace')
+                ax_text.text(x_pos, y_pos, line, fontsize=12, family='monospace')
                 y_pos -= y_step_line
 
             y_pos -= y_step_header # Extra space between lists
@@ -810,9 +816,9 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
     # Save the figure
     try:
         plt.savefig(filename, dpi=150, bbox_inches='tight')
-        print(f" SUCCESS: Saved plot to {filename}")
+        print(f"    SUCCESS: Saved plot to {filename}")
     except Exception as e:
-        print(f" ERROR: Failed to save plot to {filename}. Reason: {e}")
+        print(f"    ERROR: Failed to save plot to {filename}. Reason: {e}")
 
     # Close the plot to free memory
     plt.close()
@@ -823,14 +829,14 @@ def plot_value_panel_chart(data, category_name, save_dir):
     showing Value Score, Price (DPG), and Total Terpenes.
     (Implementation for Step 6)
     """
-    print(f" > Plotting Top 25 Value Panel Chart for {category_name}...")
+    print(f"  > Plotting Top 25 Value Panel Chart for {category_name}...")
 
     # --- 1. Define Filters and Calculate Value Score ---
 
     # We must have valid DPG and Total_Terps to calculate value
     df_filtered = data[
-    (data['dpg'].notna()) & (data['dpg'] > 0) &
-    (data['Total_Terps'].notna()) & (data['Total_Terps'] > 0)
+        (data['dpg'].notna()) & (data['dpg'] > 0) &
+        (data['Total_Terps'].notna()) & (data['Total_Terps'] > 0)
     ].copy()
 
     # Calculate the "Value Score" (Terps per Dollar)
@@ -843,7 +849,7 @@ def plot_value_panel_chart(data, category_name, save_dir):
     df_top25 = df_filtered.nlargest(25, 'Value_Score')
 
     if df_top25.empty:
-        print(f" SKIPPING: No products with valid Value Score for {category_name}.")
+        print(f"    SKIPPING: No products with valid Value Score for {category_name}.")
         return
 
     # Sort by score ascending for plotting (so #1 is at the top)
@@ -853,8 +859,8 @@ def plot_value_panel_chart(data, category_name, save_dir):
 
     # Create labels: "Brand | Name_Clean"
     y_labels = [
-    f"{row['Brand']} | {row['Name_Clean']}"
-    for _, row in df_top25.iterrows()
+        f"{row['Brand']} | {row['Name_Clean']}"
+        for _, row in df_top25.iterrows()
     ]
 
     # --- 4. Plotting ---
@@ -863,18 +869,21 @@ def plot_value_panel_chart(data, category_name, save_dir):
 
     # Create a figure with 3 subplots that share a Y-axis
     fig, (ax1, ax2, ax3) = plt.subplots(
-    1, 3,
-    figsize=(20, 14),
-    sharey=True # This links all three Y-axes
+        1, 3,
+        figsize=(20, 14),
+        sharey=True # This links all three Y-axes
     )
 
     # Set a main title for the entire figure
     fig.suptitle(f'Top 25 "Best Value" Products: {category_name.title()}',
-    fontsize=20, y=1.02)
+                 fontsize=20, y=1.02)
+    
+    # --- Create a single, unified color palette based on rank ---
+    palette = sns.color_palette('viridis', n_colors=len(df_top25))
 
     # --- Plot 1: Value Score (Terps per Dollar) ---
     bars1 = ax1.barh(y_labels, df_top25['Value_Score'],
-    color=sns.color_palette('viridis', n_colors=len(y_labels)))
+                     color=palette) # Use unified palette
     ax1.set_xlabel('Value Score (Terps per $)', fontsize=12)
     ax1.tick_params(axis='x', labelsize=10)
     ax1.grid(axis='x', linestyle='--', alpha=0.7)
@@ -883,7 +892,7 @@ def plot_value_panel_chart(data, category_name, save_dir):
 
     # --- Plot 2: Price per Gram (DPG) ---
     bars2 = ax2.barh(y_labels, df_top25['dpg'],
-    color=sns.color_palette('rocket', n_colors=len(y_labels)))
+                     color=palette) # Use unified palette
     ax2.set_xlabel('Price per Gram (DPG $)', fontsize=12)
     ax2.tick_params(axis='x', labelsize=10)
     ax2.grid(axis='x', linestyle='--', alpha=0.7)
@@ -892,7 +901,7 @@ def plot_value_panel_chart(data, category_name, save_dir):
 
     # --- Plot 3: Total Terpenes ---
     bars3 = ax3.barh(y_labels, df_top25['Total_Terps'],
-    color=sns.color_palette('mako', n_colors=len(y_labels)))
+                     color=palette) # Use unified palette
     ax3.set_xlabel('Total Terpenes (%)', fontsize=12)
     ax3.tick_params(axis='x', labelsize=10)
     ax3.grid(axis='x', linestyle='--', alpha=0.7)
@@ -904,8 +913,9 @@ def plot_value_panel_chart(data, category_name, save_dir):
     # Style Y-axis ticks (only visible on ax1)
     ax1.tick_params(axis='y', labelsize=9)
 
-    # Ensure layout is tight
-    plt.tight_layout(rect=[0, 0.03, 1, 0.98]) # Adjust rect for suptitle
+    # Manually adjust subplot spacing
+    # Give more room to the left for labels, less to the plots
+    fig.subplots_adjust(left=0.4, top=0.95, bottom=0.05, right=0.98, wspace=0.35)
 
     # Define the output filename
     filename = os.path.join(save_dir, f'top_25_value_panel_{category_name}.png')
@@ -913,9 +923,9 @@ def plot_value_panel_chart(data, category_name, save_dir):
     # Save the figure
     try:
         plt.savefig(filename, dpi=150)
-        print(f" SUCCESS: Saved plot to {filename}")
+        print(f"    SUCCESS: Saved plot to {filename}")
     except Exception as e:
-        print(f" ERROR: Failed to save plot to {filename}. Reason: {e}")
+        print(f"    ERROR: Failed to save plot to {filename}. Reason: {e}")
 
     # Close the plot to free memory
     plt.close()
