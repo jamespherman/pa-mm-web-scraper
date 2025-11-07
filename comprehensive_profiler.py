@@ -96,7 +96,16 @@ def profile_cresco():
                 try:
                     params = {
                         'category': category,
+                        'inventory_type': 'retail',
+                        'require_sellable_quantity': 'true',
+                        'include_specials': 'true',
+                        'sellable': 'true',
+                        'order_by': 'brand',
                         'limit': '50',
+                        'usage_type': 'medical',
+                        'hob_first': 'true',
+                        'include_filters': 'true',
+                        'include_facets': 'true',
                         'offset': str(page * 50)
                     }
                     
@@ -223,7 +232,11 @@ def profile_iheartjane():
                 payload["page"] = page
                 payload["search_filter"] = f"store_id = {store_id}"
                 
-                params = {'jdm_api_key': NEW_JANE_API_KEY, 'jdm_source': 'monolith'}
+                params = {
+                    'jdm_api_key': NEW_JANE_API_KEY,
+                    'jdm_source': 'monolith',
+                    'jdm_version': '2.12.0'
+                }
                 
                 response = requests.post(NEW_JANE_URL, params=params, json=payload, timeout=20)
                 response.raise_for_status()
