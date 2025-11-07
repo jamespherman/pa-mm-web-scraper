@@ -1,0 +1,93 @@
+--- PROFILING RESULTS ---
+
+--- All Terpene Names Found (18) ---
+BetaCaryophyllene
+BetaMyrcene
+BetaPinene
+Bisabolol
+CaryophylleneOxide
+Humulene
+Limonene
+Linalool
+Ocimene
+Pinene
+Terpinolene
+a_terpinene
+b_caryophyllene
+b_myrcene
+b_pinene
+humulene
+limonene
+linalool
+
+--- All Brand Names Found (41) ---
+& Shine
+&Shine
+Cresco
+Cresco 
+Doctor Solomon's
+Eleven
+FarmaceuticalRX
+Find
+FloraCal Farms
+Garcia Hand Picked
+Good Green
+Good News
+Grassroots
+Gratitude Gardens
+Hijinks
+ILERA
+Khalifa Kush
+Kind Tree
+Later Days
+Legend
+Modern Flower
+Modern Flower Ground
+Organic Remedies 
+Penn Health Group
+Prime Wellness
+R.O.
+R.O. Ground
+R.O. Shake
+RYTHM
+Redemption
+Remedi
+Resolute Remedies
+Rythm
+Standard Farms
+Strane
+Strane Reserve
+Sunshine
+Supply
+Terrapin
+Verano
+mood
+
+--- All Category Names Found (7) ---
+Concentrate
+Flower
+Oral
+Tincture
+Topicals
+Vaporizers
+flower
+
+--- All Subcategory Names Found (18) ---
+DEFAULT
+PRE_GROUND
+SHAKE_TRIM
+SMALL_BUDS
+WHOLE_FLOWER
+capsules-tablets
+cartridges
+disposables
+flavored
+hash
+lotions
+sauce
+shake-trim
+shatter
+small-buds
+sublingual
+suppositories
+unflavored

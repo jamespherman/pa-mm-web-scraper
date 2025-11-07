@@ -329,6 +329,7 @@ def parse_product_details(product, store_name):
     Returns:
         dict: A flattened dictionary containing the key product information.
     """
+    
     data = {
         'Name': product.get('Name', 'N/A'),
         'Brand': product.get('brandName', 'N/A'),

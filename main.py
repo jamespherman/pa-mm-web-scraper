@@ -100,20 +100,20 @@ def main():
             if not df.empty:
                 all_dataframes.append(df)
 
-        print("\nStarting Dutchie Scraper...")
-        dutchie_df = fetch_dutchie_data()
-        if not dutchie_df.empty:
-            all_dataframes.append(dutchie_df)
+        print("\nStarting Cresco Scraper...")
+        cresco_df = fetch_cresco_data(CRESCO_STORES)
+        if not cresco_df.empty:
+            all_dataframes.append(cresco_df)
 
         print("\nStarting Trulieve Scraper...")
         trulieve_df = fetch_trulieve_data(TRULIEVE_STORES)
         if not trulieve_df.empty:
             all_dataframes.append(trulieve_df)
 
-        print("\nStarting Cresco Scraper...")
-        cresco_df = fetch_cresco_data(CRESCO_STORES)
-        if not cresco_df.empty:
-            all_dataframes.append(cresco_df)
+        print("\nStarting Dutchie Scraper...")
+        dutchie_df = fetch_dutchie_data()
+        if not dutchie_df.empty:
+            all_dataframes.append(dutchie_df)
 
         # If no scrapers return data, exit gracefully.
         if not all_dataframes:

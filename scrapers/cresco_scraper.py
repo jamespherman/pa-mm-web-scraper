@@ -84,6 +84,7 @@ def parse_cresco_products(products, store_name):
     
     for product in products:
         try:
+
             data = {
                 'Name': product.get('name', 'N/A'),
                 'Brand': product.get('brand', 'N/A'),

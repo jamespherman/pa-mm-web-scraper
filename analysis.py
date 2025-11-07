@@ -16,6 +16,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import matplotlib.patches as mpatches
+from matplotlib.colors import LinearSegmentedColormap
+import matplotlib.colors as mcolors
 
 # A predefined list of known terpene columns. This ensures consistency
 # when processing and plotting terpene-related data.
@@ -615,11 +617,15 @@ def plot_top_50_heatmap(data, category_name, save_dir):
     # --- 4. Prepare Data for Plotting ---
 
     # Create the Y-axis labels (e.g., "Strain | Brand | 3.5% terps | 22.1% THC")
-    y_labels = [
-        f"{row['Name_Clean']} | {row['Brand']} | "
-        f"{row['Total_Terps']:.2f}% terps | {row['THC']:.1f}% THC"
-        for index, row in top_50_df.iterrows()
-    ]
+    y_labels = []
+    for index, row in top_50_df.iterrows():
+        # Create the raw label string
+        label_str = (f"{row['Name_Clean']} | {row['Brand']} | "
+                     f"{row['Total_Terps']:.2f}% terps | {row['THC']:.1f}% THC")
+        
+        # Clean up any repeating "|" characters
+        clean_label = re.sub(r'\|+', '|', label_str)
+        y_labels.append(clean_label)
 
     # Get just the terpene data for the heatmap
     heatmap_data = top_50_df[TERPS_TO_PLOT]
@@ -635,30 +641,50 @@ def plot_top_50_heatmap(data, category_name, save_dir):
 
     # Make plot height dynamic based on number of products
     plot_height = max(10, len(top_50_df) * 0.3)
-    plt.figure(figsize=(15, plot_height))
+    fig = plt.figure(figsize=(18, plot_height))
 
     # Create the heatmap
     ax = sns.heatmap(
         heatmap_data_sorted,
         yticklabels=y_labels,
-        cmap='viridis',
+        cmap='Greys', # <-- FIX 3: Changed to black-to-white
         annot=True,  # Show the values
         fmt=".2f",  # Format values to 2 decimal places
         linewidths=.5,
-        annot_kws={"size": 8}  # Smaller font for annotations
+        annot_kws={"size": 10},  # Smaller font for annotations
     )
 
     # --- 6. Style and Save ---
 
-    plt.title(f'Top {len(top_50_df)} Terpiest {category_name.title()} Products', fontsize=16)
-    plt.xlabel('Terpene', fontsize=12)
-    plt.ylabel('Product | Brand | Profile', fontsize=12)
+    plt.title(f'Top {len(top_50_df)} Terpiest {category_name.title()} Products', fontsize=18)
+    plt.ylabel('Product | Brand | Profile', fontsize=16)
     plt.xticks(rotation=45, ha='right', fontsize=10)
-    plt.yticks(fontsize=9)
+    plt.yticks(fontsize=11)
     ax.xaxis.tick_top()  # Move X-axis labels to the top
     ax.xaxis.set_label_position('top')
 
-    plt.tight_layout()
+    # Force a draw so matplotlib can calculate the actual rendered size
+    fig.canvas.draw()
+    
+    # Get the renderer to calculate text bounding boxes
+    renderer = fig.canvas.get_renderer()
+    
+    # Find the maximum label width in pixels
+    max_width_pixels = 0
+    for label in ax.get_yticklabels():
+        bbox = label.get_window_extent(renderer=renderer)
+        if bbox.width > max_width_pixels:
+            max_width_pixels = bbox.width
+    
+    # Convert pixel width to a fraction of the total figure width
+    fig_width_pixels = fig.get_window_extent().width
+    new_left_margin = (max_width_pixels / fig_width_pixels)
+    
+    # Add a small 2% padding to the right of the text
+    new_left_margin += 0.02
+
+    # Manually adjust subplot spacing
+    fig.subplots_adjust(left=new_left_margin, top=0.95, bottom=0.05, right=0.98)
 
     # Define the output filename
     filename = os.path.join(save_dir, f'top_50_heatmap_{category_name}.png')
@@ -850,7 +876,7 @@ def plot_value_panel_chart(data, category_name, save_dir):
     """
     Generates a 3-panel chart of the Top 25 "Best Value" products,
     showing Value Score, Price (DPG), and Total Terpenes.
-    (Implementation for Step 6)
+    (Implementation for Step 6 - REVISED)
     """
     print(f"  > Plotting Top 25 Value Panel Chart for {category_name}...")
 
@@ -866,10 +892,12 @@ def plot_value_panel_chart(data, category_name, save_dir):
     # A higher score is better
     df_filtered['Value_Score'] = df_filtered['Total_Terps'] / df_filtered['dpg']
 
-    # --- 2. Get Top 25 Products ---
+    # --- 2. Get Top 25 Unique Products ---
 
-    # Sort by the new Value_Score and get the top 25
-    df_top25 = df_filtered.nlargest(25, 'Value_Score')
+    # FIX 2: Find top 25 *unique* products based on Name_Clean
+    # This prevents the "multiple bar" issue.
+    df_unique = df_filtered.drop_duplicates('Name_Clean')
+    df_top25 = df_unique.nlargest(25, 'Value_Score')
 
     if df_top25.empty:
         print(f"    SKIPPING: No products with valid Value Score for {category_name}.")
@@ -898,39 +926,61 @@ def plot_value_panel_chart(data, category_name, save_dir):
     )
 
     # Set a main title for the entire figure
-    fig.suptitle(f'Top 25 "Best Value" Products: {category_name.title()}',
-                 fontsize=20, y=1.02)
+    fig.suptitle(f'Top 25 "High Terps & Low Dollars Per Gram" Products: {category_name.title()}',
+                 fontsize=26, y=0.98)
     
-    # Define 3 separate, sequential colormaps
-    palette1 = sns.color_palette('Greens', n_colors=len(df_top25))
-    palette2 = sns.color_palette('Reds', n_colors=len(df_top25))
-    palette3 = sns.color_palette('Blues', n_colors=len(df_top25))
+    # --- FIX 1 & 3: Define Custom Gray-to-Hue Colormaps ---
+    
+    # Base gray color
+    gray = (0.5, 0.5, 0.5)
+    
+    # Panel 1: Gray to Green (for Value Score)
+    cmap1 = LinearSegmentedColormap.from_list('gray_to_green', 
+                                              [gray, sns.color_palette('Greens')[-1]])
+    norm1 = mcolors.Normalize(vmin=df_top25['Value_Score'].min(), 
+                              vmax=df_top25['Value_Score'].max())
+    colors1 = [cmap1(norm1(val)) for val in df_top25['Value_Score']]
+    
+    # Panel 2: Red (Low DPG) to Gray (High DPG)
+    cmap2 = LinearSegmentedColormap.from_list('red_to_gray', 
+                                              [sns.color_palette('Reds')[-1], gray])
+    norm2 = mcolors.Normalize(vmin=df_top25['dpg'].min(), 
+                              vmax=df_top25['dpg'].max())
+    colors2 = [cmap2(norm2(val)) for val in df_top25['dpg']]
+    
+    # Panel 3: Gray to Blue (for Total Terps)
+    cmap3 = LinearSegmentedColormap.from_list('gray_to_blue', 
+                                              [gray, sns.color_palette('Blues')[-1]])
+    norm3 = mcolors.Normalize(vmin=df_top25['Total_Terps'].min(), 
+                              vmax=df_top25['Total_Terps'].max())
+    colors3 = [cmap3(norm3(val)) for val in df_top25['Total_Terps']]
+    
 
     # --- Plot 1: Value Score (Terps per Dollar) ---
     bars1 = ax1.barh(y_labels, df_top25['Value_Score'],
-                     color=palette1) # Use unified palette
-    ax1.set_xlabel('Value Score (Terps / DPG)', fontsize=12)
-    ax1.tick_params(axis='x', labelsize=10)
-    # Add data labels
-    ax1.bar_label(bars1, fmt='%.2f', label_type='center', color='white', fontweight='bold', padding=2, fontsize=8)
+                     color=colors1) # Use value-mapped colors
+    # FIX 4: Update x-label
+    ax1.set_xlabel('Value Score (Terps / DPG)', fontsize=22)
+    ax1.bar_label(bars1, fmt='%.2f', label_type='center', 
+                  color='white', fontweight='bold', padding=2, fontsize=18)
 
     # --- Plot 2: Price per Gram (DPG) ---
     bars2 = ax2.barh(y_labels, df_top25['dpg'],
-                     color=palette2) # Use unified palette
-    ax2.set_xlabel('Price per Gram (DPG $)', fontsize=12)
-    ax2.tick_params(axis='x', labelsize=10)
-    # Add data labels
-    ax2.bar_label(bars2, fmt='$%.0f', label_type='center', color='white', fontweight='bold', padding=2, fontsize=8)
+                     color=colors2) # Use value-mapped colors
+    ax2.set_xlabel('Price per Gram (DPG $)', fontsize=22)
+    ax2.bar_label(bars2, fmt='$%.0f', label_type='center', 
+                  color='white', fontweight='bold', padding=2, fontsize=18)
 
     # --- Plot 3: Total Terpenes ---
     bars3 = ax3.barh(y_labels, df_top25['Total_Terps'],
-                     color=palette3) # Use unified palette
-    ax3.set_xlabel('Total Terpenes (%)', fontsize=12)
-    ax3.tick_params(axis='x', labelsize=10)
-    # Add data labels
-    ax3.bar_label(bars3, fmt='%.1f%%', label_type='center', color='white', fontweight='bold', padding=2, fontsize=8)
+                     color=colors3) # Use value-mapped colors
+    ax3.set_xlabel('Total Terpenes (%)', fontsize=22)
+    ax3.bar_label(bars3, fmt='%.1f%%', label_type='center', 
+                  color='white', fontweight='bold', padding=2, fontsize=18)
 
-    # Remove all axis ticks, tick labels, and spines
+    # --- 5. Style and Save ---
+
+    # FIX 2: Remove all axis ticks, tick labels, and spines
     for ax in [ax1, ax2, ax3]:
         ax.set_xticks([])
         ax.set_xticklabels([])
@@ -938,21 +988,39 @@ def plot_value_panel_chart(data, category_name, save_dir):
         ax.spines['right'].set_visible(False)
         ax.spines['bottom'].set_visible(False)
         ax.spines['left'].set_visible(False)
-    # Keep the y-tick LABELS (the product names) but hide the ticks
+    
+    # Keep the y-tick LABELS but hide the ticks
     ax1.tick_params(axis='y', length=0)
-
-    # Color the y-axis labels to match the Value Score
-    for label, color in zip(ax1.get_yticklabels(), palette1):
+    
+    # FIX 3: Color the y-axis labels to match the Value Score
+    for label, color in zip(ax1.get_yticklabels(), colors1):
         label.set_color(color)
+        
+    # FIX 4: Set Y-axis label font size
+    ax1.tick_params(axis='y', labelsize=16)
 
-    # --- 5. Style and Save ---
-
-    # Style Y-axis ticks (only visible on ax1)
-    ax1.tick_params(axis='y', labelsize=9)
+    # Force a draw so matplotlib can calculate the actual rendered size of labels
+    fig.canvas.draw()
+    
+    # Get the renderer to calculate text bounding boxes
+    renderer = fig.canvas.get_renderer()
+    
+    # Find the maximum label width in pixels
+    max_width_pixels = 0
+    for label in ax1.get_yticklabels():
+        bbox = label.get_window_extent(renderer=renderer)
+        if bbox.width > max_width_pixels:
+            max_width_pixels = bbox.width
+    
+    # Convert pixel width to a fraction of the total figure width
+    fig_width_pixels = fig.get_window_extent().width
+    new_left_margin = (max_width_pixels / fig_width_pixels)
+    
+    # Add a small 2% padding to the right of the text
+    new_left_margin += 0.02
 
     # Manually adjust subplot spacing
-    # Give more room to the left for labels, less to the plots
-    fig.subplots_adjust(left=0.4, top=0.95, bottom=0.05, right=0.98, wspace=0.35)
+    fig.subplots_adjust(left=new_left_margin, top=0.95, bottom=0.05, right=0.98, wspace=0.35)
 
     # Define the output filename
     filename = os.path.join(save_dir, f'top_25_value_panel_{category_name}.png')
@@ -963,6 +1031,6 @@ def plot_value_panel_chart(data, category_name, save_dir):
         print(f"    SUCCESS: Saved plot to {filename}")
     except Exception as e:
         print(f"    ERROR: Failed to save plot to {filename}. Reason: {e}")
-
+    
     # Close the plot to free memory
     plt.close()

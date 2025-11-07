@@ -85,6 +85,23 @@ def parse_trulieve_products(products, store_name):
     
     for product in products:
         try:
+
+            breakpoint()
+            
+            # --- NEW DEBUGGING CODE ---
+            if product.get('category') == 'vaporizers':
+                print("\n\n--- DEBUG: VAPE PRODUCT FOUND (Trulieve) ---")
+                print(f"Product: {product.get('name')}")
+                
+                # This is the breakpoint.
+                breakpoint()
+                
+                # At the (Pdb) prompt, type:
+                #   product.get('terpenes')
+                # This will show the raw terpene list.
+                # Type 'c' to continue.
+            # --- END OF DEBUGGING CODE ---
+
             # --- Extract Common Data ---
             common_name = product.get('name', 'N/A')
             brand = product.get('brand', 'N/A')
