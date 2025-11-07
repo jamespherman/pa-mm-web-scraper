@@ -82,42 +82,57 @@ def _consolidate_brands(df):
         pd.DataFrame: The DataFrame with consolidated brand names.
     """
     print("Consolidating brand names...")
+    df['Brand'] = df['Brand'].str.strip()
+    df['Brand'] = df['Brand'].str.replace(r'\*Pitt Promo\*Belushi\'s Farm', "Belushi's Farm", regex=True)
     # The `brand_map` dictionary defines the desired transformations.
     # Key: The name found in the raw data. Value: The standardized name.
     brand_map = {
-        # Variations of GTI
+        # --- GTI ---
         'Good Green': 'GTI', '&Shine': 'GTI', 'Rythm': 'GTI', 'Rhythm': 'GTI',
-        # Variations of Jushi
+        # --- Jushi ---
         'The Bank': 'Jushi', 'The Lab': 'Jushi', 'Seche': 'Jushi', 'Lab': 'Jushi',
-        # Variations of Trulieve
+        # --- Trulieve ---
         'TruFlower': 'Trulieve', 'Cultivar Collection': 'Trulieve',
         'Modern Flower': 'Trulieve', 'Avenue': 'Trulieve', 'Muse': 'Trulieve',
         'Moxie': 'Trulieve', 'Franklin Labs': 'Trulieve',
         'Khalifa Kush': 'Trulieve', 'Roll One (Trulieve)': 'Trulieve',
-        # Variations of Ayr
+        # --- Ayr ---
         'Lost In Translation': 'Ayr', 'Revel': 'Ayr', 'Origyn': 'Ayr',
         'Seven Hills': 'Ayr', 'Kynd': 'Ayr',
-        # Variations of Cresco
+        # --- Cresco ---
         'Supply/Cresco': 'Cresco', 'FloraCal': 'Cresco',
-        'Cresco Labs': 'Cresco', 'Sunnyside': 'Cresco', # Store name also used as brand
-        # Variations of Curaleaf
+        'Cresco Labs': 'Cresco', 'Sunnyside': 'Cresco',
+        # --- Curaleaf ---
         'Grass Roots': 'Curaleaf', 'Blades': 'Curaleaf', 'Select': 'Curaleaf', 'Select Briq': 'Curaleaf',
-        # Variations of Verano
+        # --- Verano ---
         'Essence': 'Verano', 'Savvy': 'Verano', 'Muv': 'Verano',
-        # Variations of Vytal
-        'Vytal Options': 'Vytal', 'mood by Vytal': 'Vytal', # Consolidate to Vytal
-        # Misc
+        # --- Vytal ---
+        'Vytal Options': 'Vytal',
+        'Solventless by Vytal': 'Vytal Solventless', # Kept separate per user
+        'mood by Vytal': 'mood', # Mapped to 'mood' per user
+        # --- R.O. ---
+        'R.O. Ground': 'R.O.', 'R.O. Shake': 'R.O.',
+        # --- Strane ---
+        'Strane Stash': 'Strane', 'Strane Reserve': 'Strane',
+        # --- Misc Single-Rule Consolidations ---
         'The Woods': 'Terrapin',
         'Cookies': 'Kind Tree', 'Gage': 'Kind Tree',
         'Standard Farms': 'Standard Farms', 'Old Pal': 'Standard Farms', 'Highsman': 'Standard Farms',
         'Tyson 2.0': 'Columbia Care', 'Triple Seven': 'Columbia Care', 'Classix': 'Columbia Care',
         'FarmaceuticalRx': 'FRX',
         'Maitri Medicinals': 'Maitri',
+        'Maitri Genetics': 'Maitri',
         'Natural Selections': 'Natural Selections',
         'Organic Remedies': 'Organic Remedies',
         'Penn Health Group': 'PHG',
+        'Penn Health': 'PHG',
         'Prime Wellness': 'Prime',
-        'SupplyTM': 'Supply', # New addition
+        'SupplyTM': 'Supply', 'Supply TM': 'Supply',
+        'Calypso Bountiful': 'Calypso',
+        'Garcia Hand Picked': 'Garcia',
+        'Redemption Shake': 'Redemption',
+        'Sunshine Cannabis': 'Sunshine',
+        'Ozone Reserve': 'Ozone',
     }
     # The `.replace()` method on a pandas Series is highly efficient for this kind of mapping.
     df['Brand'] = df['Brand'].replace(brand_map)
@@ -426,6 +441,14 @@ def plot_value_scatterplot(data, category_name, save_dir):
     unique_brands = sorted(df_plot['Brand'].unique())
     n_brands = len(unique_brands)
 
+    # Set legend columns dynamically based on number of brands
+    if n_brands > 60:
+        ncol = 3
+    elif n_brands > 30:
+        ncol = 2
+    else:
+        ncol = 1
+
     # Define the user-provided custom color lists
     # 11 Custom Colors (Primary)
     custom_colors = [
@@ -496,7 +519,7 @@ def plot_value_scatterplot(data, category_name, save_dir):
     ax.set_ylabel('Total Terpenes (%)', fontsize=12)
 
     # Move the legend outside the plot
-    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0.)
+    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0., ncol=ncol)
 
     # Add annotations for the "Value Quadrants"
     xlim = ax.get_xlim()
