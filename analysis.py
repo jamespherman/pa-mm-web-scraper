@@ -754,16 +754,15 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
         pie_data,
         autopct='%1.1f%%',
         colors=pie_colors,
-        startangle=90
+        startangle=90,
     )
 
     # Style the text
-    for text in texts:
-        text.set_fontsize(10)
     for autotext in autotexts:
         autotext.set_fontsize(10)
         autotext.set_color('white')
 
+    # Add the legend below the chart
     legend_labels = [f"{name} ({perc:.1f}%)" for name, perc in zip(pie_data.index, (pie_data / pie_data.sum() * 100))]
     ax_pie.legend(patches, legend_labels, loc="upper center", bbox_to_anchor=(0.5, -0.05), fontsize=10, ncol=3)
 
