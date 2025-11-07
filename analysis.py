@@ -888,7 +888,7 @@ def plot_value_panel_chart(data, category_name, save_dir):
 
     # --- 4. Plotting ---
 
-    sns.set_style("whitegrid")
+    sns.set_style("white")
 
     # Create a figure with 3 subplots that share a Y-axis
     fig, (ax1, ax2, ax3) = plt.subplots(
@@ -901,35 +901,49 @@ def plot_value_panel_chart(data, category_name, save_dir):
     fig.suptitle(f'Top 25 "Best Value" Products: {category_name.title()}',
                  fontsize=20, y=1.02)
     
-    # --- Create a single, unified color palette based on rank ---
-    palette = sns.color_palette('viridis', n_colors=len(df_top25))
+    # Define 3 separate, sequential colormaps
+    palette1 = sns.color_palette('Greens', n_colors=len(df_top25))
+    palette2 = sns.color_palette('Reds', n_colors=len(df_top25))
+    palette3 = sns.color_palette('Blues', n_colors=len(df_top25))
 
     # --- Plot 1: Value Score (Terps per Dollar) ---
     bars1 = ax1.barh(y_labels, df_top25['Value_Score'],
-                     color=palette) # Use unified palette
-    ax1.set_xlabel('Value Score (Terps per $)', fontsize=12)
+                     color=palette1) # Use unified palette
+    ax1.set_xlabel('Value Score (Terps / DPG)', fontsize=12)
     ax1.tick_params(axis='x', labelsize=10)
-    ax1.grid(axis='x', linestyle='--', alpha=0.7)
     # Add data labels
-    ax1.bar_label(bars1, fmt='%.2f', padding=2, fontsize=8)
+    ax1.bar_label(bars1, fmt='%.2f', label_type='center', color='white', fontweight='bold', padding=2, fontsize=8)
 
     # --- Plot 2: Price per Gram (DPG) ---
     bars2 = ax2.barh(y_labels, df_top25['dpg'],
-                     color=palette) # Use unified palette
+                     color=palette2) # Use unified palette
     ax2.set_xlabel('Price per Gram (DPG $)', fontsize=12)
     ax2.tick_params(axis='x', labelsize=10)
-    ax2.grid(axis='x', linestyle='--', alpha=0.7)
     # Add data labels
-    ax2.bar_label(bars2, fmt='$%.2f', padding=2, fontsize=8)
+    ax2.bar_label(bars2, fmt='$%.0f', label_type='center', color='white', fontweight='bold', padding=2, fontsize=8)
 
     # --- Plot 3: Total Terpenes ---
     bars3 = ax3.barh(y_labels, df_top25['Total_Terps'],
-                     color=palette) # Use unified palette
+                     color=palette3) # Use unified palette
     ax3.set_xlabel('Total Terpenes (%)', fontsize=12)
     ax3.tick_params(axis='x', labelsize=10)
-    ax3.grid(axis='x', linestyle='--', alpha=0.7)
     # Add data labels
-    ax3.bar_label(bars3, fmt='%.2f%%', padding=2, fontsize=8)
+    ax3.bar_label(bars3, fmt='%.1f%%', label_type='center', color='white', fontweight='bold', padding=2, fontsize=8)
+
+    # Remove all axis ticks, tick labels, and spines
+    for ax in [ax1, ax2, ax3]:
+        ax.set_xticks([])
+        ax.set_xticklabels([])
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.spines['bottom'].set_visible(False)
+        ax.spines['left'].set_visible(False)
+    # Keep the y-tick LABELS (the product names) but hide the ticks
+    ax1.tick_params(axis='y', length=0)
+
+    # Color the y-axis labels to match the Value Score
+    for label, color in zip(ax1.get_yticklabels(), palette1):
+        label.set_color(color)
 
     # --- 5. Style and Save ---
 
