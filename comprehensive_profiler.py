@@ -47,7 +47,7 @@ def profile_dutchie():
                     "includeEnterpriseSpecials": False,
                     "productsFilter": {"dispensaryId": store_id, "pricingType": "med", "Status": "Active"},
                     "page": page,
-                    "perPage": 100 # Fetch 100 at a time
+                    "perPage": 1000 # Fetch 1000 at a time
                 }
                 extensions = {
                     "persistedQuery": {"version": 1, "sha256Hash": "ee29c060826dc41c527e470e9ae502c9b2c169720faa0a9f5d25e1b9a530a4a0"}
@@ -101,12 +101,12 @@ def profile_cresco():
                         'include_specials': 'true',
                         'sellable': 'true',
                         'order_by': 'brand',
-                        'limit': '50',
+                        'limit': '1000',
                         'usage_type': 'medical',
                         'hob_first': 'true',
                         'include_filters': 'true',
                         'include_facets': 'true',
-                        'offset': str(page * 50)
+                        'offset': str(page * 1000)
                     }
                     
                     response = requests.get("https://api.crescolabs.com/p/inventory/op/fifo-inventory", headers=headers, params=params, timeout=20)
@@ -224,51 +224,47 @@ def profile_iheartjane():
     
     for store_name, store_id in IHEARTJANE_STORES.items():
         print(f"  Profiling iHeartJane store: {store_name}...")
-        page = 0
-        while True:
-            try:
-                payload = base_payload.copy()
-                payload["store_id"] = store_id
-                payload["page"] = page
-                payload["search_filter"] = f"store_id = {store_id}"
-                
-                params = {
-                    'jdm_api_key': NEW_JANE_API_KEY,
-                    'jdm_source': 'monolith',
-                    'jdm_version': '2.12.0'
-                }
-                
-                response = requests.post(NEW_JANE_URL, params=params, json=payload, timeout=20)
-                response.raise_for_status()
-                products = response.json().get('products', [])
-                
-                if not products:
-                    break # No more products
+        try:
+            payload = base_payload.copy()
+            payload["store_id"] = store_id
+            payload["page"] = 0
+            payload["search_filter"] = f"store_id = {store_id}"
+            
+            params = {
+                'jdm_api_key': NEW_JANE_API_KEY,
+                'jdm_source': 'monolith',
+                'jdm_version': '2.12.0'
+            }
+            
+            response = requests.post(NEW_JANE_URL, params=params, json=payload, timeout=20)
+            response.raise_for_status()
+            products = response.json().get('products', [])
+            
+            if not products:
+                break # No more products
 
-                for prod in products:
-                    attrs = prod.get('search_attributes', {})
-                    all_brand_names.add(attrs.get('brand'))
-                    all_category_names.add(attrs.get('kind'))
-                    all_subcategory_names.add(attrs.get('kind_subtype'))
-                    
-                    # iHeartJane is special, we parse from raw text
-                    raw_text = (attrs.get('store_notes', '') or '') + (attrs.get('description', '') or '')
-                    if raw_text:
-                        # Find all "Name : 1.234%" patterns
-                        matches = re.findall(r"([a-zA-Z\s\d\.-]+)[\s:]*([\d\.]+)%", raw_text, re.IGNORECASE)
-                        for name, value in matches:
-                            name = name.strip()
-                            # Filter out non-terpene names
-                            if name.lower() not in ['thc', 'cbd', 'thca', 'cbg', 'cbn', 'd8', 'd9'] and '%' not in name:
-                                all_terpene_names.add(name) # e.g., 'Caryophyllene', 'b-Pinene'
+            for prod in products:
+                attrs = prod.get('search_attributes', {})
+                all_brand_names.add(attrs.get('brand'))
+                all_category_names.add(attrs.get('kind'))
+                all_subcategory_names.add(attrs.get('kind_subtype'))
                 
-                print(f"    ... found {len(products)} products on page {page}")
-                page += 1
-                time.sleep(0.5)
+                # iHeartJane is special, we parse from raw text
+                raw_text = (attrs.get('store_notes', '') or '') + (attrs.get('description', '') or '')
+                if raw_text:
+                    # Find all "Name : 1.234%" patterns
+                    matches = re.findall(r"([a-zA-Z\s\d\.-]+)[\s:]*([\d\.]+)%", raw_text, re.IGNORECASE)
+                    for name, value in matches:
+                        name = name.strip()
+                        # Filter out non-terpene names
+                        if name.lower() not in ['thc', 'cbd', 'thca', 'cbg', 'cbn', 'd8', 'd9'] and '%' not in name:
+                            all_terpene_names.add(name) # e.g., 'Caryophyllene', 'b-Pinene'
+            
+            print(f"    ... found {len(products)} products in a single call.")
 
-            except Exception as e:
-                print(f"    ERROR profiling {store_name} on page {page}: {e}")
-                break
+        except Exception as e:
+            print(f"    ERROR profiling {store_name}: {e}")
+            break
 
     print("iHeartJane profile complete.")
 

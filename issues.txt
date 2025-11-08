@@ -1,0 +1,15 @@
+Agreed-Upon List of Issues
+
+Terpene Data Quality: The profiler is scraping junk text, not just terpene names. The problem is likely scope—we are applying our text search too broadly. We need to investigate the raw data from each source to see if we can target our extraction to specific "lab data" fields instead of searching entire product descriptions.
+
+Cresco (Lawrenceville) Failure: The "empty store" hypothesis is just a guess. We don't know why that store is returning no data. The correct approach is to create a narrow, focused test function to debug the API call for the Lawrenceville store specifically and determine if it requires different or additional parameters beyond the store ID.
+
+Dutchie Scraper Inefficiency: The current two-step scrape is a major bottleneck. We need to investigate the Dutchie API (by searching for public documentation) to determine if:
+
+a) The initial product list already contains the detailed data we need.
+
+b) We can request details for multiple products in a single batch call, rather than one by one.
+
+c) We are, in fact, stuck with the slow, one-at-a-time method.
+
+Category Discovery: Using "educated guesses" for categories is a weak, circular solution. We need to investigate the Cresco and Trulieve APIs (by searching for public documentation) to find an algorithmic way to get a definitive list of all available categories from their endpoints, rather than trying to guess them.
