@@ -12,7 +12,8 @@ def get_or_create_worksheet(spreadsheet, sheet_name):
     Retrieves a worksheet by its name from a given spreadsheet.
 
     If the worksheet does not exist, it will be created with a default
-    size of 100 rows and 30 columns.
+    size of 100 rows and 30 columns. This prevents errors when trying to
+    write to a non-existent sheet.
 
     Args:
         spreadsheet (gspread.Spreadsheet): The authenticated gspread Spreadsheet object.
@@ -57,7 +58,7 @@ def write_to_google_sheet(spreadsheet, dataframe):
 
         # Replace any pandas `NaN` values with empty strings. This is because
         # `gspread` writes `NaN` as the string "#N/A" into the sheet, while
-        # an empty string results in an empty cell.
+        # an empty string results in an empty cell, which is cleaner.
         dataframe_filled = dataframe.fillna('')
 
         # Use the `set_with_dataframe` function from the `gspread_dataframe`
