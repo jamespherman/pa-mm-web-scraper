@@ -1,14 +1,18 @@
-# scrapers/trulieve_scraper.py
-# This scraper fetches data from the new Trulieve v2 API.
+# scrapers/prulieve_scraper.py
+# This scraper fetches data from the Trulieve v2 API.
 
 import requests
 import pandas as pd
 import numpy as np
+import time  # Import time for the sleep delay
+# Note: This imports from the 'scraper_utils.py' file
 from .scraper_utils import convert_to_grams
 import re
 
 # --- Constants ---
-BASE_URL = "https://api.trulieve.com/api/v2/menu/{store_id}/{category}/MEDICAL"
+# This URL is correct
+BASE_URL = "https://api.trulieve.com/api/v2/menu/{store_id}/{category}/DEFAULT"
+
 HEADERS = {
     "accept": "*/*",
     "accept-language": "en-US,en;q=0.9",
@@ -23,208 +27,103 @@ HEADERS = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
 }
 
-CATEGORIES = ["flower", "vaporizers", "concentrates", "tinctures", "edibles"]
-
-# Define known terpenes to look for (copied from iheartjane)
-KNOWN_TERPENES = [
-    'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
-    'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Caryophyllene Oxide',
-    'Guaiol', 'Humulene', 'alpha-Bisabolol', 'Camphene', 'Ocimene'
+# This list is also correct
+CATEGORIES = [
+    "flower", 
+    "vapes", 
+    "concentrates", 
+    "tinctures", 
+    "edibles",
+    "accessories",
+    "pre-roll"
 ]
 
-# Map API terpene names (e.g., "BetaCaryophyllene") to our standard names
-TERPENE_MAPPING = {
-    # beta-Myrcene
-    'betamyrcene': 'beta-Myrcene',
-    'myrcene': 'beta-Myrcene',
-    'b-myrcene': 'beta-Myrcene',
-    # Limonene
-    'limonene': 'Limonene',
-    'd-limonene': 'Limonene',
-    # beta-Caryophyllene
-    'betacaryophyllene': 'beta-Caryophyllene',
-    'caryophyllene': 'beta-Caryophyllene',
-    'b-caryophyllene': 'beta-Caryophyllene',
-    # Terpinolene
-    'terpinolene': 'Terpinolene',
-    # Linalool
-    'linalool': 'Linalool',
-    # alpha-Pinene
-    'alphapinene': 'alpha-Pinene',
-    'a-pinene': 'alpha-Pinene',
-    'pinene': 'alpha-Pinene', # Note: 'Pinene' might map to alpha
-    # beta-Pinene
-    'betapinene': 'beta-Pinene',
-    'b-pinene': 'beta-Pinene',
-    # Caryophyllene Oxide
-    'caryophylleneoxide': 'Caryophyllene Oxide',
-    # Guaiol
-    'guaiol': 'Guaiol',
-    # Humulene
-    'humulene': 'Humulene',
-    'alpha-humulene': 'Humulene',
-    'a-humulene': 'Humulene',
-    # alpha-Bisabolol
-    'alphabisabolol': 'alpha-Bisabolol',
-    'bisabolol': 'alpha-Bisabolol',
-    'a-bisabolol': 'alpha-Bisabolol',
-    # Camphene
-    'camphene': 'Camphene',
-    # Ocimene
-    'ocimene': 'Ocimene',
-    'beta-ocimene': 'Ocimene',
-    'b-ocimene': 'Ocimene'
-}
+# Define known terpenes to look for
+KNOWN_TERPENES = [
+    'alpha-Pinene', 'beta-Pinene', 'Myrcene', 'Limonene', 'Terpinolene',
+    'Ocimene', 'Linalool', 'beta-Caryophyllene', 'Humulene', 'Nerolidol',
+    'Bisabolol', 'CaryophylleneOxide' # Added from your snippet
+]
 
-def parse_trulieve_products(products, store_name):
+# --- Main Function ---
+def get_trulieve_data(store_map):
     """
-    Parses the 'data' array from the Trulieve API response.
-    Each variant of a product becomes a separate row.
-    """
-    parsed_variants = []
+    Fetches and processes product data from the Trulieve API for given store IDs.
     
-    for product in products:
-        try:
+    Args:
+        store_map (dict): A dictionary mapping {store_name: store_id}
 
-            breakpoint()
-            
-            # --- NEW DEBUGGING CODE ---
-            if product.get('category') == 'vaporizers':
-                print("\n\n--- DEBUG: VAPE PRODUCT FOUND (Trulieve) ---")
-                print(f"Product: {product.get('name')}")
-                
-                # This is the breakpoint.
-                breakpoint()
-                
-                # At the (Pdb) prompt, type:
-                #   product.get('terpenes')
-                # This will show the raw terpene list.
-                # Type 'c' to continue.
-            # --- END OF DEBUGGING CODE ---
-
-            # --- Extract Common Data ---
-            common_name = product.get('name', 'N/A')
-            brand = product.get('brand', 'N/A')
-            strain_type = product.get('strain_type', 'N/A')
-            category = product.get('category', 'N/A')
-            subcategory = product.get('subcategory', 'N/A')
-            
-            # --- Extract Cannabinoids ---
-            # This API provides them at the top level
-            thc = product.get('thc_content')
-            cbd = product.get('cbd_content')
-            
-            # --- Extract Terpenes ---
-            terpene_data = {terp: np.nan for terp in KNOWN_TERPENES}
-            total_terps = 0
-            
-            terpenes_list = product.get('terpenes', [])
-            if terpenes_list:
-                for terp in terpenes_list:
-                    name = terp.get('name')
-                    value = terp.get('value')
-                    
-                    if name and value is not None:
-                        # Clean name: "BetaCaryophyllene" -> "betacaryophyllene"
-                        clean_name = name.strip().lower().replace('-', '')
-                        standard_name = TERPENE_MAPPING.get(clean_name)
-                        
-                        if standard_name:
-                            terpene_data[standard_name] = value
-                            total_terps += value
-                            
-            total_terps = total_terps if total_terps > 0 else np.nan
-
-            # --- Loop Through Variants for Price/Weight ---
-            variants = product.get('variants', [])
-            if not variants:
-                continue # Skip if no variants
-                
-            for variant in variants:
-                weight_str = variant.get('option')
-                if not weight_str:
-                    continue # Skip if no weight
-                    
-                weight_g = convert_to_grams(weight_str)
-                
-                # Prioritize sale price, then regular price
-                price = variant.get('sale_unit_price') or variant.get('unit_price')
-                
-                if not price:
-                    continue # Skip if no price
-                    
-                # Build the final row
-                product_row = {
-                    'Name': common_name,
-                    'Store': store_name,
-                    'Brand': brand,
-                    'Type': category,
-                    'Subtype': subcategory,
-                    'Weight': weight_g,
-                    'Weight_Str': weight_str,
-                    'Price': float(price),
-                    'THC': float(thc) if thc is not None else np.nan,
-                    'CBD': float(cbd) if cbd is not None else np.nan,
-                    'Total_Terps': total_terps,
-                }
-                
-                # Add the parsed terpene data
-                product_row.update(terpene_data)
-                
-                parsed_variants.append(product_row)
-
-        except Exception as e:
-            print(f"Error parsing product: {product.get('name')}. Error: {e}")
-            continue
-            
-    return parsed_variants
-
-
-def fetch_trulieve_data(stores):
-    """
-    Main function to orchestrate the Trulieve scraping process.
+    Returns:
+        pd.DataFrame: A DataFrame containing all processed product data.
     """
     all_products_list = []
-
-    print("Starting Trulieve Scraper (api.trulieve.com)...")
-
-    for store_name, store_id in stores.items():
-        print(f"Fetching data for Trulieve store: {store_name} (ID: {store_id})...")
+    
+    for store_name, store_id in store_map.items():
+        print(f"--- Scraping store: {store_name} ({store_id}) ---")
+        
         for category in CATEGORIES:
+            print(f"  Fetching category: {category}...")
             page = 1
+            total_scraped = 0
+            
             while True:
+                url = BASE_URL.format(store_id=store_id, category=category)
+                
+                params = {
+                    'page': page,
+                    'search': "",
+                    'weights': "",
+                    'brand': "",
+                    'strain_type': "",
+                    'subcategory': "",
+                    'cbd_max': "",
+                    'cbd_min': "",
+                    'thc_max': "",
+                    'thc_min': "",
+                    'special': "",
+                    'sort_by': "default",
+                }
+
                 try:
-                    # Construct the URL for the current page
-                    url = f"{BASE_URL.format(store_id=store_id, category=category)}?page={page}"
-                    
-                    response = requests.get(url, headers=HEADERS, timeout=10)
+                    response = requests.get(url, headers=HEADERS, params=params, timeout=10)
                     response.raise_for_status()
                     
-                    json_response = response.json()
+                    data = response.json()
                     
-                    products = json_response.get('data')
-                    
+                    # --- THIS IS THE FIRST FIX ---
+                    # The product list is under the "data" key, not "products"
+                    products = data.get('data', []) 
+
                     if not products:
-                        # No more products on this page, stop for this category
-                        print(f"  ...completed category: {category}")
-                        break
+                        if page == 1:
+                            print(f"    ...found 0 products for {category}.")
+                        else:
+                            print(f"  ...completed category: {category}. Found {total_scraped} products.")
+                        break 
                         
-                    # Parse the products and add them to our master list
-                    parsed_products = parse_trulieve_products(products, store_name)
-                    all_products_list.extend(parsed_products)
+                    print(f"    Page {page}: Found {len(products)} products.")
+
+                    # --- THIS IS THE SECOND FIX ---
+                    # We pass the new, correct data structure to the parser
+                    products_df = process_product_data(products, store_name)
+                    all_products_list.append(products_df)
+                    total_scraped += len(products_df)
                     
-                    # Check if this is the last page
-                    last_page = json_response.get('last_page')
-                    current_page = json_response.get('current_page')
-                    if last_page is not None and current_page is not None and current_page >= last_page:
-                        print(f"  ...completed category: {category}")
+                    time.sleep(0.5) 
+                        
+                    # Check for the last page
+                    if not data.get('next_page_url'):
+                        print(f"  ...completed category: {category}. Found {total_scraped} products.")
                         break
                         
                     page += 1
                     
                 except requests.exceptions.RequestException as e:
-                    print(f"Error fetching page {page} for {category} at {store_name}: {e}")
-                    break # Stop trying for this category on error
+                    if e.response is not None and e.response.status_code == 404:
+                        print(f"    ...category '{category}' does not exist at this store.")
+                    else:
+                        print(f"Error fetching page {page} for {category} at {store_name}: {e}")
+                    break 
                 except Exception as e:
                     print(f"An error occurred processing page {page} for {category}: {e}")
                     break
@@ -234,24 +133,115 @@ def fetch_trulieve_data(stores):
         return pd.DataFrame()
 
     # --- Final DataFrame ---
-    df = pd.DataFrame(all_products_list)
+    df = pd.concat(all_products_list, ignore_index=True)
 
     # Calculate DPG
-    df['dpg'] = df['Price'] / df['Weight']
+    df['Price'] = pd.to_numeric(df['Price'], errors='coerce')
+    df['Weight'] = pd.to_numeric(df['Weight'], errors='coerce')
+    df['dpg'] = df.apply(lambda row: row['Price'] / row['Weight'] if row['Weight'] > 0 else np.nan, axis=1)
     
-    # Define column order (ensure all known columns are present)
-    cannabinoid_cols = sorted([col for col in df.columns if col not in KNOWN_TERPENES + ['Name', 'Store', 'Brand', 'Type', 'Subtype', 'Weight', 'Weight_Str', 'Price', 'dpg', 'Total_Terps']])
-    terpene_cols = KNOWN_TERPENES
+    # Define column order
+    base_cols = ['Name', 'Store', 'Brand', 'Type', 'Subtype', 'Weight', 'Weight_Str', 'Price', 'dpg', 'Total_Terps']
+    
+    # Dynamically get all cannabinoid columns (all-caps)
+    cannabinoid_cols = sorted([col for col in df.columns if col.isupper() and len(col) <= 5 and col not in base_cols])
+    # Dynamically get all terpene columns
+    terpene_cols = sorted([col for col in df.columns if col in KNOWN_TERPENES])
 
-    column_order = (
-        ['Name', 'Store', 'Brand', 'Type', 'Subtype', 'Weight', 'Weight_Str', 'Price', 'dpg', 'Total_Terps'] +
-        cannabinoid_cols +
-        terpene_cols
-    )
+    column_order = base_cols + cannabinoid_cols + terpene_cols
     
+    # Add any missing columns
+    for col in column_order:
+        if col not in df:
+            df[col] = np.nan
+            
     # Reorder and fill NaNs
     df = df.reindex(columns=column_order).fillna(np.nan)
 
-    print(f"\nScraping complete for Trulieve. DataFrame created with {len(df)} rows.")
+    print(f"\nTotal products processed for all stores: {len(df)}")
     return df
 
+
+# --- Data Processing Function ---
+def process_product_data(products, store_name):
+    """
+    Processes a list of raw product dictionaries from the Trulieve API
+    based on the new, correct data structure from your snippet.
+    """
+    processed_list = []
+    
+    for product in products:
+        
+        # Extract variant info (for price and weight)
+        # Use .get('variants', [{}])[0] to safely get the first variant or an empty dict
+        variant = product.get('variants', [{}])[0]
+        if not variant:
+            variant = {} # Ensure variant is a dict if the list was empty
+            
+        weight_str = variant.get('option')
+        
+        # Basic Info
+        data = {
+            'Name': product.get('name'),
+            'Store': store_name,
+            'Brand': product.get('brand'),
+            'Type': product.get('category'),
+            'Subtype': product.get('subcategory'),
+            'Weight_Str': weight_str,
+            'Weight': convert_to_grams(weight_str),
+            'Price': variant.get('sale_unit_price') or variant.get('unit_price') or product.get('unit_price')
+        }
+
+        # Cannabinoids (from top-level keys)
+        if product.get('thc_content') is not None:
+            data['THC'] = product.get('thc_content')
+        if product.get('cbd_content') is not None:
+            data['CBD'] = product.get('cbd_content')
+        # Add any others you see, e.g.:
+        # data['CBN'] = product.get('cbn_content') 
+
+        # Terpenes (from the 'terpenes' list)
+        terpenes = product.get('terpenes', [])
+        total_terps = 0
+        if terpenes:
+            for t in terpenes:
+                name = t.get('name')
+                value = t.get('value')
+                
+                # Normalize the name from the API (e.g., "BetaCaryophyllene")
+                # to our standard (e.g., "beta-Caryophyllene")
+                if name == "BetaCaryophyllene":
+                    clean_name = "beta-Caryophyllene"
+                elif name == "BetaMyrcene":
+                    clean_name = "Myrcene"
+                elif name == "BetaPinene":
+                    clean_name = "beta-Pinene"
+                elif name == "Pinene": # Assuming this is alpha
+                    clean_name = "alpha-Pinene"
+                elif name == "Bisabolol":
+                    clean_name = "Bisabolol"
+                elif name == "CaryophylleneOxide":
+                    clean_name = "CaryophylleneOxide"
+                elif name == "Humulene":
+                    clean_name = "Humulene"
+                elif name == "Limonene":
+                    clean_name = "Limonene"
+                elif name == "Linalool":
+                    clean_name = "Linalool"
+                elif name == "Terpinolene":
+                    clean_name = "Terpinolene"
+                elif name == "Ocimene":
+                    clean_name = "Ocimene"
+                else:
+                    clean_name = name # Keep it if we don't have a map
+                
+                if value is not None:
+                    if clean_name in KNOWN_TERPENES:
+                        data[clean_name] = value
+                    total_terps += value
+        
+        data['Total_Terps'] = total_terps if total_terps > 0 else np.nan
+
+        processed_list.append(data)
+    
+    return pd.DataFrame(processed_list)
