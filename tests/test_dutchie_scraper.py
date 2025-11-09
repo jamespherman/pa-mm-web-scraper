@@ -52,7 +52,7 @@ class TestDutchieScraper(unittest.TestCase):
         self.assertEqual(parsed_data['Name'], "Test Kush")
         self.assertEqual(parsed_data['Brand'], "Test Farms")
         self.assertEqual(parsed_data['Store'], "Test Store")
-        self.assertEqual(parsed_data['Type'], "Flower")
+        self.assertEqual(parsed_data['Type'], "flower")
         self.assertEqual(parsed_data['Subtype'], "Indica")
 
         # Test special price is chosen
