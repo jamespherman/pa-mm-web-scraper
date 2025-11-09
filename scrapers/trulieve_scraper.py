@@ -4,7 +4,7 @@
 import requests
 import pandas as pd
 import numpy as np
-from .scraper_utils import convert_to_grams
+from .scraper_utils import convert_to_grams, MASTER_TERPENE_MAP, brand_map, MASTER_CATEGORY_MAP
 import re
 
 # --- Constants ---
@@ -32,23 +32,6 @@ KNOWN_TERPENES = [
     'Guaiol', 'Humulene', 'alpha-Bisabolol', 'Camphene', 'Ocimene'
 ]
 
-# Map API terpene names (e.g., "BetaCaryophyllene") to our standard names
-TERPENE_MAPPING = {
-    'betamyrcene': 'beta-Myrcene', 'myrcene': 'beta-Myrcene', 'b-myrcene': 'beta-Myrcene',
-    'limonene': 'Limonene', 'd-limonene': 'Limonene',
-    'betacaryophyllene': 'beta-Caryophyllene', 'caryophyllene': 'beta-Caryophyllene', 'b-caryophyllene': 'beta-Caryophyllene',
-    'terpinolene': 'Terpinolene',
-    'linalool': 'Linalool',
-    'alphapinene': 'alpha-Pinene', 'a-pinene': 'alpha-Pinene', 'pinene': 'alpha-Pinene',
-    'betapinene': 'beta-Pinene', 'b-pinene': 'beta-Pinene',
-    'caryophylleneoxide': 'Caryophyllene Oxide',
-    'guaiol': 'Guaiol',
-    'humulene': 'Humulene', 'alpha-humulene': 'Humulene', 'a-humulene': 'Humulene',
-    'alphabisabolol': 'alpha-Bisabolol', 'bisabolol': 'alpha-Bisabolol', 'a-bisabolol': 'alpha-Bisabolol',
-    'camphene': 'Camphene',
-    'ocimene': 'Ocimene', 'beta-ocimene': 'Ocimene', 'b-ocimene': 'Ocimene'
-}
-
 def parse_trulieve_products(products, store_name):
     """
     Parses the 'data' array from the Trulieve API response.
@@ -59,8 +42,8 @@ def parse_trulieve_products(products, store_name):
     for product in products:
         try:
             common_name = product.get('name', 'N/A')
-            brand = product.get('brand', 'N/A')
-            category = product.get('category', 'N/A')
+            raw_brand = product.get('brand', 'N/A')
+            raw_category = product.get('category', 'N/A')
             subcategory = product.get('subcategory', 'N/A')
             
             thc = product.get('thc_content')
@@ -76,10 +59,11 @@ def parse_trulieve_products(products, store_name):
                     
                     if name and value is not None:
                         clean_name = name.strip().lower().replace('-', '')
-                        standard_name = TERPENE_MAPPING.get(clean_name)
+                        standard_name = MASTER_TERPENE_MAP.get(clean_name)
                         
                         if standard_name:
-                            terpene_data[standard_name], total_terps = value, total_terps + value
+                            terpene_data[standard_name] = value
+                            total_terps += value
                             
             total_terps = total_terps if total_terps > 0 else np.nan
 
@@ -94,9 +78,14 @@ def parse_trulieve_products(products, store_name):
                 if not price: continue
                     
                 product_row = {
-                    'Name': common_name, 'Store': store_name, 'Brand': brand,
-                    'Type': category, 'Subtype': subcategory, 'Weight': convert_to_grams(weight_str),
-                    'Weight_Str': weight_str, 'Price': float(price),
+                    'Name': common_name,
+                    'Store': store_name,
+                    'Brand': brand_map.get(raw_brand, raw_brand),
+                    'Type': MASTER_CATEGORY_MAP.get(raw_category.lower(), raw_category),
+                    'Subtype': subcategory,
+                    'Weight': convert_to_grams(weight_str),
+                    'Weight_Str': weight_str,
+                    'Price': float(price),
                     'THC': float(thc) if thc is not None else np.nan,
                     'CBD': float(cbd) if cbd is not None else np.nan,
                     'Total_Terps': total_terps,

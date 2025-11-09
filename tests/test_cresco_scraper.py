@@ -64,7 +64,7 @@ class TestCrescoScraper(unittest.TestCase):
         self.assertEqual(product1['Limonene'], 0.5)
         # Total terps should be SUM of terpenes list, not the fallback value
         self.assertAlmostEqual(product1['Total_Terps'], 1.3)
-        self.assertTrue(np.isnan(product1['Subtype']))
+        self.assertIsNone(product1['Subtype'])
 
         # --- Test the tincture product ---
         product2 = parsed_data[1]

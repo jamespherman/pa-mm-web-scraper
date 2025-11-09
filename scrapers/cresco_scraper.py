@@ -4,7 +4,7 @@
 import requests
 import pandas as pd
 import numpy as np
-from .scraper_utils import convert_to_grams
+from .scraper_utils import convert_to_grams, MASTER_TERPENE_MAP, brand_map, MASTER_CATEGORY_MAP
 import re
 
 # --- Constants ---
@@ -32,13 +32,6 @@ KNOWN_TERPENES = [
     'alpha-Bisabolol', 'Camphene', 'Ocimene'
 ]
 
-TERPENE_MAPPING = {
-    'alpha_pinene': 'alpha-Pinene', 'beta_pinene': 'beta-Pinene', 'beta_myrcene': 'beta-Myrcene',
-    'limonene': 'Limonene', 'beta_caryophyllene': 'beta-Caryophyllene', 'linalool': 'Linalool',
-    'terpinolene': 'Terpinolene', 'humulene': 'Humulene', 'ocimene': 'Ocimene', 'guaiol': 'Guaiol',
-    'bisabolol': 'alpha-Bisabolol', 'camphene': 'Camphene', 'caryophyllene_oxide': 'Caryophyllene Oxide',
-}
-
 def extract_weight_from_cresco_name(name):
     """
     Extracts weight in grams from a product name string (e.g., "3.5g", "1g").
@@ -56,8 +49,15 @@ def parse_cresco_products(products, store_name):
     parsed_products = []
     for product in products:
         try:
-            data = {'Name': product.get('name', 'N/A'), 'Brand': product.get('brand', 'N/A'), 'Store': store_name,
-                    'Type': product.get('category', 'N/A'), 'Subtype': np.nan}
+            raw_brand = product.get('brand', 'N/A')
+            raw_category = product.get('category', 'N/A')
+            data = {
+                'Name': product.get('name', 'N/A'),
+                'Brand': brand_map.get(raw_brand, raw_brand),
+                'Store': store_name,
+                'Type': MASTER_CATEGORY_MAP.get(raw_category.lower(), raw_category),
+                'Subtype': product.get('sku', {}).get('product', {}).get('sub_category')
+            }
             data['Price'] = float(product.get('discounted_price') or product.get('price')) if product.get('price') is not None else np.nan
             data['Weight_Str'], data['Weight'] = 'N/A', extract_weight_from_cresco_name(data['Name'])
             data.update({ 'THC': product.get('bt_potency_thc'), 'THCa': product.get('bt_potency_thca'),
@@ -69,9 +69,10 @@ def parse_cresco_products(products, store_name):
                 for terp in terpenes_list:
                     name, value = terp.get('terpene'), terp.get('value')
                     if name and value is not None:
-                        standard_name = TERPENE_MAPPING.get(name.strip().lower().replace('-', '_'))
+                        standard_name = MASTER_TERPENE_MAP.get(name.strip().lower().replace('-', '_'))
                         if standard_name:
-                            terpene_data[standard_name], total_terps = value, total_terps + value
+                            terpene_data[standard_name] = value
+                            total_terps += value
             if total_terps == 0 and product.get('bt_potency_terps'):
                 total_terps = product.get('bt_potency_terps')
             data.update(terpene_data)

@@ -68,78 +68,6 @@ def _convert_to_numeric(df):
     df[TERPENE_COLUMNS] = df[TERPENE_COLUMNS].fillna(0)
     return df
 
-def _consolidate_brands(df):
-    """
-    Standardizes brand names by mapping variations to a single canonical name.
-
-    Dispensary menus often list the same brand under different names (e.g.,
-    "&Shine", "Rythm", "Good Green" are all part of GTI). This function
-    uses a predefined dictionary to consolidate these variations, making
-    brand-level analysis more accurate.
-
-    Args:
-        df (pd.DataFrame): The DataFrame with the 'Brand' column to clean.
-
-    Returns:
-        pd.DataFrame: The DataFrame with consolidated brand names.
-    """
-    print("Consolidating brand names...")
-    df['Brand'] = df['Brand'].str.strip()
-    df['Brand'] = df['Brand'].str.replace(r'\*Pitt Promo\*Belushi\'s Farm', "Belushi's Farm", regex=True)
-    # The `brand_map` dictionary defines the desired transformations.
-    # Key: The name found in the raw data. Value: The standardized name.
-    brand_map = {
-        # --- GTI ---
-        'Good Green': 'GTI', '&Shine': 'GTI', 'Rythm': 'GTI', 'Rhythm': 'GTI',
-        # --- Jushi ---
-        'The Bank': 'Jushi', 'The Lab': 'Jushi', 'Seche': 'Jushi', 'Lab': 'Jushi',
-        # --- Trulieve ---
-        'TruFlower': 'Trulieve', 'Cultivar Collection': 'Trulieve',
-        'Modern Flower': 'Trulieve', 'Avenue': 'Trulieve', 'Muse': 'Trulieve',
-        'Moxie': 'Trulieve', 'Franklin Labs': 'Trulieve',
-        'Khalifa Kush': 'Trulieve', 'Roll One (Trulieve)': 'Trulieve',
-        # --- Ayr ---
-        'Lost In Translation': 'Ayr', 'Revel': 'Ayr', 'Origyn': 'Ayr',
-        'Seven Hills': 'Ayr', 'Kynd': 'Ayr',
-        # --- Cresco ---
-        'Supply/Cresco': 'Cresco', 'FloraCal': 'Cresco',
-        'Cresco Labs': 'Cresco', 'Sunnyside': 'Cresco',
-        # --- Curaleaf ---
-        'Grass Roots': 'Curaleaf', 'Blades': 'Curaleaf', 'Select': 'Curaleaf', 'Select Briq': 'Curaleaf',
-        # --- Verano ---
-        'Essence': 'Verano', 'Savvy': 'Verano', 'Muv': 'Verano',
-        # --- Vytal ---
-        'Vytal Options': 'Vytal',
-        'Solventless by Vytal': 'Vytal Solventless', # Kept separate per user
-        'mood by Vytal': 'mood', # Mapped to 'mood' per user
-        # --- R.O. ---
-        'R.O. Ground': 'R.O.', 'R.O. Shake': 'R.O.',
-        # --- Strane ---
-        'Strane Stash': 'Strane', 'Strane Reserve': 'Strane',
-        # --- Misc Single-Rule Consolidations ---
-        'The Woods': 'Terrapin',
-        'Cookies': 'Kind Tree', 'Gage': 'Kind Tree',
-        'Standard Farms': 'Standard Farms', 'Old Pal': 'Standard Farms', 'Highsman': 'Standard Farms',
-        'Tyson 2.0': 'Columbia Care', 'Triple Seven': 'Columbia Care', 'Classix': 'Columbia Care',
-        'FarmaceuticalRx': 'FRX',
-        'Maitri Medicinals': 'Maitri',
-        'Maitri Genetics': 'Maitri',
-        'Natural Selections': 'Natural Selections',
-        'Organic Remedies': 'Organic Remedies',
-        'Penn Health Group': 'PHG',
-        'Penn Health': 'PHG',
-        'Prime Wellness': 'Prime',
-        'SupplyTM': 'Supply', 'Supply TM': 'Supply',
-        'Calypso Bountiful': 'Calypso',
-        'Garcia Hand Picked': 'Garcia',
-        'Redemption Shake': 'Redemption',
-        'Sunshine Cannabis': 'Sunshine',
-        'Ozone Reserve': 'Ozone',
-    }
-    # The `.replace()` method on a pandas Series is highly efficient for this kind of mapping.
-    df['Brand'] = df['Brand'].replace(brand_map)
-    return df
-
 def _clean_item_names(df):
     """
     Cleans product names by removing extraneous information like weight, type, etc.
@@ -219,35 +147,6 @@ def _clean_item_names(df):
     )
     return df
 
-def _standardize_types(df):
-    """
-    Standardizes product 'Type' column for consistent categorization.
-
-    Maps variations like 'vape' or 'vapes' to a standard 'vaporizers' category.
-    This is crucial for grouping data correctly before plotting.
-
-    Args:
-        df (pd.DataFrame): The DataFrame with the 'Type' column.
-
-    Returns:
-        pd.DataFrame: The DataFrame with standardized 'Type' values.
-    """
-    print("Standardizing product types...")
-    if 'Type' not in df.columns:
-        print("Warning: 'Type' column not found. Skipping type standardization.")
-        return df
-    # Ensure 'Type' is string and lowercase
-    df['Type'] = df['Type'].astype(str).str.lower()
-    # Define mappings for variations
-    type_map = {
-        'vape': 'vaporizers',
-        'vapes': 'vaporizers',
-        'concentrate': 'concentrates'
-        # 'flower' is already consistent
-    }
-    df['Type'] = df['Type'].replace(type_map)
-    return df
-
 def run_analysis(dataframe):
     """
     The main orchestration function for the analysis module.
@@ -271,10 +170,6 @@ def run_analysis(dataframe):
     cleaned_df = dataframe.copy()
     # Convert types first (critical for all other operations)
     cleaned_df = _convert_to_numeric(cleaned_df)
-    # Standardize product types (e.g., 'vape' -> 'vaporizers')
-    cleaned_df = _standardize_types(cleaned_df)
-    # Consolidate brand names
-    cleaned_df = _consolidate_brands(cleaned_df)
     # Clean item names
     cleaned_df = _clean_item_names(cleaned_df)
     print(f"Data cleaning complete. New column 'Name_Clean' added.")
