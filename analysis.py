@@ -252,7 +252,9 @@ def run_analysis(dataframe):
     """
     The main orchestration function for the analysis module.
 
-    It executes the cleaning and plotting functions in the correct order.
+    It executes the cleaning and plotting functions in the correct order. This ensures that
+    the data is properly prepared before visualization, and that all generated plots are
+    saved to a date-stamped directory.
 
     Args:
         dataframe (pd.DataFrame): The raw, combined DataFrame from the scrapers.
@@ -316,7 +318,8 @@ def plot_brand_violin(data, category_name, save_dir):
     Generates and saves a violin plot of Total Terps vs. Brand.
 
     This plot helps visualize the distribution of terpene content for each brand.
-    Brands with fewer than a minimum number of samples are excluded.
+    Brands with fewer than a minimum number of samples are excluded to ensure
+    statistical significance and readability of the plot.
 
     Args:
         data (pd.DataFrame): The data for a specific product category.
@@ -409,8 +412,14 @@ def plot_brand_violin(data, category_name, save_dir):
 def plot_value_scatterplot(data, category_name, save_dir):
     """
     Generates a scatter plot of Price per Gram (DPG) vs. Total Terpenes,
-    using custom bi-colored markers for brand discrimination.
-    (Implementation for Step 5e - CORRECT)
+    using custom bi-colored markers for brand discrimination. This helps to
+    visually identify which brands offer better value (higher terpenes for a
+    lower price).
+
+    Args:
+        data (pd.DataFrame): The data for the specific product category.
+        category_name (str): The name of the category (e.g., 'flower').
+        save_dir (str): The directory where the plot image will be saved.
     """
     print(f"  > Plotting Value Scatter Plot for {category_name}...")
 
@@ -555,7 +564,8 @@ def plot_top_50_heatmap(data, category_name, save_dir):
     Generates a heatmap of the top 50 products with the highest total terpenes.
 
     This provides a detailed look at the terpene profiles of the most potent
-    products available in a given category.
+    products available in a given category. Outliers (e.g., infused flower) are
+    filtered out to ensure the comparison is meaningful.
 
     Args:
         data (pd.DataFrame): The data for a specific product category.
@@ -704,6 +714,8 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
     Generates and saves the dominant terpene pie chart and top 10 lists.
 
     This provides a high-level overview of the terpene landscape for a product category.
+    It shows which terpenes are most frequently dominant and lists the top products
+    for each key terpene.
 
     Args:
         data (pd.DataFrame): The data for a specific product category.
@@ -875,8 +887,13 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
 def plot_value_panel_chart(data, category_name, save_dir):
     """
     Generates a 3-panel chart of the Top 25 "Best Value" products,
-    showing Value Score, Price (DPG), and Total Terpenes.
-    (Implementation for Step 6 - REVISED)
+    showing Value Score, Price (DPG), and Total Terpenes. This allows for a
+    multi-faceted view of what makes a product a good value.
+
+    Args:
+        data (pd.DataFrame): The data for the specific product category.
+        category_name (str): The name of the category (e.g., 'flower').
+        save_dir (str): The directory where the plot image will be saved.
     """
     print(f"  > Plotting Top 25 Value Panel Chart for {category_name}...")
 

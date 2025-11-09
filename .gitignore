@@ -16,6 +16,12 @@ __pycache__/
 *.m
 
 # OS-specific (if on macOS)
-.DS_Store\n# Python build artifacts\n__pycache__/\n*.pyc
+.DS_Store
+# Python build artifacts
+__pycache__/
+*.pyc
 token.json
 .DS_Store
+
+# Generated schema reports
+schema_reports/

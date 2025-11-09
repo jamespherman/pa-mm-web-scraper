@@ -1,199 +1,164 @@
 # scrapers/iheartjane_scraper.py
-# This is the iHeartJane scraper, rebuilt with the new API.
+# This scraper is responsible for fetching data from the iHeartJane platform.
+# It uses the v2/smart API, which is a more recent and robust endpoint
+# compared to their older, deprecated APIs.
 
 import requests
 import pandas as pd
-import re # Import the regular expression library
-from .scraper_utils import convert_to_grams # Import our new util function
+import re
+from .scraper_utils import convert_to_grams
 
-# --- New API Constants ---
+# --- API Constants ---
+# These constants define the endpoint and authentication for the iHeartJane API.
 NEW_JANE_URL = "https://dmerch.iheartjane.com/v2/smart"
 NEW_JANE_API_KEY = "ce5f15c9-3d09-441d-9bfd-26e87aff5925"
 
-# Define the terpenes we want to extract
+# A predefined list of terpenes to extract. This ensures consistency in the
+# final DataFrame and simplifies the parsing logic.
 TERPENE_LIST = [
     'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
     'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Caryophyllene Oxide',
     'Guaiol', 'Humulene', 'alpha-Bisabolol', 'Camphene', 'Ocimene'
 ]
 
-# Map all possible name variations to the official terpene name
+# A mapping to standardize terpene names. APIs often return variations
+# (e.g., 'b-myrcene', 'beta-myrcene'), and this ensures they are all mapped
+# to a single, canonical name for consistent analysis.
 TERPENE_MAPPING = {
-    # beta-Myrcene
-    'beta-myrcene': 'beta-Myrcene',
-    'myrcene': 'beta-Myrcene',
-    'b-myrcene': 'beta-Myrcene',
-    # Limonene
-    'limonene': 'Limonene',
-    'd-limonene': 'Limonene',
-    # beta-Caryophyllene
-    'beta-caryophyllene': 'beta-Caryophyllene',
-    'caryophyllene': 'beta-Caryophyllene',
-    'b-caryophyllene': 'beta-Caryophyllene',
-    # Terpinolene
+    'beta-myrcene': 'beta-Myrcene', 'myrcene': 'beta-Myrcene', 'b-myrcene': 'beta-Myrcene',
+    'limonene': 'Limonene', 'd-limonene': 'Limonene',
+    'beta-caryophyllene': 'beta-Caryophyllene', 'caryophyllene': 'beta-Caryophyllene', 'b-caryophyllene': 'beta-Caryophyllene',
     'terpinolene': 'Terpinolene',
-    # Linalool
     'linalool': 'Linalool',
-    # alpha-Pinene
-    'alpha-pinene': 'alpha-Pinene',
-    'a-pinene': 'alpha-Pinene',
-    # beta-Pinene
-    'beta-pinene': 'beta-Pinene',
-    'b-pinene': 'beta-Pinene',
-    # Caryophyllene Oxide
+    'alpha-pinene': 'alpha-Pinene', 'a-pinene': 'alpha-Pinene',
+    'beta-pinene': 'beta-Pinene', 'b-pinene': 'beta-Pinene',
     'caryophyllene oxide': 'Caryophyllene Oxide',
-    # Guaiol
     'guaiol': 'Guaiol',
-    # Humulene
-    'humulene': 'Humulene',
-    'alpha-humulene': 'Humulene',
-    'a-humulene': 'Humulene',
-    # alpha-Bisabolol
-    'alpha-bisabolol': 'alpha-Bisabolol',
-    'bisabolol': 'alpha-Bisabolol',
-    'a-bisabolol': 'alpha-Bisabolol',
-    # Camphene
+    'humulene': 'Humulene', 'alpha-humulene': 'Humulene', 'a-humulene': 'Humulene',
+    'alpha-bisabolol': 'alpha-Bisabolol', 'bisabolol': 'alpha-Bisabolol', 'a-bisabolol': 'alpha-Bisabolol',
     'camphene': 'Camphene',
-    # Ocimene
-    'ocimene': 'Ocimene',
-    'beta-ocimene': 'Ocimene',
-    'b-ocimene': 'Ocimene'
+    'ocimene': 'Ocimene', 'beta-ocimene': 'Ocimene', 'b-ocimene': 'Ocimene'
 }
 
 def parse_terpenes_from_text(text):
     """
-    Uses regular expressions (regex) to find all terpenes in
-    a block of text (like the 'store_notes' field).
+    Parses terpene data from a raw text block using regular expressions.
+
+    The iHeartJane API often embeds lab data in a free-text field like 'store_notes'
+    or 'description'. This function uses a regex pattern to find all occurrences of
+    terpene names followed by a percentage value.
+
+    Args:
+        text (str): The block of text to parse.
+
+    Returns:
+        dict: A dictionary of found terpenes and their values, including 'Total_Terps'.
     """
     terp_data = {}
     if not text:
         return terp_data
 
-    # This pattern now captures names with spaces and hyphens.
-    # e.g., "beta-Myrcene", "beta Myrcene", "b Myrcene"
+    # This regex pattern is designed to capture terpene names (which may include
+    # spaces and hyphens) and their corresponding percentage value.
     pattern = r"([a-zA-Z\s-]+)[\s:]*([\d\.]+)%"
-
     matches = re.findall(pattern, text, re.IGNORECASE)
 
     total_terps = 0
     for name, value in matches:
-        # Clean up the name and look it up in our mapping
+        # Standardize the found terpene name using the TERPENE_MAPPING.
         clean_name = name.strip().lower()
         official_name = TERPENE_MAPPING.get(clean_name)
 
         if official_name:
             val = float(value)
-            # Avoid double-counting if a name is matched twice
+            # This check prevents double-counting if a terpene is listed twice.
             if official_name not in terp_data:
                 terp_data[official_name] = val
                 total_terps += val
 
     if total_terps > 0:
-        # Round to 3 decimal places
         terp_data['Total_Terps'] = round(total_terps, 3)
 
     return terp_data
 
-# --- Cannabinoid Definitions ---
-
+# A mapping to standardize cannabinoid names from the API response to our
+# desired column names.
 CANNABINOID_MAPPING = {
-    'thca_potency': 'THCa',
-    'cbd_potency': 'CBD',
-    'cbg_potency': 'CBG',
-    'cbn_potency': 'CBN',
-    'thc_potency': 'THC',
-    'delta_9_thc_potency': 'THC', # Map Delta-9 to THC
+    'thca_potency': 'THCa', 'cbd_potency': 'CBD', 'cbg_potency': 'CBG',
+    'cbn_potency': 'CBN', 'thc_potency': 'THC', 'delta_9_thc_potency': 'THC',
     'delta_8_thc_potency': 'Delta-8 THC'
 }
 
 def parse_jane_product(product_hit, store_name):
     """
-    Parses a single product from the new "smart" API response.
+    Parses a single product 'hit' from the iHeartJane API JSON response.
+
+    This function extracts all relevant information for a single product and its
+    variants (different weights and prices), returning a list of dictionaries,
+    where each dictionary represents a distinct product variant.
+
+    Args:
+        product_hit (dict): The JSON object for a single product.
+        store_name (str): The name of the store being scraped.
+
+    Returns:
+        list: A list of dictionaries, each representing a product variant.
     """
     if 'search_attributes' not in product_hit:
         return []
 
     product_variants = []
-    
-    # All the good data is in 'search_attributes'
     attrs = product_hit['search_attributes']
 
-    # 1. Get common data
+    # 1. Extract common data shared across all variants of this product.
     common_data = {
-        'Name': attrs.get('name'),
-        'Brand': attrs.get('brand'),
-        'Type': attrs.get('kind'),
-        'Subtype': attrs.get('kind_subtype'),
-        'Store': store_name,
-        'THC': attrs.get('percent_thc'), # Default value
+        'Name': attrs.get('name'), 'Brand': attrs.get('brand'), 'Type': attrs.get('kind'),
+        'Subtype': attrs.get('kind_subtype'), 'Store': store_name, 'THC': attrs.get('percent_thc')
     }
 
-    # 1a. Get Potency Data from the Correct Field
-    # The data is in 'inventory_potencies', not the top level!
+    # 2. Extract potency data from the correct nested field.
     inventory_potencies = attrs.get('inventory_potencies', [])
-
-    # We prefer the 'gram' or 'eighth_ounce' potency data if available
     target_potencies = {}
     for pot in inventory_potencies:
-        # The 'price_id' is 'gram', 'eighth_ounce', 'half_ounce', etc.
-        price_id = pot.get('price_id', '')
-        if price_id in ['gram', 'eighth_ounce']:
+        if pot.get('price_id', '') in ['gram', 'eighth_ounce']:
             target_potencies = pot
-            break # Found our preferred one, stop looking
-
-    # If we didn't find a preferred one, use the first available
+            break
     if not target_potencies and inventory_potencies:
         target_potencies = inventory_potencies[0]
 
-    # Now, extract all cannabinoids using our mapping
     if target_potencies:
         for api_field, our_field in CANNABINOID_MAPPING.items():
             value = target_potencies.get(api_field)
             if value is not None:
                 common_data[our_field] = value
 
-    # 2. Get lab data (terpenes)
-    # We'll parse the 'store_notes' or 'description' field
-    notes = attrs.get('store_notes', '')
-    if not notes:
-        notes = attrs.get('description', '')
-        
+    # 3. Extract terpene data by parsing text fields.
+    notes = attrs.get('store_notes', '') or attrs.get('description', '')
     terpene_data = parse_terpenes_from_text(notes)
-    common_data.update(terpene_data) # Add all found terpenes
+    common_data.update(terpene_data)
 
-    # 3. Process price/weight variants
+    # 4. Process all available price/weight variants.
     available_weights = attrs.get('available_weights', [])
     if not available_weights:
-        # Fallback for "each" items
         if attrs.get('price_each'):
             variant_data = common_data.copy()
-            variant_data['Price'] = attrs.get('price_each')
-            # Check for specials
-            special_price = attrs.get('special_price_each', {}).get('discount_price')
-            if special_price:
-                variant_data['Price'] = float(special_price)
-                
+            variant_data['Price'] = float(attrs.get('special_price_each', {}).get('discount_price') or attrs.get('price_each'))
             variant_data['Weight_Str'] = "Each"
             variant_data['Weight'] = None
             product_variants.append(variant_data)
-        return product_variants # Return what we have
+        return product_variants
 
-    # Loop through the weights that are actually available
     for weight_str in available_weights:
-        # e.g., "gram" -> "price_gram"
         price_field = f"price_{weight_str.replace(' ', '_')}"
-        # e.g., "gram" -> "special_price_gram"
         special_price_field = f"special_price_{weight_str.replace(' ', '_')}"
-
         price = attrs.get(price_field)
         
-        # Check for a special price
         special_price_data = attrs.get(special_price_field, {})
         if special_price_data and special_price_data.get('discount_price'):
             price = float(special_price_data['discount_price'])
 
         if not price:
-            continue # Skip if no price for this weight
+            continue
 
         variant_data = common_data.copy()
         variant_data['Price'] = float(price)
@@ -205,57 +170,47 @@ def parse_jane_product(product_hit, store_name):
 
 def fetch_iheartjane_data(store_id, store_name):
     """
-    Fetches all product data for a specific iHeartJane store ID
-    using the new v2/smart API.
+    Fetches all product data for a specific iHeartJane store ID.
+
+    This function constructs and sends a POST request to the iHeartJane v2/smart API.
+    It mimics the payload of a real browser request to retrieve all products in a
+    single call, then parses the response into a pandas DataFrame.
+
+    Args:
+        store_id (int): The unique identifier for the iHeartJane store.
+        store_name (str): The user-friendly name of the store.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing all product variants from the store.
     """
     print(f"Fetching data for iHeartJane store: {store_name} (ID: {store_id})...")
     
     all_products = []
     
-    # These are the URL parameters, including our new API key
-    params = {
-        'jdm_api_key': NEW_JANE_API_KEY,
-        'jdm_source': 'monolith',
-        'jdm_version': '2.12.0'
-    }
+    params = { 'jdm_api_key': NEW_JANE_API_KEY, 'jdm_source': 'monolith', 'jdm_version': '2.12.0' }
     
-    # This is the full list of facets the browser requested
-    # We will send the same list to look like a real request
     full_search_facets = [
-        "activities", "aggregate_rating", "applicable_special_ids",
-        "available_weights", "brand_subtype", "brand", "bucket_price",
-        "category", "feelings", "has_brand_discount", "kind",
-        "percent_cbd", "percent_thc", "root_types", "compound_names"
+        "activities", "aggregate_rating", "applicable_special_ids", "available_weights",
+        "brand_subtype", "brand", "bucket_price", "category", "feelings",
+        "has_brand_discount", "kind", "percent_cbd", "percent_thc", "root_types", "compound_names"
     ]
 
-    # This payload now much more closely matches the real browser request
     payload = {
-        "app_mode": "embedded",
-        "jane_device_id": "me7dtQx8hW9YlcYmnHPys", # Static ID from your request
-        "search_attributes": ["*"],
-        "store_id": store_id,
-        "disable_ads": False,
-        "num_columns": 1,
-        "page_size": 60,
-        "page": 0,
-        "placement": "menu_inline_table",
-        "search_facets": full_search_facets, # Use the full list
-        "search_filter": f"store_id = {store_id}",
-        "search_query": "", # Empty query to get ALL products
-        "search_sort": "recommendation"
+        "app_mode": "embedded", "jane_device_id": "me7dtQx8hW9YlcYmnHPys", "search_attributes": ["*"],
+        "store_id": store_id, "disable_ads": False, "num_columns": 1, "page_size": 60, "page": 0,
+        "placement": "menu_inline_table", "search_facets": full_search_facets,
+        "search_filter": f"store_id = {store_id}", "search_query": "", "search_sort": "recommendation"
     }
 
     try:
-        # Make the POST request
         response = requests.post(NEW_JANE_URL, params=params, json=payload)
-        response.raise_for_status() # Raise an error for bad responses
+        response.raise_for_status()
         
         data = response.json()
         hits = data.get('products', [])
 
         print(f"  ...retrieved {len(hits)} products in a single call.")
 
-        # Process each product hit
         for hit in hits:
             product_variants = parse_jane_product(hit, store_name)
             all_products.extend(product_variants)
@@ -265,9 +220,7 @@ def fetch_iheartjane_data(store_id, store_name):
             
     if all_products:
         print(f"Successfully fetched {len(all_products)} product variants for {store_name}.")
-        # Convert the list of dictionaries into a pandas DataFrame
         return pd.DataFrame(all_products)
     else:
         print(f"No data fetched for {store_name}.")
         return pd.DataFrame()
-

@@ -45,6 +45,15 @@ CRESCO_STORES = {
 def main():
     """
     The main function to orchestrate the scraping, data loading, and analysis process.
+
+    This function handles the primary logic of the application. It attempts to load
+    pre-scraped data from a Google Sheet corresponding to the current date. If the
+    sheet is not found, it proceeds to run the individual scrapers, aggregate their
+    data, and write the combined results to a new Google Sheet.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing the scraped or loaded data. Returns
+                      None if no data could be scraped or loaded.
     """
     combined_df = None
 
