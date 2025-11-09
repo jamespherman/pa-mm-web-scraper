@@ -39,7 +39,7 @@ TRULIEVE_STORES = {
 }
 CRESCO_STORES = {
     "Sunnyside (Penn Ave)": "203",
-    "Sunnyside (Lawrenceville)": "89"
+    "Sunnyside (Lawrenceville)": "899"
 }
 
 def main():

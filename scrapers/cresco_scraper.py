@@ -103,7 +103,8 @@ def fetch_cresco_data(stores):
                     response = requests.get(BASE_URL, headers=headers, params=params, timeout=10)
                     response.raise_for_status()
                     
-                    json_response, products = response.json(), json_response.get('data')
+                    json_response = response.json()
+                    products = json_response.get('data')
                     if not products:
                         print(f"  ...completed category: {category}. Found {total_scraped} products.")
                         break
