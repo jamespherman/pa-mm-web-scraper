@@ -378,7 +378,7 @@ def parse_product_details(product, store_name):
     # --- Terpenes ---
     terpene_data = {terp: np.nan for terp in KNOWN_TERPENES}
     total_terps = 0
-    if product.get('terpenes'): 
+    if product.get('terpenes'):
         for terp in product['terpenes']:
             name = terp.get('name', terp.get('libraryTerpene', {}).get('name'))
             value = terp.get('value')

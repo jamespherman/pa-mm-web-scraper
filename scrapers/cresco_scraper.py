@@ -4,251 +4,233 @@
 import requests
 import pandas as pd
 import numpy as np
-import time
-# Note: This imports from the 'scraper_utils.py' file
 from .scraper_utils import convert_to_grams
 import re
 
 # --- Constants ---
 BASE_URL = "https://api.crescolabs.com/p/inventory/op/fifo-inventory"
 
-# --- HEADERS ---
-# These are taken directly from your new network logs.
+# Headers discovered from browser inspection.
+# We are *intentionally* omitting the 'authorization' token, as it is
+# user-specific and expires quickly. The 'x-api-key' is the stable key.
 HEADERS = {
     "accept": "application/json, text/plain, */*",
-    "accept-encoding": "gzip, deflate, br",
-    "accept-language": "en-US,en;q=0.9",
+    "accept-encoding": "gzip, deflate, br, zstd",
+    "accept-language": "en-US,en;q=0.9,it-IT;q=0.8,it;q=0.7",
     "ordering_app_id": "9ha3c289-1260-4he2-nm62-4598bca34naa",
     "origin": "https://www.sunnyside.shop",
     "referer": "https://www.sunnyside.shop/",
+    "sec-ch-ua": "\"Microsoft Edge\";v=\"141\", \"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"141\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
     "sec-fetch-dest": "empty",
     "sec-fetch-mode": "cors",
     "sec-fetch-site": "cross-site",
-    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
     "x-api-key": "hE1gQuwYcO54382jYNH0c9W0w4fEC3dJ8ljnwVau",
-    "x-client-version": "4.20.0",
-    "store_id": "" # This will be set dynamically in the loop
+    "x-client-version": "4.20.0"
 }
 
-# --- CATEGORY LIST ---
-KNOWN_CATEGORIES = [
-    'flower',
-    'vapes',
-    'edibles',
-    'concentrates',
-    'capsules',
-    'tinctures',
-    'topicals',
-    'accessories',
-    'pre-roll',
-    'beverage'
-]
+# Define store configurations
+CATEGORIES = ["flower", "vapes", "concentrates"]
 
-# --- TERPENE LIST ---
-# This list is now based on the *standardized names* we will map to
-# from the 'potency' object in the API response.
 KNOWN_TERPENES = [
-    'alpha-Pinene', 'beta-Pinene', 'Myrcene', 'Limonene', 'Terpinolene',
-    'Ocimene', 'Linalool', 'beta-Caryophyllene', 'Humulene', 'Nerolidol',
-    'Guaiol', 'alpha-Bisabolol', 'Camphene', 'delta-3-Carene',
-    'alpha-Terpinene', 'gamma-Terpinene', 'p-Cymene', 'Eucalyptol',
-    'beta-Eudesmol', 'Caryophyllene Oxide', 'Fenchone', 'Borneol'
+    'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
+    'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Caryophyllene Oxide',
+    'Guaiol', 'Humulene', 'alpha-Bisabolol', 'Camphene', 'Ocimene'
 ]
 
-# --- Main Function ---
-def get_cresco_data(store_map):
+# Map API terpene names (e.g., 'beta_myrcene') to our standard names
+TERPENE_MAPPING = {
+    'alpha_pinene': 'alpha-Pinene',
+    'beta_pinene': 'beta-Pinene',
+    'beta_myrcene': 'beta-Myrcene',
+    'limonene': 'Limonene',
+    'beta_caryophyllene': 'beta-Caryophyllene',
+    'linalool': 'Linalool',
+    'terpinolene': 'Terpinolene',
+    'humulene': 'Humulene',
+    'ocimene': 'Ocimene',
+    'guaiol': 'Guaiol',
+    'bisabolol': 'alpha-Bisabolol', # API uses 'bisabolol'
+    'camphene': 'Camphene',
+    'caryophyllene_oxide': 'Caryophyllene Oxide',
+}
+
+def extract_weight_from_cresco_name(name):
     """
-    Fetches and processes product data from the Cresco API for given store IDs.
+    Extracts weight in grams from a product name string (e.g., "3.5g", "1g").
+    Uses regex to find patterns like '3.5g', '1g', '500mg'.
+    """
+    name_lower = name.lower()
     
-    Args:
-        store_map (dict): A dictionary mapping {store_name: store_id}
+    # Pattern for 'g'
+    g_match = re.search(r'(\.?\d+\.?\d*)\s*g', name_lower)
+    if g_match:
+        return float(g_match.group(1))
+        
+    # Pattern for 'mg'
+    mg_match = re.search(r'(\.?\d+\.?\d*)\s*mg', name_lower)
+    if mg_match:
+        return float(mg_match.group(1)) / 1000.0
+        
+    return np.nan
 
-    Returns:
-        pd.DataFrame: A DataFrame containing all processed product data.
+def parse_cresco_products(products, store_name):
     """
-    all_products_list = []
-    limit = 1000 # Set a very high limit to get all products in one request
+    Parses the 'data' array from the Cresco API response.
+    """
+    parsed_products = []
+    
+    for product in products:
+        try:
 
-    for store_name, store_id in store_map.items():
-        print(f"--- Scraping store: {store_name} ({store_id}) ---")
-        
-        request_headers = HEADERS.copy()
-        request_headers['store_id'] = store_id
-        
-        for category in KNOWN_CATEGORIES:
-            print(f"  Fetching category: {category}...")
-            
-            # --- PARAMS ---
-            # We make one request per category with a high limit.
-            params = {
-                # 'page': 1, # This API does not use 'page'
-                'limit': limit,
-                'category': category,
-                'inventory_type': 'retail',
-                'require_sellable_quantity': 'true',
-                'include_specials': 'true',
-                'sellable': 'true',
-                'order_by': 'brand',
-                'usage_type': 'medical',
-                'hob_first': 'true',
-                'include_filters': 'true',
-                'include_facets': 'true'
+            data = {
+                'Name': product.get('name', 'N/A'),
+                'Brand': product.get('brand', 'N/A'),
+                'Store': store_name,
+                'Type': product.get('category', 'N/A'),
+                'Subtype': np.nan, # Not explicitly provided in top level
             }
 
-            try:
-                # --- Make the GET Request ---
-                response = requests.get(BASE_URL, headers=request_headers, params=params, timeout=15)
-                response.raise_for_status()
-                
-                data = response.json()
-                products = data.get('data', [])
+            # --- Price ---
+            price = product.get('discounted_price') or product.get('price')
+            data['Price'] = float(price) if price is not None else np.nan
 
-                if not products:
-                    print(f"    ...found 0 products for {category}.")
-                    continue 
+            # --- Weight ---
+            # Cresco doesn't have a clean weight field. We extract from the name.
+            data['Weight_Str'] = 'N/A'
+            data['Weight'] = extract_weight_from_cresco_name(data['Name'])
+            
+            # --- Cannabinoids ---
+            data['THC'] = product.get('bt_potency_thc')
+            data['THCa'] = product.get('bt_potency_thca')
+            data['CBD'] = product.get('bt_potency_cbd')
+            # Add other cannabinoids if available
+            data['CBG'] = product.get('bt_potency_cbg')
+            data['CBN'] = product.get('bt_potency_cbn')
 
-                # --- Process and Add Data ---
-                products_df = process_product_data(products, store_name)
-                all_products_list.append(products_df)
-                
-                print(f"    ...found {len(products_df)} products for {category}.")
+            # --- Terpenes ---
+            terpene_data = {terp: np.nan for terp in KNOWN_TERPENES}
+            total_terps = 0
+            
+            # Terpenes are in a nested 'terpenes' list
+            terpenes_list = product.get('terpenes', [])
+            if terpenes_list:
+                for terp in terpenes_list:
+                    name = terp.get('terpene')
+                    value = terp.get('value')
+                    
+                    if name and value is not None:
+                        # API uses names like 'beta_myrcene', so we standardize
+                        clean_name = name.strip().lower().replace('-', '_')
+                        standard_name = TERPENE_MAPPING.get(clean_name)
+                        
+                        if standard_name:
+                            terpene_data[standard_name] = value
+                            total_terps += value
+            
+            # Add bt_potency_terps as Total_Terps if list is empty
+            if total_terps == 0 and product.get('bt_potency_terps'):
+                total_terps = product.get('bt_potency_terps')
 
-                # Politeness delay
-                time.sleep(0.5)
-                
-            except requests.exceptions.RequestException as e:
-                print(f"Error fetching {category} at {store_name}: {e}")
-                continue
-            except Exception as e:
-                print(f"An error occurred processing {category}: {e}")
-                continue
+            data.update(terpene_data)
+            data['Total_Terps'] = total_terps if total_terps > 0 else np.nan
+            
+            parsed_products.append(data)
+
+        except Exception as e:
+            print(f"Error parsing product: {product.get('name')}. Error: {e}")
+            continue
+            
+    return parsed_products
+
+def fetch_cresco_data(stores):
+    """
+    Main function to orchestrate the Cresco scraping process.
+    """
+    all_products_list = []
     
-    # --- End of loops ---
+    print("Starting Cresco (Sunnyside) Scraper (api.crescolabs.com)...")
+
+    for store_name, store_id in stores.items():
+        print(f"Fetching data for Sunnyside store: {store_name} (ID: {store_id})...")
+        
+        # Create a headers copy and set the specific store_id
+        headers = HEADERS.copy()
+        headers['store_id'] = store_id
+        
+        for category in CATEGORIES:
+            page = 0
+            limit = 50
+            total_scraped = 0
+            while True:
+                try:
+                    params = {
+                        'category': category,
+                        'inventory_type': 'retail',
+                        'require_sellable_quantity': 'true',
+                        'include_specials': 'true',
+                        'sellable': 'true',
+                        'order_by': 'brand',
+                        'limit': str(limit),
+                        'usage_type': 'medical',
+                        'hob_first': 'true',
+                        'include_filters': 'true',
+                        'include_facets': 'true',
+                        'offset': str(page * limit)
+                    }
+                    
+                    response = requests.get(BASE_URL, headers=headers, params=params, timeout=10)
+                    response.raise_for_status()
+                    
+                    json_response = response.json()
+                    products = json_response.get('data')
+                    
+                    if not products:
+                        print(f"  ...completed category: {category}. Found {total_scraped} products.")
+                        break
+                        
+                    parsed_products = parse_cresco_products(products, store_name)
+                    all_products_list.extend(parsed_products)
+                    total_scraped += len(parsed_products)
+                    
+                    # Check if this is the last page
+                    if len(products) < limit:
+                        print(f"  ...completed category: {category}. Found {total_scraped} products.")
+                        break
+                        
+                    page += 1
+                    
+                except requests.exceptions.RequestException as e:
+                    print(f"Error fetching page {page} for {category} at {store_name}: {e}")
+                    break
+                except Exception as e:
+                    print(f"An error occurred processing page {page} for {category}: {e}")
+                    break
 
     if not all_products_list:
         print("No product data was fetched from Cresco. Returning an empty DataFrame.")
         return pd.DataFrame()
 
     # --- Final DataFrame ---
-    df = pd.concat(all_products_list, ignore_index=True)
+    df = pd.DataFrame(all_products_list)
 
     # Calculate DPG
-    df['Price'] = pd.to_numeric(df['Price'], errors='coerce')
-    df['Weight'] = pd.to_numeric(df['Weight'], errors='coerce')
-    df['dpg'] = df.apply(lambda row: row['Price'] / row['Weight'] if row['Weight'] > 0 else np.nan, axis=1)
+    df['dpg'] = df['Price'] / df['Weight']
     
-    # --- Define column order ---
-    # These are the "base" columns
-    other_cols = [
-        'Name', 'Store', 'Brand', 'Type', 'Subtype', 'Weight', 
-        'Weight_Str', 'Price', 'dpg', 'Total_Terps'
-    ]
-    
-    # Find all terpene columns that were actually created
-    present_terpenes = [col for col in KNOWN_TERPENES if col in df.columns]
-    
-    # Cannabinoid cols are whatever is left over (e.g., 'THC', 'THCA', etc.)
-    present_cannabinoids = [
-        col for col in df.columns if col not in other_cols and col not in present_terpenes
-    ]
+    # Define column order
+    cannabinoid_cols = sorted([col for col in df.columns if col not in KNOWN_TERPENES + ['Name', 'Store', 'Brand', 'Type', 'Subtype', 'Weight', 'Weight_Str', 'Price', 'dpg', 'Total_Terps']])
+    terpene_cols = KNOWN_TERPENES
 
-    # Build the final, sorted list of columns
     column_order = (
         ['Name', 'Store', 'Brand', 'Type', 'Subtype', 'Weight', 'Weight_Str', 'Price', 'dpg', 'Total_Terps'] +
-        sorted(present_cannabinoids) +
-        sorted(present_terpenes)
+        cannabinoid_cols +
+        terpene_cols
     )
     
-    # Add any missing columns (e.g., if no products had 'Total_Terps')
-    for col in column_order:
-        if col not in df:
-            df[col] = np.nan
-            
     # Reorder and fill NaNs
     df = df.reindex(columns=column_order).fillna(np.nan)
 
-    print(f"\nTotal products processed for all stores: {len(df)}")
+    print(f"\nScraping complete for Cresco. DataFrame created with {len(df)} rows.")
     return df
-
-# --- Data Processing Function ---
-# THIS FUNCTION IS COMPLETELY REBUILT BASED ON YOUR NEW SNIPPET
-def process_product_data(products, store_name):
-    """
-    Processes a list of raw product dictionaries from the API
-    based on the new, correct data structure.
-    """
-    processed_list = []
-    
-    # This maps the lowercase API key from the 'potency' object
-    # to the standardized name we want in our final DataFrame.
-    TERPENE_MAP = {
-        'b_caryophyllene': 'beta-Caryophyllene',
-        'b_myrcene': 'Myrcene',
-        'b_pinene': 'beta-Pinene',
-        'bisabolol': 'alpha-Bisabolol',
-        'camphene': 'Camphene',
-        'carene': 'delta-3-Carene',
-        'humulene': 'Humulene',
-        'limonene': 'Limonene',
-        'linalool': 'Linalool',
-        'ocimene': 'Ocimene',
-        'pinene': 'alpha-Pinene', # Map 'pinene' to 'alpha-Pinene'
-        'terpinolene': 'Terpinolene',
-        'guaiol': 'Guaiol',
-        'caryophyllene_oxide': 'Caryophyllene Oxide',
-        'eucalyptol': 'Eucalyptol',
-        'nerolidol': 'Nerolidol' # A guess, based on 'trans_nerolidal'
-    }
-    
-    for product in products:
-        # Get nested objects safely
-        sku = product.get('sku', {})
-        sku_product = sku.get('product', {})
-        sku_strain = sku.get('strain', {})
-        potency = product.get('potency', {})
-        
-        # --- Basic Info ---
-        data = {
-            'Name': product.get('name'),
-            'Store': store_name,
-            'Brand': product.get('brand'),
-            'Type': sku_product.get('category', 'Other'),
-            'Subtype': sku_product.get('sub_category'),
-            'Weight_Str': sku_product.get('weight'),
-            'Weight': convert_to_grams(sku_product.get('weight')),
-            # Get discounted price first, fall back to base price
-            'Price': product.get('discounted_price') or product.get('price')
-        }
-
-        # --- Cannabinoids ---
-        # Get from the top-level 'bt_potency' fields
-        if product.get('bt_potency_thc') is not None:
-            data['THC'] = product.get('bt_potency_thc')
-        if product.get('bt_potency_thca') is not None:
-            data['THCA'] = product.get('bt_potency_thca')
-        if product.get('bt_potency_cbd') is not None:
-            data['CBD'] = product.get('bt_potency_cbd')
-        if product.get('bt_potency_cbda') is not None:
-            data['CBDA'] = product.get('bt_potency_cbda')
-        # Add any other 'bt_potency_' fields you want here
-
-        # --- Terpenes ---
-        total_terps = 0
-        if potency: # Use the 'potency' object
-            # Get total terps from one of two fields
-            total_terps = potency.get('total_terps') or product.get('bt_potency_terps')
-            
-            # Map individual terpenes
-            for api_name, standard_name in TERPENE_MAP.items():
-                if potency.get(api_name) is not None and potency.get(api_name) > 0:
-                    data[standard_name] = potency[api_name]
-        
-        # Fallback in case 'potency' object was missing
-        if total_terps == 0 or total_terps is None:
-             total_terps = product.get('bt_potency_terps')
-        
-        data['Total_Terps'] = total_terps if total_terps > 0 else np.nan
-
-        processed_list.append(data)
-    
-    return pd.DataFrame(processed_list)

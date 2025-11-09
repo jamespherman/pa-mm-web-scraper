@@ -1,0 +1,4864 @@
+{
+  "data": {
+    "filteredProducts": {
+      "products": [
+        {
+          "_id": "68c9692673640e5340eba7a3",
+          "id": "68c9692673640e5340eba7a3",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1758030118081",
+          "updatedAt": "2025-10-05T14:47:48.127Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/53fc9352f7e23755e46cc188d0feeebf",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/53fc9352f7e23755e46cc188d0feeebf",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            43
+          ],
+          "medicalSpecialPrices": [
+            27.95
+          ],
+          "wholesalePrices": null,
+          "Name": "Forza | Live Sugar | 1g",
+          "nonArmsLength": null,
+          "Options": [
+            "1gC"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "1gC",
+              "inventory": 3,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            43
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "1gC",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            43
+          ],
+          "recSpecialPrices": [
+            27.95
+          ],
+          "special": true,
+          "specialData": {
+            "bogoSpecials": null,
+            "saleSpecials": [
+              {
+                "createdBy": "5f5ac69c4508af00b350ce1d",
+                "directPOSProductIdMapping": false,
+                "rawPOSWeightMapping": false,
+                "useLatestCartCalculator": null,
+                "discount": 25,
+                "discountStacking": false,
+                "dollarDiscount": false,
+                "eligibleProductOptions": null,
+                "menuType": "both",
+                "minorVersion": 0,
+                "nonStackingBehavior": "favorCustomer",
+                "payByBankIncentiveEnabled": null,
+                "paymentRestrictions": null,
+                "percentDiscount": true,
+                "saleDiscounts": null,
+                "settingsDerivedFrom": "dispensary",
+                "skipV4Merge": null,
+                "source": null,
+                "sourceId": null,
+                "specialId": "690e6788cacace00ae6df3e5",
+                "specialName": "25% OFF Concentrates! *NOT Stackable ",
+                "specialType": "sale",
+                "specialRestrictions": {
+                  "Concentrate": {
+                    "discountType": "percentDiscount"
+                  }
+                },
+                "stackingBehavior": "cumulative",
+                "stackingMode": null,
+                "targetPrice": false,
+                "useGreedOptimizedCalculator": null,
+                "useTotalQtyCalcsFix": true,
+                "version": 3,
+                "__typename": "Products_specialData_saleSpecials"
+              },
+              {
+                "createdBy": "5f5ac69c4508af00b350ce1d",
+                "directPOSProductIdMapping": false,
+                "rawPOSWeightMapping": false,
+                "useLatestCartCalculator": null,
+                "discount": 35,
+                "discountStacking": false,
+                "dollarDiscount": false,
+                "eligibleProductOptions": null,
+                "menuType": "both",
+                "minorVersion": 0,
+                "nonStackingBehavior": "favorCustomer",
+                "payByBankIncentiveEnabled": null,
+                "paymentRestrictions": null,
+                "percentDiscount": true,
+                "saleDiscounts": null,
+                "settingsDerivedFrom": "dispensary",
+                "skipV4Merge": null,
+                "source": null,
+                "sourceId": null,
+                "specialId": "690e6977fd316100a408f4df",
+                "specialName": "35% OFF Huny & House Brand Concentrates! *NOT Stackable",
+                "specialType": "sale",
+                "specialRestrictions": {
+                  "690918b6e2323b4f58fd9aae": {
+                    "discountType": "percentDiscount"
+                  },
+                  "6909192a6df7fde0e78c6413": {
+                    "discountType": "percentDiscount"
+                  },
+                  "690919630becfd13d697e5bc": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ffdd59a9400e2fbd1cfa64": {
+                    "discountType": "percentDiscount"
+                  },
+                  "690919d1fa1106b58eedb170": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68dbe9f24f5c9c3d99137c4e": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68c9692673640e5340eba7a3": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ffdbcca038893d12ea4f9e": {
+                    "discountType": "percentDiscount"
+                  },
+                  "689b58e95c0c4aacf49fa756": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ffdc8625a57b33011e064a": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68adbc4ee6c0d727962d141a": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68234d218042ada75e6746ac": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ee9b01f4eb5069f5915f3c": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ee978dc7f2a26568369d86": {
+                    "discountType": "percentDiscount"
+                  },
+                  "69091abe299a109e8cf30396": {
+                    "discountType": "percentDiscount"
+                  },
+                  "69091b1bc636662036c8865a": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68eea30ec3109e3b0f2ae3a9": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68eea3c5c7f2a26568369e3d": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68eea478313813d52cc7b6ad": {
+                    "discountType": "percentDiscount"
+                  }
+                },
+                "stackingBehavior": "cumulative",
+                "stackingMode": null,
+                "targetPrice": false,
+                "useGreedOptimizedCalculator": null,
+                "useTotalQtyCalcsFix": true,
+                "version": 3,
+                "__typename": "Products_specialData_saleSpecials"
+              }
+            ],
+            "__typename": "Products_specialData"
+          },
+          "Status": "Active",
+          "strainType": "Hybrid",
+          "subcategory": "sugar",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              89.744
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Concentrate",
+          "vapeTaxApplicable": null,
+          "weight": 1,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "forza-live-sugar-1g",
+          "pastCNames": [
+            null,
+            "forza-live-sugar-1g"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "calm": 9,
+            "happy": 8,
+            "relaxed": 6,
+            "energetic": 5
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 1.066,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 88.678,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.199,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBDA (Cannabidiolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 1.836,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.604,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 92.383,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "68d2f04ee9f7c81c44e28ee9",
+          "id": "68d2f04ee9f7c81c44e28ee9",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "cad8aba5-fcb9-4caa-981d-f421a22d057f",
+            "name": "Eleven",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/07a67c7e810e9684614568275d3d93ae",
+            "__typename": "Brand",
+            "_id": "cad8aba5-fcb9-4caa-981d-f421a22d057f",
+            "description": "Let’s make it simple. By limiting product interaction and over-processing, we're able to maintain the natural benefits and quality of our products. Eleven takes away the complexities and brings volumes of quality without the fuss. Our growers are committed to delivering you the highest quality mix of classic and new innovative strains.\n\nEveryone should be able to access quality cannabis, no matter if you want to turn down the stress with an indica, turn up the energy with a sativa, or turn off the distractions with a hybrid. Eleven is the perfect volume, whatever your vibe. Eleven uses the same high quality flower as premium cannabis brand Natural Selections, allowing consumers with any budget to access this quality cannabis, priced right."
+          },
+          "brandId": "cad8aba5-fcb9-4caa-981d-f421a22d057f",
+          "brandName": "Eleven",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1758654542242",
+          "updatedAt": "2025-10-09T20:37:15.942Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/0a4dfe95c731e6590b72249ce5233008",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/0a4dfe95c731e6590b72249ce5233008",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            12
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "Serving Tray (7x5)",
+          "nonArmsLength": null,
+          "Options": [
+            "N/A"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "N/A",
+              "inventory": 45,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            12
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "N/A",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            12
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "N/A",
+          "subcategory": "trays",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "type": "Accessories",
+          "vapeTaxApplicable": null,
+          "weight": 1,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "serving-tray-7x5-",
+          "pastCNames": [
+            null,
+            "serving-tray",
+            "serving-tray-7x5-"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/07a67c7e810e9684614568275d3d93ae",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {},
+          "cannabinoidsV2": [],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "68a4de2e6aabb081eca7475a",
+          "id": "68a4de2e6aabb081eca7475a",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1755635246909",
+          "updatedAt": "2025-11-07T21:31:00.163Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/88c1d37ed6f0087a2901a1c61766fb3b",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/88c1d37ed6f0087a2901a1c61766fb3b",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            34
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "Animal Mntz",
+          "nonArmsLength": null,
+          "Options": [
+            "1/8oz"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "1/8oz",
+              "inventory": 64,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            34
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "1/8oz",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            34
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "Indica",
+          "subcategory": "premium",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              24.423
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Flower",
+          "vapeTaxApplicable": null,
+          "weight": 2,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "animal-mntz",
+          "pastCNames": [
+            null,
+            "animal-mntz-new-strain-",
+            "animal-mntz"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "relaxed": 9,
+            "sleepy": 8,
+            "happy": 8,
+            "euphoric": 8
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 24.423,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.079,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.901,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 25.403,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "689b58e95c0c4aacf49fa756",
+          "id": "689b58e95c0c4aacf49fa756",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1755011305516",
+          "updatedAt": "2025-11-02T15:56:50.199Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/53fc9352f7e23755e46cc188d0feeebf",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/53fc9352f7e23755e46cc188d0feeebf",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            43
+          ],
+          "medicalSpecialPrices": [
+            27.95
+          ],
+          "wholesalePrices": null,
+          "Name": "Key Lime Kush | Live Sugar | 1g",
+          "nonArmsLength": null,
+          "Options": [
+            "1gC"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "1gC",
+              "inventory": 2,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            43
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "1gC",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            43
+          ],
+          "recSpecialPrices": [
+            27.95
+          ],
+          "special": true,
+          "specialData": {
+            "bogoSpecials": null,
+            "saleSpecials": [
+              {
+                "createdBy": "5f5ac69c4508af00b350ce1d",
+                "directPOSProductIdMapping": false,
+                "rawPOSWeightMapping": false,
+                "useLatestCartCalculator": null,
+                "discount": 25,
+                "discountStacking": false,
+                "dollarDiscount": false,
+                "eligibleProductOptions": null,
+                "menuType": "both",
+                "minorVersion": 0,
+                "nonStackingBehavior": "favorCustomer",
+                "payByBankIncentiveEnabled": null,
+                "paymentRestrictions": null,
+                "percentDiscount": true,
+                "saleDiscounts": null,
+                "settingsDerivedFrom": "dispensary",
+                "skipV4Merge": null,
+                "source": null,
+                "sourceId": null,
+                "specialId": "690e6788cacace00ae6df3e5",
+                "specialName": "25% OFF Concentrates! *NOT Stackable ",
+                "specialType": "sale",
+                "specialRestrictions": {
+                  "Concentrate": {
+                    "discountType": "percentDiscount"
+                  }
+                },
+                "stackingBehavior": "cumulative",
+                "stackingMode": null,
+                "targetPrice": false,
+                "useGreedOptimizedCalculator": null,
+                "useTotalQtyCalcsFix": true,
+                "version": 3,
+                "__typename": "Products_specialData_saleSpecials"
+              },
+              {
+                "createdBy": "5f5ac69c4508af00b350ce1d",
+                "directPOSProductIdMapping": false,
+                "rawPOSWeightMapping": false,
+                "useLatestCartCalculator": null,
+                "discount": 35,
+                "discountStacking": false,
+                "dollarDiscount": false,
+                "eligibleProductOptions": null,
+                "menuType": "both",
+                "minorVersion": 0,
+                "nonStackingBehavior": "favorCustomer",
+                "payByBankIncentiveEnabled": null,
+                "paymentRestrictions": null,
+                "percentDiscount": true,
+                "saleDiscounts": null,
+                "settingsDerivedFrom": "dispensary",
+                "skipV4Merge": null,
+                "source": null,
+                "sourceId": null,
+                "specialId": "690e6977fd316100a408f4df",
+                "specialName": "35% OFF Huny & House Brand Concentrates! *NOT Stackable",
+                "specialType": "sale",
+                "specialRestrictions": {
+                  "690918b6e2323b4f58fd9aae": {
+                    "discountType": "percentDiscount"
+                  },
+                  "6909192a6df7fde0e78c6413": {
+                    "discountType": "percentDiscount"
+                  },
+                  "690919630becfd13d697e5bc": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ffdd59a9400e2fbd1cfa64": {
+                    "discountType": "percentDiscount"
+                  },
+                  "690919d1fa1106b58eedb170": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68dbe9f24f5c9c3d99137c4e": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68c9692673640e5340eba7a3": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ffdbcca038893d12ea4f9e": {
+                    "discountType": "percentDiscount"
+                  },
+                  "689b58e95c0c4aacf49fa756": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ffdc8625a57b33011e064a": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68adbc4ee6c0d727962d141a": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68234d218042ada75e6746ac": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ee9b01f4eb5069f5915f3c": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ee978dc7f2a26568369d86": {
+                    "discountType": "percentDiscount"
+                  },
+                  "69091abe299a109e8cf30396": {
+                    "discountType": "percentDiscount"
+                  },
+                  "69091b1bc636662036c8865a": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68eea30ec3109e3b0f2ae3a9": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68eea3c5c7f2a26568369e3d": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68eea478313813d52cc7b6ad": {
+                    "discountType": "percentDiscount"
+                  }
+                },
+                "stackingBehavior": "cumulative",
+                "stackingMode": null,
+                "targetPrice": false,
+                "useGreedOptimizedCalculator": null,
+                "useTotalQtyCalcsFix": true,
+                "version": 3,
+                "__typename": "Products_specialData_saleSpecials"
+              }
+            ],
+            "__typename": "Products_specialData"
+          },
+          "Status": "Active",
+          "strainType": "Hybrid",
+          "subcategory": "sugar",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              81.34
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Concentrate",
+          "vapeTaxApplicable": null,
+          "weight": 2,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "key-lime-kush-live-sugar-1g-49785",
+          "pastCNames": [
+            null,
+            "key-lime-kush-live-sugar-1g-49785"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "calm": 9,
+            "happy": 8,
+            "relaxed": 6,
+            "energetic": 5
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 0.202,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBDA (Cannabidiolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.346,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 80.468,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.872,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 5.184,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 87.072,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "68d2f1021d61fada63e6f386",
+          "id": "68d2f1021d61fada63e6f386",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "cad8aba5-fcb9-4caa-981d-f421a22d057f",
+            "name": "Eleven",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/07a67c7e810e9684614568275d3d93ae",
+            "__typename": "Brand",
+            "_id": "cad8aba5-fcb9-4caa-981d-f421a22d057f",
+            "description": "Let’s make it simple. By limiting product interaction and over-processing, we're able to maintain the natural benefits and quality of our products. Eleven takes away the complexities and brings volumes of quality without the fuss. Our growers are committed to delivering you the highest quality mix of classic and new innovative strains.\n\nEveryone should be able to access quality cannabis, no matter if you want to turn down the stress with an indica, turn up the energy with a sativa, or turn off the distractions with a hybrid. Eleven is the perfect volume, whatever your vibe. Eleven uses the same high quality flower as premium cannabis brand Natural Selections, allowing consumers with any budget to access this quality cannabis, priced right."
+          },
+          "brandId": "cad8aba5-fcb9-4caa-981d-f421a22d057f",
+          "brandName": "Eleven",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1758654722630",
+          "updatedAt": "2025-10-08T21:52:07.531Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/5a0c2b87b195e5c34b8625fe7ce90a1e",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/5a0c2b87b195e5c34b8625fe7ce90a1e",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            22
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "Volume Knob Grinder | 63mm",
+          "nonArmsLength": null,
+          "Options": [
+            "N/A"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "N/A",
+              "inventory": 73,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            22
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "N/A",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            22
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "N/A",
+          "subcategory": "grinders",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "type": "Accessories",
+          "vapeTaxApplicable": null,
+          "weight": 2,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "volume-knob-grinder-63mm",
+          "pastCNames": [
+            null,
+            "volume-knob-grinder",
+            "volume-knob-grinder-63mm"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/07a67c7e810e9684614568275d3d93ae",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {},
+          "cannabinoidsV2": [],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "68adbc4ee6c0d727962d141a",
+          "id": "68adbc4ee6c0d727962d141a",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1756216398514",
+          "updatedAt": "2025-10-31T14:33:27.975Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/53fc9352f7e23755e46cc188d0feeebf",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/53fc9352f7e23755e46cc188d0feeebf",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            43
+          ],
+          "medicalSpecialPrices": [
+            27.95
+          ],
+          "wholesalePrices": null,
+          "Name": "Pink Lady | Live Sugar | 1g",
+          "nonArmsLength": null,
+          "Options": [
+            "1gC"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "1gC",
+              "inventory": 8,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            43
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "1gC",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            43
+          ],
+          "recSpecialPrices": [
+            27.95
+          ],
+          "special": true,
+          "specialData": {
+            "bogoSpecials": null,
+            "saleSpecials": [
+              {
+                "createdBy": "5f5ac69c4508af00b350ce1d",
+                "directPOSProductIdMapping": false,
+                "rawPOSWeightMapping": false,
+                "useLatestCartCalculator": null,
+                "discount": 25,
+                "discountStacking": false,
+                "dollarDiscount": false,
+                "eligibleProductOptions": null,
+                "menuType": "both",
+                "minorVersion": 0,
+                "nonStackingBehavior": "favorCustomer",
+                "payByBankIncentiveEnabled": null,
+                "paymentRestrictions": null,
+                "percentDiscount": true,
+                "saleDiscounts": null,
+                "settingsDerivedFrom": "dispensary",
+                "skipV4Merge": null,
+                "source": null,
+                "sourceId": null,
+                "specialId": "690e6788cacace00ae6df3e5",
+                "specialName": "25% OFF Concentrates! *NOT Stackable ",
+                "specialType": "sale",
+                "specialRestrictions": {
+                  "Concentrate": {
+                    "discountType": "percentDiscount"
+                  }
+                },
+                "stackingBehavior": "cumulative",
+                "stackingMode": null,
+                "targetPrice": false,
+                "useGreedOptimizedCalculator": null,
+                "useTotalQtyCalcsFix": true,
+                "version": 3,
+                "__typename": "Products_specialData_saleSpecials"
+              },
+              {
+                "createdBy": "5f5ac69c4508af00b350ce1d",
+                "directPOSProductIdMapping": false,
+                "rawPOSWeightMapping": false,
+                "useLatestCartCalculator": null,
+                "discount": 35,
+                "discountStacking": false,
+                "dollarDiscount": false,
+                "eligibleProductOptions": null,
+                "menuType": "both",
+                "minorVersion": 0,
+                "nonStackingBehavior": "favorCustomer",
+                "payByBankIncentiveEnabled": null,
+                "paymentRestrictions": null,
+                "percentDiscount": true,
+                "saleDiscounts": null,
+                "settingsDerivedFrom": "dispensary",
+                "skipV4Merge": null,
+                "source": null,
+                "sourceId": null,
+                "specialId": "690e6977fd316100a408f4df",
+                "specialName": "35% OFF Huny & House Brand Concentrates! *NOT Stackable",
+                "specialType": "sale",
+                "specialRestrictions": {
+                  "690918b6e2323b4f58fd9aae": {
+                    "discountType": "percentDiscount"
+                  },
+                  "6909192a6df7fde0e78c6413": {
+                    "discountType": "percentDiscount"
+                  },
+                  "690919630becfd13d697e5bc": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ffdd59a9400e2fbd1cfa64": {
+                    "discountType": "percentDiscount"
+                  },
+                  "690919d1fa1106b58eedb170": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68dbe9f24f5c9c3d99137c4e": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68c9692673640e5340eba7a3": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ffdbcca038893d12ea4f9e": {
+                    "discountType": "percentDiscount"
+                  },
+                  "689b58e95c0c4aacf49fa756": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ffdc8625a57b33011e064a": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68adbc4ee6c0d727962d141a": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68234d218042ada75e6746ac": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ee9b01f4eb5069f5915f3c": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ee978dc7f2a26568369d86": {
+                    "discountType": "percentDiscount"
+                  },
+                  "69091abe299a109e8cf30396": {
+                    "discountType": "percentDiscount"
+                  },
+                  "69091b1bc636662036c8865a": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68eea30ec3109e3b0f2ae3a9": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68eea3c5c7f2a26568369e3d": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68eea478313813d52cc7b6ad": {
+                    "discountType": "percentDiscount"
+                  }
+                },
+                "stackingBehavior": "cumulative",
+                "stackingMode": null,
+                "targetPrice": false,
+                "useGreedOptimizedCalculator": null,
+                "useTotalQtyCalcsFix": true,
+                "version": 3,
+                "__typename": "Products_specialData_saleSpecials"
+              }
+            ],
+            "__typename": "Products_specialData"
+          },
+          "Status": "Active",
+          "strainType": "Hybrid",
+          "subcategory": "sugar",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              88.91
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Concentrate",
+          "vapeTaxApplicable": null,
+          "weight": 3,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "pink-lady-live-sugar-1g",
+          "pastCNames": [
+            null,
+            "pink-lady-live-sugar-1g"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "calm": 9,
+            "happy": 8,
+            "relaxed": 6,
+            "energetic": 5
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 85.801,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 3.109,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.174,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBDA (Cannabidiolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.316,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 2.189,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 91.589,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "686d1e1789382479f08d38ed",
+          "id": "686d1e1789382479f08d38ed",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1751981591248",
+          "updatedAt": "2025-11-07T21:37:18.580Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/e0f2311ef1d743b840e1bfb76a90cd42",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/e0f2311ef1d743b840e1bfb76a90cd42",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            120
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "Black Maple #22 X Wedding Sherb | Celestia Infused Flower | 7g",
+          "nonArmsLength": null,
+          "Options": [
+            "1/4oz"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "1/4oz",
+              "inventory": 30,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            120
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "1/4oz",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            120
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "Hybrid",
+          "subcategory": "infused-buds",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              50.792
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Flower",
+          "vapeTaxApplicable": null,
+          "weight": 4,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "black-maple-22-x-wedding-sherb-celestia-infused-flower-7g",
+          "pastCNames": [
+            null,
+            "black-maple-22-x-wedding-sherb-celestia-infused-whole-flower-7g",
+            "black-maple-22-x-wedding-sherb-celestia-infused-flower-7g"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "calm": 9,
+            "happy": 8,
+            "relaxed": 6,
+            "energetic": 5
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 17.129,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 33.663,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.119,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCV (Tetrahydrocannabivarin)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.441,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.143,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBC (Cannabichromene)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 1.359,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 52.854,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "669fd07a638cb2025479fe69",
+          "id": "669fd07a638cb2025479fe69",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1721749626630",
+          "updatedAt": "2025-11-07T22:44:10.048Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/b5ae2ff3a445d6aa9c0fb99ddb9bf4f4",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/b5ae2ff3a445d6aa9c0fb99ddb9bf4f4",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            30
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "OGKB 2.1 | Cured Resin Liquid Diamond Cartridge | 500mg",
+          "nonArmsLength": null,
+          "Options": [
+            ".5g"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": ".5g",
+              "inventory": 33,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            30
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": ".5g",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            30
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "Indica",
+          "subcategory": "cured-resin-cartridge",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              77.917
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Vaporizers",
+          "vapeTaxApplicable": null,
+          "weight": 4,
+          "featured": {
+            "current": true,
+            "startTime": "1762555449572",
+            "endTime": null,
+            "__typename": "Products_featured"
+          },
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "ogkb-2-1-cured-resin-liquid-diamond-cartridge-500mg",
+          "pastCNames": [
+            null,
+            "ogkb-2-0-liquid-diamond-cartridge-500mg",
+            "ogkb-2-1-liquid-diamond-cartridge-500mg",
+            "ogkb-2-1-cured-resin-liquid-diamond-cartridge-500mg"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "happy": 8,
+            "relaxed": 9,
+            "sleepy": 8,
+            "euphoric": 8
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 67.32,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 10.597,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.476,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCV (Tetrahydrocannabivarin)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.774,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBDA (Cannabidiolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.781,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBN (Cannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.514,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.124,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBC (Cannabichromene)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 1.976,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 80.727,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "68234d218042ada75e6746ac",
+          "id": "68234d218042ada75e6746ac",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1747143969957",
+          "updatedAt": "2025-11-04T20:26:48.236Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/e2183979f83ebf0fed6b7ef34943b7b7",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/e2183979f83ebf0fed6b7ef34943b7b7",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            43
+          ],
+          "medicalSpecialPrices": [
+            27.95
+          ],
+          "wholesalePrices": null,
+          "Name": "Pura Vida | Live Sugar | 1g",
+          "nonArmsLength": null,
+          "Options": [
+            "1gC"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "1gC",
+              "inventory": 35,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            43
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "1gC",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            43
+          ],
+          "recSpecialPrices": [
+            27.95
+          ],
+          "special": true,
+          "specialData": {
+            "bogoSpecials": null,
+            "saleSpecials": [
+              {
+                "createdBy": "5f5ac69c4508af00b350ce1d",
+                "directPOSProductIdMapping": false,
+                "rawPOSWeightMapping": false,
+                "useLatestCartCalculator": null,
+                "discount": 25,
+                "discountStacking": false,
+                "dollarDiscount": false,
+                "eligibleProductOptions": null,
+                "menuType": "both",
+                "minorVersion": 0,
+                "nonStackingBehavior": "favorCustomer",
+                "payByBankIncentiveEnabled": null,
+                "paymentRestrictions": null,
+                "percentDiscount": true,
+                "saleDiscounts": null,
+                "settingsDerivedFrom": "dispensary",
+                "skipV4Merge": null,
+                "source": null,
+                "sourceId": null,
+                "specialId": "690e6788cacace00ae6df3e5",
+                "specialName": "25% OFF Concentrates! *NOT Stackable ",
+                "specialType": "sale",
+                "specialRestrictions": {
+                  "Concentrate": {
+                    "discountType": "percentDiscount"
+                  }
+                },
+                "stackingBehavior": "cumulative",
+                "stackingMode": null,
+                "targetPrice": false,
+                "useGreedOptimizedCalculator": null,
+                "useTotalQtyCalcsFix": true,
+                "version": 3,
+                "__typename": "Products_specialData_saleSpecials"
+              },
+              {
+                "createdBy": "5f5ac69c4508af00b350ce1d",
+                "directPOSProductIdMapping": false,
+                "rawPOSWeightMapping": false,
+                "useLatestCartCalculator": null,
+                "discount": 35,
+                "discountStacking": false,
+                "dollarDiscount": false,
+                "eligibleProductOptions": null,
+                "menuType": "both",
+                "minorVersion": 0,
+                "nonStackingBehavior": "favorCustomer",
+                "payByBankIncentiveEnabled": null,
+                "paymentRestrictions": null,
+                "percentDiscount": true,
+                "saleDiscounts": null,
+                "settingsDerivedFrom": "dispensary",
+                "skipV4Merge": null,
+                "source": null,
+                "sourceId": null,
+                "specialId": "690e6977fd316100a408f4df",
+                "specialName": "35% OFF Huny & House Brand Concentrates! *NOT Stackable",
+                "specialType": "sale",
+                "specialRestrictions": {
+                  "690918b6e2323b4f58fd9aae": {
+                    "discountType": "percentDiscount"
+                  },
+                  "6909192a6df7fde0e78c6413": {
+                    "discountType": "percentDiscount"
+                  },
+                  "690919630becfd13d697e5bc": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ffdd59a9400e2fbd1cfa64": {
+                    "discountType": "percentDiscount"
+                  },
+                  "690919d1fa1106b58eedb170": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68dbe9f24f5c9c3d99137c4e": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68c9692673640e5340eba7a3": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ffdbcca038893d12ea4f9e": {
+                    "discountType": "percentDiscount"
+                  },
+                  "689b58e95c0c4aacf49fa756": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ffdc8625a57b33011e064a": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68adbc4ee6c0d727962d141a": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68234d218042ada75e6746ac": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ee9b01f4eb5069f5915f3c": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68ee978dc7f2a26568369d86": {
+                    "discountType": "percentDiscount"
+                  },
+                  "69091abe299a109e8cf30396": {
+                    "discountType": "percentDiscount"
+                  },
+                  "69091b1bc636662036c8865a": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68eea30ec3109e3b0f2ae3a9": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68eea3c5c7f2a26568369e3d": {
+                    "discountType": "percentDiscount"
+                  },
+                  "68eea478313813d52cc7b6ad": {
+                    "discountType": "percentDiscount"
+                  }
+                },
+                "stackingBehavior": "cumulative",
+                "stackingMode": null,
+                "targetPrice": false,
+                "useGreedOptimizedCalculator": null,
+                "useTotalQtyCalcsFix": true,
+                "version": 3,
+                "__typename": "Products_specialData_saleSpecials"
+              }
+            ],
+            "__typename": "Products_specialData"
+          },
+          "Status": "Active",
+          "strainType": "Sativa",
+          "subcategory": "sugar",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              87.008
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Concentrate",
+          "vapeTaxApplicable": null,
+          "weight": 4,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "pura-vida-live-sugar-1g",
+          "pastCNames": [
+            null,
+            "krumpets-live-sugar-1g",
+            "pura-vida-live-sugar-1g"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "happy": 9,
+            "energetic": 9,
+            "creative": 8,
+            "focused": 8,
+            "inspired": 8
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 1.932,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 85.076,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.149,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBDA (Cannabidiolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.622,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 2.035,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 89.814,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "663d4741919651a5598d13bf",
+          "id": "663d4741919651a5598d13bf",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "f5b39ad7-65b8-4aa0-8e71-c8b41e46384b",
+            "name": "Standard Farms",
+            "parentBrandId": "72edaed2-5772-49ed-bc69-6e5378bf2dff",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/634df6ba60689c3409e753babc920d89",
+            "__typename": "Brand",
+            "_id": "f5b39ad7-65b8-4aa0-8e71-c8b41e46384b",
+            "description": "Standard Farms mission is to be the standard bearer for natural quality, expertly grown, modern medical marijuana. Combining cutting-edge science and cultivation. Standard Farms is changing the way people understand and use marijuana.\n\nStandard Farms believes in a little plant full of potential. Potential to heal, potential for innovation, potential to enjoy life."
+          },
+          "brandId": "f5b39ad7-65b8-4aa0-8e71-c8b41e46384b",
+          "brandName": "Standard Farms",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1715291969003",
+          "updatedAt": "2025-10-18T14:24:22.050Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/9ec3d9844dd989c4e706709a55b0b0c7",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/9ec3d9844dd989c4e706709a55b0b0c7",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            30
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "Dart Battery",
+          "nonArmsLength": null,
+          "Options": [
+            "N/A"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "N/A",
+              "inventory": 9,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            30
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "N/A",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            30
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "N/A",
+          "subcategory": "batteries",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "type": "Accessories",
+          "vapeTaxApplicable": null,
+          "weight": 5,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "dart-battery",
+          "pastCNames": [
+            null,
+            "dart-battery"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/634df6ba60689c3409e753babc920d89",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {},
+          "cannabinoidsV2": [],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "68b73d6138becbe7444d657f",
+          "id": "68b73d6138becbe7444d657f",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1756839265547",
+          "updatedAt": "2025-11-07T21:32:37.519Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/0c9346f8b86d5b547bbd8a8877bdf5c9",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/0c9346f8b86d5b547bbd8a8877bdf5c9",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            34
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "California",
+          "nonArmsLength": null,
+          "Options": [
+            "1/8oz"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "1/8oz",
+              "inventory": 35,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            34
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "1/8oz",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            34
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "Hybrid",
+          "subcategory": "premium",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              21.355
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Flower",
+          "vapeTaxApplicable": null,
+          "weight": 7,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "california",
+          "pastCNames": [
+            null,
+            "california-new-strain-",
+            "california"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "calm": 9,
+            "happy": 8,
+            "relaxed": 6,
+            "energetic": 5
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 0.813,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 20.542,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.523,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.102,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 21.98,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "670eb8135568a5fa3768f18c",
+          "id": "670eb8135568a5fa3768f18c",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1729017875210",
+          "updatedAt": "2025-10-31T14:32:15.776Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/b5ae2ff3a445d6aa9c0fb99ddb9bf4f4",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/b5ae2ff3a445d6aa9c0fb99ddb9bf4f4",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            30
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "Perfect Cell | Cured Resin Liquid Diamond Cartridge | 500mg",
+          "nonArmsLength": null,
+          "Options": [
+            ".5g"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": ".5g",
+              "inventory": 51,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            30
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": ".5g",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            30
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "Hybrid",
+          "subcategory": "cured-resin-cartridge",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              80.829
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Vaporizers",
+          "vapeTaxApplicable": null,
+          "weight": 9,
+          "featured": {
+            "current": true,
+            "startTime": "1761921133742",
+            "endTime": null,
+            "__typename": "Products_featured"
+          },
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "perfect-cell-cured-resin-liquid-diamond-cartridge-500mg",
+          "pastCNames": [
+            null,
+            "perfect-cell-liquid-diamonds-cartridge-500mg",
+            "perfect-cell-cured-resin-liquid-diamonds-cartridge-500mg",
+            "perfect-cell-cured-resin-liquid-diamond-cartridge-500mg"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "energetic": 5,
+            "happy": 8,
+            "calm": 9,
+            "relaxed": 6
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 67.353,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 13.476,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.449,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCV (Tetrahydrocannabivarin)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.585,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.148,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBC (Cannabichromene)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 1.759,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.167,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBDA (Cannabidiolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.274,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBN (Cannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 84.211,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "66bf7a86c96d2bdc2c33c59e",
+          "id": "66bf7a86c96d2bdc2c33c59e",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "470a2c0d-1512-4b5c-b2c5-39bf2958f7b6",
+            "name": "Pulsar",
+            "parentBrandId": null,
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/d8f644f9d9379523d06824d869066b25",
+            "__typename": "Brand",
+            "_id": "470a2c0d-1512-4b5c-b2c5-39bf2958f7b6",
+            "description": ""
+          },
+          "brandId": "470a2c0d-1512-4b5c-b2c5-39bf2958f7b6",
+          "brandName": "Pulsar",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1723824774833",
+          "updatedAt": "2025-10-22T15:06:15.895Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/f0a19a3c21c3c4aa29c3e05b4608753d",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/f0a19a3c21c3c4aa29c3e05b4608753d",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            },
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/1aa65e1f0768efcca9aab39beb0372bf",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            },
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/8b79ef9d3fbc3a0e286fd10c166cfa72",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            40
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "510 DL Pipe | Auto Draw Variable Voltage Vape Bar | Assorted Colors",
+          "nonArmsLength": null,
+          "Options": [
+            "N/A"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "N/A",
+              "inventory": 11,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            40
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "N/A",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            40
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "N/A",
+          "subcategory": "batteries",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "type": "Accessories",
+          "vapeTaxApplicable": null,
+          "weight": 10,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "510-dl-pipe-auto-draw-variable-voltage-vape-bar-assorted-colors",
+          "pastCNames": [
+            null,
+            "510-dl-2-0-pro-mist-series-auto-draw-variable-voltage-vape-bar-assorted-colors",
+            "510-dl-pipe-auto-draw-variable-voltage-vape-bar-assorted-colors"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/d8f644f9d9379523d06824d869066b25",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {},
+          "cannabinoidsV2": [],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "658b4b06b6875700095791c7",
+          "id": "658b4b06b6875700095791c7",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "eb43b820-ff67-4526-951f-bb8f506f0b2b",
+            "name": "&Shine",
+            "parentBrandId": "9037a09f-bfea-486e-990e-0d9f900de17d",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/fcece18bf850583c277b1def158fd9d2",
+            "__typename": "Brand",
+            "_id": "eb43b820-ff67-4526-951f-bb8f506f0b2b",
+            "description": "&Shine is all about good cannabis that sparks good times—for anybody, in pretty much any situation. Whether the mood you’re looking for is “let’s goooo,” “all gooood,” or “down for whatever,” we’ve got something to match in our shining selection. (See what we did there?) Just find the vibe you want &Shine on."
+          },
+          "brandId": "eb43b820-ff67-4526-951f-bb8f506f0b2b",
+          "brandName": "&Shine",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1703627526269",
+          "updatedAt": "2025-10-27T15:21:56.744Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/09a00be98fd2be97367555baa5c04146",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/09a00be98fd2be97367555baa5c04146",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            25
+          ],
+          "medicalSpecialPrices": [
+            18.75
+          ],
+          "wholesalePrices": null,
+          "Name": "Pineapple Guava | 10mg Troche | 10pk",
+          "nonArmsLength": null,
+          "Options": [
+            "N/A"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "N/A",
+              "inventory": 22,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            25
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "N/A",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            25
+          ],
+          "recSpecialPrices": [
+            18.75
+          ],
+          "special": true,
+          "specialData": {
+            "bogoSpecials": null,
+            "saleSpecials": [
+              {
+                "createdBy": "5f5ac69c4508af00b350ce1d",
+                "directPOSProductIdMapping": false,
+                "rawPOSWeightMapping": false,
+                "useLatestCartCalculator": null,
+                "discount": 25,
+                "discountStacking": false,
+                "dollarDiscount": false,
+                "eligibleProductOptions": null,
+                "menuType": "both",
+                "minorVersion": 0,
+                "nonStackingBehavior": "favorCustomer",
+                "payByBankIncentiveEnabled": null,
+                "paymentRestrictions": null,
+                "percentDiscount": true,
+                "saleDiscounts": null,
+                "settingsDerivedFrom": "dispensary",
+                "skipV4Merge": null,
+                "source": null,
+                "sourceId": null,
+                "specialId": "690e6809e29c350063581b8c",
+                "specialName": "25% OFF Ingestibles & Topicals! *NOT Stackable ",
+                "specialType": "sale",
+                "specialRestrictions": {
+                  "Oral": {
+                    "discountType": "percentDiscount"
+                  },
+                  "Tincture": {
+                    "discountType": "percentDiscount"
+                  },
+                  "Topicals": {
+                    "discountType": "percentDiscount"
+                  }
+                },
+                "stackingBehavior": "cumulative",
+                "stackingMode": null,
+                "targetPrice": false,
+                "useGreedOptimizedCalculator": null,
+                "useTotalQtyCalcsFix": true,
+                "version": 3,
+                "__typename": "Products_specialData_saleSpecials"
+              }
+            ],
+            "__typename": "Products_specialData"
+          },
+          "Status": "Active",
+          "strainType": "Sativa",
+          "subcategory": "sublingual",
+          "THC": null,
+          "THCContent": {
+            "unit": "MILLIGRAMS",
+            "range": [
+              100
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Oral",
+          "vapeTaxApplicable": null,
+          "weight": 10,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "pineapple-guava-10mg-troche-10pk",
+          "pastCNames": [
+            null,
+            "pineapple-guava-10mg-troche-10pk"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/fcece18bf850583c277b1def158fd9d2",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "energetic": 9,
+            "happy": 9,
+            "creative": 8,
+            "focused": 8,
+            "inspired": 8
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 0.1,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 3.33,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.01,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "CBN (Cannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.02,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "CBC (Cannabichromene)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.01,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "THCV (Tetrahydrocannabivarin)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 100,
+              "unit": "MILLIGRAMS",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "65cf85ea9ef2a9000998a14f",
+          "id": "65cf85ea9ef2a9000998a14f",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "eb43b820-ff67-4526-951f-bb8f506f0b2b",
+            "name": "&Shine",
+            "parentBrandId": "9037a09f-bfea-486e-990e-0d9f900de17d",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/fcece18bf850583c277b1def158fd9d2",
+            "__typename": "Brand",
+            "_id": "eb43b820-ff67-4526-951f-bb8f506f0b2b",
+            "description": "&Shine is all about good cannabis that sparks good times—for anybody, in pretty much any situation. Whether the mood you’re looking for is “let’s goooo,” “all gooood,” or “down for whatever,” we’ve got something to match in our shining selection. (See what we did there?) Just find the vibe you want &Shine on."
+          },
+          "brandId": "eb43b820-ff67-4526-951f-bb8f506f0b2b",
+          "brandName": "&Shine",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1708099050119",
+          "updatedAt": "2025-11-03T19:44:37.736Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/1195ee4319105b1ec48e0e64d10752e6",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/1195ee4319105b1ec48e0e64d10752e6",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            52
+          ],
+          "medicalSpecialPrices": [
+            39
+          ],
+          "wholesalePrices": null,
+          "Name": "Blueberry | 50mg THC 10mg CBN Plus Troches | 10pk",
+          "nonArmsLength": null,
+          "Options": [
+            "N/A"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "N/A",
+              "inventory": 27,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            52
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "N/A",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            52
+          ],
+          "recSpecialPrices": [
+            39
+          ],
+          "special": true,
+          "specialData": {
+            "bogoSpecials": null,
+            "saleSpecials": [
+              {
+                "createdBy": "5f5ac69c4508af00b350ce1d",
+                "directPOSProductIdMapping": false,
+                "rawPOSWeightMapping": false,
+                "useLatestCartCalculator": null,
+                "discount": 25,
+                "discountStacking": false,
+                "dollarDiscount": false,
+                "eligibleProductOptions": null,
+                "menuType": "both",
+                "minorVersion": 0,
+                "nonStackingBehavior": "favorCustomer",
+                "payByBankIncentiveEnabled": null,
+                "paymentRestrictions": null,
+                "percentDiscount": true,
+                "saleDiscounts": null,
+                "settingsDerivedFrom": "dispensary",
+                "skipV4Merge": null,
+                "source": null,
+                "sourceId": null,
+                "specialId": "690e6809e29c350063581b8c",
+                "specialName": "25% OFF Ingestibles & Topicals! *NOT Stackable ",
+                "specialType": "sale",
+                "specialRestrictions": {
+                  "Oral": {
+                    "discountType": "percentDiscount"
+                  },
+                  "Tincture": {
+                    "discountType": "percentDiscount"
+                  },
+                  "Topicals": {
+                    "discountType": "percentDiscount"
+                  }
+                },
+                "stackingBehavior": "cumulative",
+                "stackingMode": null,
+                "targetPrice": false,
+                "useGreedOptimizedCalculator": null,
+                "useTotalQtyCalcsFix": true,
+                "version": 3,
+                "__typename": "Products_specialData_saleSpecials"
+              }
+            ],
+            "__typename": "Products_specialData"
+          },
+          "Status": "Active",
+          "strainType": "Indica",
+          "subcategory": "sublingual",
+          "THC": null,
+          "THCContent": {
+            "unit": "MILLIGRAMS",
+            "range": [
+              500
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Oral",
+          "vapeTaxApplicable": null,
+          "weight": 11,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "blueberry-50mg-thc-10mg-cbn-plus-troches-10pk",
+          "pastCNames": [
+            null,
+            "blueberry-50mg-thc-10mg-cbd-plus-troches-10pk",
+            "blueberry-50mg-thc-10mg-cbn-plus-troches-10pk"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/fcece18bf850583c277b1def158fd9d2",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "relaxed": 9,
+            "sleepy": 8,
+            "happy": 8,
+            "euphoric": 8
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 11.26,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.03,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "THCV (Tetrahydrocannabivarin)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 2.26,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "CBN (Cannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.77,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.06,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "CBC (Cannabichromene)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 600,
+              "unit": "MILLIGRAMS",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "6876597d22e0b735957aff03",
+          "id": "6876597d22e0b735957aff03",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1752586621746",
+          "updatedAt": "2025-11-07T21:36:01.032Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/e0f2311ef1d743b840e1bfb76a90cd42",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/e0f2311ef1d743b840e1bfb76a90cd42",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            120
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "Perfect Cell X D-O-Double-OG | Celestia Infused Flower | 7g",
+          "nonArmsLength": null,
+          "Options": [
+            "1/4oz"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "1/4oz",
+              "inventory": 41,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            120
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "1/4oz",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            120
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "Hybrid",
+          "subcategory": "infused-buds",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              54.805
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Flower",
+          "vapeTaxApplicable": null,
+          "weight": 11,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "perfect-cell-x-d-o-double-og-celestia-infused-flower-7g",
+          "pastCNames": [
+            null,
+            "perfect-cell-x-d-o-double-og-celestia-infused-flower-7g"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "calm": 9,
+            "happy": 8,
+            "relaxed": 6,
+            "energetic": 5
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 19.483,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 35.322,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.254,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCV (Tetrahydrocannabivarin)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.121,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBN (Cannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.429,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.481,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 56.227,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "6859c886e0a8447d132e4bdb",
+          "id": "6859c886e0a8447d132e4bdb",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "470a2c0d-1512-4b5c-b2c5-39bf2958f7b6",
+            "name": "Pulsar",
+            "parentBrandId": null,
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/d8f644f9d9379523d06824d869066b25",
+            "__typename": "Brand",
+            "_id": "470a2c0d-1512-4b5c-b2c5-39bf2958f7b6",
+            "description": ""
+          },
+          "brandId": "470a2c0d-1512-4b5c-b2c5-39bf2958f7b6",
+          "brandName": "Pulsar",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1750714502713",
+          "updatedAt": "2025-11-02T15:38:43.815Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/959c1e0b7f9e1702aaf505f016fb796d",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/959c1e0b7f9e1702aaf505f016fb796d",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            },
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/16dcce0111cf46b3c66bfe331a990e54",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            },
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/aede4093615b7a62fb4bc28d85fe179d",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            },
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/bf014a213fdbe20c2d1e57397fa0853d",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            25
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "510 DL 2.0 PRO | Mist Series | Auto Draw Variable Voltage Vape Bar | Assorted Colors",
+          "nonArmsLength": null,
+          "Options": [
+            "N/A"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "N/A",
+              "inventory": 7,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            25
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "N/A",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            25
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "N/A",
+          "subcategory": "batteries",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "type": "Accessories",
+          "vapeTaxApplicable": null,
+          "weight": 12,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "510-dl-2-0-pro-mist-series-auto-draw-variable-voltage-vape-bar-assorted-colors-30840",
+          "pastCNames": [
+            null,
+            "510-dl-2-0-pro-mist-series-auto-draw-variable-voltage-vape-bar-assorted-colors-30840"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/d8f644f9d9379523d06824d869066b25",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {},
+          "cannabinoidsV2": [],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "6761f0d6e75b04766bfa1803",
+          "id": "6761f0d6e75b04766bfa1803",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1734471894639",
+          "updatedAt": "2025-10-16T15:26:07.408Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/b5ae2ff3a445d6aa9c0fb99ddb9bf4f4",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/b5ae2ff3a445d6aa9c0fb99ddb9bf4f4",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            30
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "Sticky Grapes | Cured Resin Liquid Diamond Cartridge | 500mg",
+          "nonArmsLength": null,
+          "Options": [
+            ".5g"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": ".5g",
+              "inventory": 16,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            30
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": ".5g",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            30
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "Hybrid",
+          "subcategory": "cured-resin-cartridge",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              76.833
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Vaporizers",
+          "vapeTaxApplicable": null,
+          "weight": 12,
+          "featured": {
+            "current": true,
+            "startTime": "1760628367328",
+            "endTime": null,
+            "__typename": "Products_featured"
+          },
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "sticky-grapes-cured-resin-liquid-diamond-cartridge-500mg",
+          "pastCNames": [
+            null,
+            "sticky-grapes-live-liquid-diamonds-cartridge-500mg",
+            "sticky-grapes-liquid-diamonds-cartridge-500mg",
+            "sticky-grapes-cured-resin-liquid-diamonds-cartridge-500mg",
+            "sticky-grapes-live-resin-liquid-diamonds-cartridge-500mg",
+            "sticky-grapes-live-resin-liquid-diamond-cartridge-500mg",
+            "sticky-grapes-cured-resin-liquid-diamond-cartridge-500mg"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "calm": 9,
+            "happy": 8,
+            "relaxed": 6,
+            "energetic": 5
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 71.306,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 5.527,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.43,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCV (Tetrahydrocannabivarin)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.501,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.503,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.406,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D8 (Delta 8-tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.28,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBN (Cannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.274,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBC (Cannabichromene)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 79.227,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "65f46dc7c64d8800094d7cc6",
+          "id": "65f46dc7c64d8800094d7cc6",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "eb43b820-ff67-4526-951f-bb8f506f0b2b",
+            "name": "&Shine",
+            "parentBrandId": "9037a09f-bfea-486e-990e-0d9f900de17d",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/fcece18bf850583c277b1def158fd9d2",
+            "__typename": "Brand",
+            "_id": "eb43b820-ff67-4526-951f-bb8f506f0b2b",
+            "description": "&Shine is all about good cannabis that sparks good times—for anybody, in pretty much any situation. Whether the mood you’re looking for is “let’s goooo,” “all gooood,” or “down for whatever,” we’ve got something to match in our shining selection. (See what we did there?) Just find the vibe you want &Shine on."
+          },
+          "brandId": "eb43b820-ff67-4526-951f-bb8f506f0b2b",
+          "brandName": "&Shine",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1710517703622",
+          "updatedAt": "2025-10-31T16:26:06.055Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/1951d324701e0bfd11dfd070b473a19f",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/1951d324701e0bfd11dfd070b473a19f",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            25
+          ],
+          "medicalSpecialPrices": [
+            18.75
+          ],
+          "wholesalePrices": null,
+          "Name": "Mixed Berry | 10mg Troche | 10pk",
+          "nonArmsLength": null,
+          "Options": [
+            "N/A"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "N/A",
+              "inventory": 3,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            25
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "N/A",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            25
+          ],
+          "recSpecialPrices": [
+            18.75
+          ],
+          "special": true,
+          "specialData": {
+            "bogoSpecials": null,
+            "saleSpecials": [
+              {
+                "createdBy": "5f5ac69c4508af00b350ce1d",
+                "directPOSProductIdMapping": false,
+                "rawPOSWeightMapping": false,
+                "useLatestCartCalculator": null,
+                "discount": 25,
+                "discountStacking": false,
+                "dollarDiscount": false,
+                "eligibleProductOptions": null,
+                "menuType": "both",
+                "minorVersion": 0,
+                "nonStackingBehavior": "favorCustomer",
+                "payByBankIncentiveEnabled": null,
+                "paymentRestrictions": null,
+                "percentDiscount": true,
+                "saleDiscounts": null,
+                "settingsDerivedFrom": "dispensary",
+                "skipV4Merge": null,
+                "source": null,
+                "sourceId": null,
+                "specialId": "690e6809e29c350063581b8c",
+                "specialName": "25% OFF Ingestibles & Topicals! *NOT Stackable ",
+                "specialType": "sale",
+                "specialRestrictions": {
+                  "Oral": {
+                    "discountType": "percentDiscount"
+                  },
+                  "Tincture": {
+                    "discountType": "percentDiscount"
+                  },
+                  "Topicals": {
+                    "discountType": "percentDiscount"
+                  }
+                },
+                "stackingBehavior": "cumulative",
+                "stackingMode": null,
+                "targetPrice": false,
+                "useGreedOptimizedCalculator": null,
+                "useTotalQtyCalcsFix": true,
+                "version": 3,
+                "__typename": "Products_specialData_saleSpecials"
+              }
+            ],
+            "__typename": "Products_specialData"
+          },
+          "Status": "Active",
+          "strainType": "Indica",
+          "subcategory": "sublingual",
+          "THC": null,
+          "THCContent": {
+            "unit": "MILLIGRAMS",
+            "range": [
+              100
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Oral",
+          "vapeTaxApplicable": null,
+          "weight": 13,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "mixed-berry-10mg-troche-10pk",
+          "pastCNames": [
+            null,
+            "mixed-berry-10mg-troche-10pk"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/fcece18bf850583c277b1def158fd9d2",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "relaxed": 9,
+            "sleepy": 8,
+            "happy": 8,
+            "euphoric": 8
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 0.02,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "CBN (Cannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.14,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 3.38,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.03,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "CBC (Cannabichromene)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.01,
+              "unit": "MILLIGRAMS_PER_GRAM",
+              "cannabinoid": {
+                "name": "THCV (Tetrahydrocannabivarin)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 100,
+              "unit": "MILLIGRAMS",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "68bf4b1e46795b410569453d",
+          "id": "68bf4b1e46795b410569453d",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1757367070894",
+          "updatedAt": "2025-11-07T21:36:17.671Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/e0f2311ef1d743b840e1bfb76a90cd42",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/e0f2311ef1d743b840e1bfb76a90cd42",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            120
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "Pink Lady X Key Lime Kush | Celestia Infused Flower | 7g",
+          "nonArmsLength": null,
+          "Options": [
+            "1/4oz"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "1/4oz",
+              "inventory": 9,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            120
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "1/4oz",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            120
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "Hybrid",
+          "subcategory": "infused-buds",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              54.071
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Flower",
+          "vapeTaxApplicable": null,
+          "weight": 13,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "pink-lady-x-key-lime-kush-celestia-infused-flower-7g",
+          "pastCNames": [
+            null,
+            "pink-lady-x-key-lime-kush-celestia-infused-flower-7g"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "calm": 9,
+            "happy": 8,
+            "relaxed": 6,
+            "energetic": 5
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 13.312,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 13.312,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.183,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCV (Tetrahydrocannabivarin)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.078,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBDA (Cannabidiolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.06,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBN (Cannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.299,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.165,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBC (Cannabichromene)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.979,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 55.835,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "6746324c7f144eb7c482aabd",
+          "id": "6746324c7f144eb7c482aabd",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              0.155
+            ],
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1732653644072",
+          "updatedAt": "2025-09-15T20:56:00.279Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/b5ae2ff3a445d6aa9c0fb99ddb9bf4f4",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/b5ae2ff3a445d6aa9c0fb99ddb9bf4f4",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            30
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "Sherbanger | Cured Resin Liquid Diamond Cartridge | 500mg",
+          "nonArmsLength": null,
+          "Options": [
+            ".5g"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": ".5g",
+              "inventory": 32,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            30
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": ".5g",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            30
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "Hybrid",
+          "subcategory": "cured-resin-cartridge",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              73.632
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Vaporizers",
+          "vapeTaxApplicable": null,
+          "weight": 13,
+          "featured": {
+            "current": true,
+            "startTime": "1757969760716",
+            "endTime": null,
+            "__typename": "Products_featured"
+          },
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "sherbanger-cured-resin-liquid-diamond-cartridge-500mg",
+          "pastCNames": [
+            null,
+            "sherbanger-liquid-diamonds-cartridge-500mg",
+            "sherbanger-cured-resin-liquid-diamonds-cartridge-500mg",
+            "sherbanger-cured-resin-liquid-diamond-cartridge-500mg"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "calm": 9,
+            "happy": 8,
+            "relaxed": 6,
+            "energetic": 5
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 64.732,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 8.9,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.313,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCV (Tetrahydrocannabivarin)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.258,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBN (Cannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.88,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.273,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBC (Cannabichromene)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 2.03,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 77.541,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "685aaa848aff5c7e86d5a018",
+          "id": "685aaa848aff5c7e86d5a018",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "470a2c0d-1512-4b5c-b2c5-39bf2958f7b6",
+            "name": "Pulsar",
+            "parentBrandId": null,
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/d8f644f9d9379523d06824d869066b25",
+            "__typename": "Brand",
+            "_id": "470a2c0d-1512-4b5c-b2c5-39bf2958f7b6",
+            "description": ""
+          },
+          "brandId": "470a2c0d-1512-4b5c-b2c5-39bf2958f7b6",
+          "brandName": "Pulsar",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1750772356986",
+          "updatedAt": "2025-10-08T20:57:15.022Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/70ae62ea954496316ff3d3837c552c8b",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/70ae62ea954496316ff3d3837c552c8b",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            5
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "Double-Sided Metal Dab Tool | 6\"",
+          "nonArmsLength": null,
+          "Options": [
+            "N/A"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "N/A",
+              "inventory": 33,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            5
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "N/A",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            5
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "N/A",
+          "subcategory": "dab-tools",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "type": "Accessories",
+          "vapeTaxApplicable": null,
+          "weight": 14,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "double-sided-metal-dab-tool-6-",
+          "pastCNames": [
+            null,
+            "double-sided-metal-dab-tool-6-"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/d8f644f9d9379523d06824d869066b25",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {},
+          "cannabinoidsV2": [],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "6733c61f53d1e013bb717a36",
+          "id": "6733c61f53d1e013bb717a36",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1731446303226",
+          "updatedAt": "2025-10-06T08:54:55.554Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/b5ae2ff3a445d6aa9c0fb99ddb9bf4f4",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/b5ae2ff3a445d6aa9c0fb99ddb9bf4f4",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            30
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "Jellium | Cured Resin Liquid Diamond Cartridge | 500mg",
+          "nonArmsLength": null,
+          "Options": [
+            ".5g"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": ".5g",
+              "inventory": 61,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            30
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": ".5g",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            30
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "Hybrid",
+          "subcategory": "cured-resin-cartridge",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              71.512
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Vaporizers",
+          "vapeTaxApplicable": null,
+          "weight": 14,
+          "featured": {
+            "current": true,
+            "startTime": "1757703786927",
+            "endTime": null,
+            "__typename": "Products_featured"
+          },
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "jellium-cured-resin-liquid-diamond-cartridge-500mg",
+          "pastCNames": [
+            null,
+            "jellium-liquid-diamonds-cartridge-500mg",
+            "jellium-cured-resin-liquid-diamonds-cartridge-500mg",
+            "jellium-cured-resin-liquid-diamond-cartridge-500mg"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "calm": 9,
+            "happy": 8,
+            "relaxed": 6,
+            "energetic": 5
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 16.264,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 55.248,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.209,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCV (Tetrahydrocannabivarin)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.262,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBDA (Cannabidiolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.147,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBN (Cannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.167,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBC (Cannabichromene)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 1.072,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 4.317,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 77.686,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "674f73236e9f7353245ff2fb",
+          "id": "674f73236e9f7353245ff2fb",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "name": "Natural Selections",
+            "parentBrandId": "30a11e47-6024-402a-be20-8a0ed659e509",
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+            "__typename": "Brand",
+            "_id": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+            "description": "The power of better flower lies in a better cultivation process; that’s why we don’t use unnecessary and excessive interventions to produce our plants. All our flower is slowly dried at low temperatures to best preserve cannabinoids and terpenes, and we hand inspect and trim every flower prior to packaging. It’s just part of our nature. Our indoor farms house a bank of 2,600 seeds representing over 60 breeders and more than 225 strains. By leveraging our robust seed bank and genetic pool, we regularly cultivate, test, and share new strains to continually explore the best that nature has to offer.\n\nWe’re good at what we do because we love what we do. We’re cultivating a community who appreciate the beauty of the natural world around us. We’re plant experts meticulously monitoring our cultivation environment to bring out the best of nature for those who appreciate it most. You deserve flower the way flower was meant to be. Our unique, tried and true strains are cultivated in harmony with nature for both healing and happiness. Tune in to the Natural Selections variety show of color, aroma, and flavor, where it’s all good, naturally."
+          },
+          "brandId": "447e13a2-44d6-46ae-89e3-210ceb56bb17",
+          "brandName": "Natural Selections",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1733260067943",
+          "updatedAt": "2025-11-07T22:39:54.115Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/b5ae2ff3a445d6aa9c0fb99ddb9bf4f4",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/b5ae2ff3a445d6aa9c0fb99ddb9bf4f4",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            30
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "Guava MTN x Strawberry Vegas  | Cured Resin Liquid Diamond Cartridge | 500mg",
+          "nonArmsLength": null,
+          "Options": [
+            ".5g"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": ".5g",
+              "inventory": 36,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            30
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": ".5g",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            30
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "Hybrid",
+          "subcategory": "cured-resin-cartridge",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": [
+              76.894
+            ],
+            "__typename": "ProductPotency"
+          },
+          "type": "Vaporizers",
+          "vapeTaxApplicable": null,
+          "weight": 15,
+          "featured": {
+            "current": true,
+            "startTime": "1762555193631",
+            "endTime": null,
+            "__typename": "Products_featured"
+          },
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "guava-mtn-x-strawberry-vegas-cured-resin-liquid-diamond-cartridge-500mg",
+          "pastCNames": [
+            null,
+            "guava-mtn-x-strawberry-vegas-liquid-diamonds-cartridge-500mg",
+            "guava-mtn-x-strawberry-vegas-cured-resin-liquid-diamonds-cartridge-500mg",
+            "guava-mtn-x-strawberry-vegas-cured-resin-liquid-diamond-cartridge-500mg",
+            "strawberry-vegas-x-guava-mtn-cured-resin-liquid-diamond-cartridge-500mg"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/f04968ff8fcb38a7759773a024b42f68",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {
+            "calm": 9,
+            "happy": 8,
+            "relaxed": 6,
+            "energetic": 5
+          },
+          "cannabinoidsV2": [
+            {
+              "value": 0.129,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBC (Cannabichromene)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 1.164,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBGA (Cannabigerolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 65.419,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THC-D9 (Delta 9–tetrahydrocannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 11.475,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCA (Δ9-tetrahydrocannabinolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.304,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "THCV (Tetrahydrocannabivarin)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.177,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBDA (Cannabidiolic acid)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.263,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBN (Cannabinol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 0.482,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "CBG (Cannabigerol)",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            },
+            {
+              "value": 79.413,
+              "unit": "PERCENTAGE",
+              "cannabinoid": {
+                "name": "\"TAC\" - Total Active Cannabinoids",
+                "__typename": "Cannabinoid"
+              },
+              "__typename": "Products_CannabinoidV2"
+            }
+          ],
+          "provider": "dutchie"
+        },
+        {
+          "_id": "683f5696b44cc2b1efc3f42c",
+          "id": "683f5696b44cc2b1efc3f42c",
+          "AdditionalOptions": [],
+          "duplicatedProductId": null,
+          "libraryProductId": null,
+          "libraryProductScore": null,
+          "brand": {
+            "id": "470a2c0d-1512-4b5c-b2c5-39bf2958f7b6",
+            "name": "Pulsar",
+            "parentBrandId": null,
+            "imageUrl": "https://s3-us-west-2.amazonaws.com/dutchie-images/d8f644f9d9379523d06824d869066b25",
+            "__typename": "Brand",
+            "_id": "470a2c0d-1512-4b5c-b2c5-39bf2958f7b6",
+            "description": ""
+          },
+          "brandId": "470a2c0d-1512-4b5c-b2c5-39bf2958f7b6",
+          "brandName": "Pulsar",
+          "CBD": null,
+          "CBDContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "certificateOfAnalysisEnabled": false,
+          "collectionCardBadge": null,
+          "comingSoon": null,
+          "createdAt": "1748981398889",
+          "updatedAt": "2025-10-22T17:25:16.950Z",
+          "DispensaryID": "621900cebbc5580e15476deb",
+          "enterpriseProductId": null,
+          "Image": "https://s3-us-west-2.amazonaws.com/dutchie-images/50d7bc83e015c2a65b85239889319519",
+          "images": [
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/50d7bc83e015c2a65b85239889319519",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            },
+            {
+              "url": "https://s3-us-west-2.amazonaws.com/dutchie-images/c27695c1d0476e873e5b3f4372ee0cea",
+              "description": "",
+              "active": true,
+              "__typename": "Products_Images"
+            }
+          ],
+          "measurements": null,
+          "medicalOnly": false,
+          "medicalPrices": [
+            30
+          ],
+          "medicalSpecialPrices": [],
+          "wholesalePrices": null,
+          "Name": "King Kut V2 | Electric Grinder | Assorted Colors",
+          "nonArmsLength": null,
+          "Options": [
+            "N/A"
+          ],
+          "limitsPerCustomer": null,
+          "manualInventory": [
+            {
+              "option": "N/A",
+              "inventory": 19,
+              "__typename": "Products_manualInventory"
+            }
+          ],
+          "POSMetaData": null,
+          "Prices": [
+            30
+          ],
+          "pricingTierData": null,
+          "specialIdsPerOption": [
+            {
+              "option": "N/A",
+              "conditionIds": [],
+              "rewardIds": [],
+              "__typename": "Products_specialIdsPerOption"
+            }
+          ],
+          "rawOptions": [],
+          "recOnly": false,
+          "recPrices": [
+            30
+          ],
+          "recSpecialPrices": [],
+          "special": null,
+          "specialData": null,
+          "Status": "Active",
+          "strainType": "N/A",
+          "subcategory": "grinders",
+          "THC": null,
+          "THCContent": {
+            "unit": "PERCENTAGE",
+            "range": null,
+            "__typename": "ProductPotency"
+          },
+          "type": "Accessories",
+          "vapeTaxApplicable": null,
+          "weight": 15,
+          "featured": null,
+          "isBelowThreshold": null,
+          "isBelowKioskThreshold": null,
+          "optionsBelowThreshold": [],
+          "optionsBelowKioskThreshold": [],
+          "cName": "king-kut-v2-electric-grinder-assorted-colors",
+          "pastCNames": [
+            null,
+            "king-kut-v2-electric-grinder",
+            "king-kut-v2-electric-grinder-assorted-colors"
+          ],
+          "brandLogo": "https://s3-us-west-2.amazonaws.com/dutchie-images/d8f644f9d9379523d06824d869066b25",
+          "bottleDepositTaxCents": null,
+          "useBetterPotencyTaxes": null,
+          "__typename": "Products",
+          "effects": {},
+          "cannabinoidsV2": [],
+          "provider": "dutchie"
+        }
+      ],
+      "queryInfo": {
+        "totalCount": 814,
+        "totalPages": 33,
+        "__typename": "queryInfoType"
+      },
+      "__typename": "ProductsList"
+    }
+  }
+}
