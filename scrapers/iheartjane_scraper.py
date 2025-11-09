@@ -6,39 +6,13 @@
 import requests
 import pandas as pd
 import re
-from .scraper_utils import convert_to_grams
+from .scraper_utils import convert_to_grams, MASTER_TERPENE_MAP, brand_map, MASTER_CATEGORY_MAP
 
 # --- API Constants ---
 # These constants define the endpoint and authentication for the iHeartJane API.
 NEW_JANE_URL = "https://dmerch.iheartjane.com/v2/smart"
 NEW_JANE_API_KEY = "ce5f15c9-3d09-441d-9bfd-26e87aff5925"
 
-# A predefined list of terpenes to extract. This ensures consistency in the
-# final DataFrame and simplifies the parsing logic.
-TERPENE_LIST = [
-    'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
-    'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Caryophyllene Oxide',
-    'Guaiol', 'Humulene', 'alpha-Bisabolol', 'Camphene', 'Ocimene'
-]
-
-# A mapping to standardize terpene names. APIs often return variations
-# (e.g., 'b-myrcene', 'beta-myrcene'), and this ensures they are all mapped
-# to a single, canonical name for consistent analysis.
-TERPENE_MAPPING = {
-    'beta-myrcene': 'beta-Myrcene', 'myrcene': 'beta-Myrcene', 'b-myrcene': 'beta-Myrcene',
-    'limonene': 'Limonene', 'd-limonene': 'Limonene',
-    'beta-caryophyllene': 'beta-Caryophyllene', 'caryophyllene': 'beta-Caryophyllene', 'b-caryophyllene': 'beta-Caryophyllene',
-    'terpinolene': 'Terpinolene',
-    'linalool': 'Linalool',
-    'alpha-pinene': 'alpha-Pinene', 'a-pinene': 'alpha-Pinene',
-    'beta-pinene': 'beta-Pinene', 'b-pinene': 'beta-Pinene',
-    'caryophyllene oxide': 'Caryophyllene Oxide',
-    'guaiol': 'Guaiol',
-    'humulene': 'Humulene', 'alpha-humulene': 'Humulene', 'a-humulene': 'Humulene',
-    'alpha-bisabolol': 'alpha-Bisabolol', 'bisabolol': 'alpha-Bisabolol', 'a-bisabolol': 'alpha-Bisabolol',
-    'camphene': 'Camphene',
-    'ocimene': 'Ocimene', 'beta-ocimene': 'Ocimene', 'b-ocimene': 'Ocimene'
-}
 
 def parse_terpenes_from_text(text):
     """
@@ -65,9 +39,9 @@ def parse_terpenes_from_text(text):
 
     total_terps = 0
     for name, value in matches:
-        # Standardize the found terpene name using the TERPENE_MAPPING.
+        # Standardize the found terpene name using the MASTER_TERPENE_MAP.
         clean_name = name.strip().lower()
-        official_name = TERPENE_MAPPING.get(clean_name)
+        official_name = MASTER_TERPENE_MAP.get(clean_name)
 
         if official_name:
             val = float(value)
@@ -111,9 +85,15 @@ def parse_jane_product(product_hit, store_name):
     attrs = product_hit['search_attributes']
 
     # 1. Extract common data shared across all variants of this product.
+    raw_brand = attrs.get('brand')
+    raw_category = attrs.get('kind')
     common_data = {
-        'Name': attrs.get('name'), 'Brand': attrs.get('brand'), 'Type': attrs.get('kind'),
-        'Subtype': attrs.get('kind_subtype'), 'Store': store_name, 'THC': attrs.get('percent_thc')
+        'Name': attrs.get('name'),
+        'Brand': brand_map.get(raw_brand, raw_brand),
+        'Type': MASTER_CATEGORY_MAP.get(raw_category.lower(), raw_category) if raw_category else None,
+        'Subtype': attrs.get('kind_subtype'),
+        'Store': store_name,
+        'THC': attrs.get('percent_thc')
     }
 
     # 2. Extract potency data from the correct nested field.

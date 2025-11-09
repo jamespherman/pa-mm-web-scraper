@@ -7,7 +7,7 @@ import requests
 import pandas as pd
 import numpy as np
 import json
-from .scraper_utils import convert_to_grams
+from .scraper_utils import convert_to_grams, MASTER_TERPENE_MAP, brand_map, MASTER_CATEGORY_MAP
 
 # --- Constants ---
 
@@ -89,23 +89,6 @@ KNOWN_TERPENES = [
     'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Caryophyllene Oxide',
     'Guaiol', 'Humulene', 'alpha-Bisabolol', 'Camphene', 'Ocimene'
 ]
-
-# A mapping to standardize terpene names. APIs often return variations
-# (e.g., 'b-myrcene', 'beta-myrcene'), and this ensures they are all mapped
-# to a single, canonical name.
-TERPENE_MAPPING = {
-    'alpha-pinene': 'alpha-Pinene', 'a-pinene': 'alpha-Pinene', 'pinene': 'alpha-Pinene',
-    'beta-pinene': 'beta-Pinene', 'b-pinene': 'beta-Pinene',
-    'beta-myrcene': 'beta-Myrcene', 'myrcene': 'beta-Myrcene', 'b-myrcene': 'beta-Myrcene',
-    'limonene': 'Limonene', 'd-limonene': 'Limonene',
-    'beta-caryophyllene': 'beta-Caryophyllene', 'caryophyllene': 'beta-Caryophyllene', 'b-caryophyllene': 'beta-Caryophyllene',
-    'linalool': 'Linalool', 'terpinolene': 'Terpinolene',
-    'humulene': 'Humulene', 'alpha-humulene': 'Humulene', 'a-humulene': 'Humulene',
-    'ocimene': 'Ocimene', 'beta-ocimene': 'Ocimene', 'b-ocimene': 'Ocimene',
-    'guaiol': 'Guaiol',
-    'alpha-bisabolol': 'alpha-Bisabolol', 'bisabolol': 'alpha-Bisabolol', 'a-bisabolol': 'alpha-Bisabolol',
-    'camphene': 'Camphene', 'caryophyllene oxide': 'Caryophyllene Oxide',
-}
 
 def get_all_product_slugs(store_name, store_config):
     """
@@ -247,9 +230,15 @@ def parse_product_details(product, store_name):
         dict: A flattened dictionary containing the key product information.
     """
     
+    raw_brand = product.get('brandName', 'N/A')
+    raw_category = product.get('type', 'N/A')
+
     data = {
-        'Name': product.get('Name', 'N/A'), 'Brand': product.get('brandName', 'N/A'),
-        'Type': product.get('type', 'N/A'), 'Subtype': product.get('subcategory', 'N/A'), 'Store': store_name
+        'Name': product.get('Name', 'N/A'),
+        'Brand': brand_map.get(raw_brand, raw_brand),
+        'Type': MASTER_CATEGORY_MAP.get(raw_category.lower(), raw_category),
+        'Subtype': product.get('subcategory', 'N/A'),
+        'Store': store_name
     }
 
     prices, special_prices = product.get('medicalPrices', []), product.get('medicalSpecialPrices', [])
@@ -278,9 +267,10 @@ def parse_product_details(product, store_name):
             name = terp.get('name', terp.get('libraryTerpene', {}).get('name'))
             value = terp.get('value')
             if name and value is not None:
-                standard_name = TERPENE_MAPPING.get(name.strip().lower())
+                standard_name = MASTER_TERPENE_MAP.get(name.strip().lower())
                 if standard_name:
-                    terpene_data[standard_name], total_terps = value, total_terps + value
+                    terpene_data[standard_name] = value
+                    total_terps += value
     data.update(terpene_data)
     data['Total_Terps'] = total_terps if total_terps > 0 else np.nan
 
