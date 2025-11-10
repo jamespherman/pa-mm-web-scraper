@@ -57,6 +57,15 @@ def parse_trulieve_products(products, store_name):
             'CBD': product.get('cbd_content'),
         }
 
+        # Parse terpenes
+        for terpene in product.get('terpenes', []):
+            terpene_name = terpene.get('name')
+            terpene_value = terpene.get('value')
+            if terpene_name and terpene_value is not None:
+                standard_name = MASTER_COMPOUND_MAP.get(terpene_name)
+                if standard_name:
+                    common_data[standard_name] = terpene_value
+
         # Variants represent different weights/prices
         variants = product.get('variants', [])
         if not variants:
