@@ -32,6 +32,68 @@ TERPENE_COLUMNS = [
 # A predefined list of key cannabinoid columns.
 CANNABINOID_COLUMNS = ['THC', 'THCa', 'CBD']
 
+def _clean_product_names(df):
+    """
+    Creates a 'Name_Clean' column by stripping clutter from the 'Name' column.
+    
+    This function removes:
+    1. Known clutter (brands, types, subtypes)
+    2. Weight patterns (e.g., "3.5g", "500mg")
+    3. General clutter (e.g., "live", "vape", "indica")
+    4. Special characters
+    """
+    print("Creating 'Name_Clean' column...")
+    
+    # Start with a copy of the 'Name' column
+    cleaned_names = df['Name'].astype(str).copy()
+    
+    # --- 1. Define Clutter Patterns ---
+    
+    # Pattern for all known brands, types, and subtypes
+    try:
+        brands = [str(b) for b in df['Brand'].unique() if pd.notna(b)]
+        types = [str(t) for t in df['Type'].unique() if pd.notna(t)]
+        subtypes = [str(s) for s in df['Subtype'].unique() if pd.notna(s)]
+        
+        known_clutter_list = sorted(list(set(brands + types + subtypes)), key=len, reverse=True)
+        known_clutter_pattern = re.compile(r'\b(' + '|'.join(re.escape(c) for c in known_clutter_list) + r')\b', re.IGNORECASE)
+    except Exception as e:
+        print(f"  - Warning: Could not build known clutter list: {e}")
+        known_clutter_pattern = re.compile(r'a^') # Empty, non-matching regex
+
+    # Pattern for weights (from our analysis)
+    weight_pattern = re.compile(
+        r'(\d+\.?\d*\s*(g|mg|ml))|'  # 3.5g, 500mg, 1ml
+        r'(\d+\s*(gram|milligram))|' # 3 gram
+        r'(1/8\s*oz|1/4\s*oz|1/2\s*oz)', # 1/8 oz
+        re.IGNORECASE
+    )
+    
+    # Pattern for general clutter (from our analysis)
+    general_clutter_words = [
+        'live', 'vape', 'pen', 'small', 'ground', 'cured', 'liquid',
+        'indica', 'sativa', 'hybrid', 'thc', 'cbd', 'cbn', 'cbg',
+        '10pk', 'pack', '10', 'x'
+    ]
+    general_clutter_pattern = re.compile(r'\b(' + '|'.join(general_clutter_words) + r')\b', re.IGNORECASE)
+
+    # Pattern for special characters and extra spaces
+    char_pattern = re.compile(r'[|/()\[\]{}:-]+', re.IGNORECASE)
+    space_pattern = re.compile(r'\s{2,}') # 2 or more spaces
+    
+    # --- 2. Apply Cleaning Steps ---
+    cleaned_names = cleaned_names.str.replace(known_clutter_pattern, '', regex=True)
+    cleaned_names = cleaned_names.str.replace(weight_pattern, '', regex=True)
+    cleaned_names = cleaned_names.str.replace(general_clutter_pattern, '', regex=True)
+    cleaned_names = cleaned_names.str.replace(char_pattern, ' ', regex=True)
+    cleaned_names = cleaned_names.str.replace(space_pattern, ' ', regex=True)
+    
+    # Final strip to remove leading/trailing spaces
+    df['Name_Clean'] = cleaned_names.str.strip()
+    
+    print("  - 'Name_Clean' column created successfully.")
+    return df
+    
 def _convert_to_numeric(df):
     """
     Converts key columns to a numeric type for calculations and analysis.
@@ -113,8 +175,14 @@ def run_analysis(dataframe):
     # --- Step 1: Data Cleaning ---
     # Create a new, cleaned dataframe to avoid modifying the original
     cleaned_df = dataframe.copy()
+    
     # Convert types first (critical for all other operations)
     cleaned_df = _convert_to_numeric(cleaned_df)
+    
+    # --- Product Name Cleaning ---
+    # Create the 'Name_Clean' column for de-duplication
+    cleaned_df = _clean_product_names(cleaned_df)
+    
     print(f"Data cleaning complete.")
     
     # --- Step 2: Plotting Orchestration ---
@@ -426,16 +494,16 @@ def plot_top_50_heatmap(data, category_name, save_dir):
 
     # Category-specific filters to remove outliers (e.g., infused flower)
     filters = {
-        'flower': (
+        'Flower': (
             (data['Total_Terps'] > 2) &
             (data['Total_Terps'] < 6) &
             (data['THC'] < 40) &
             (~data['Subtype'].str.contains('Infused', case=False, na=False))
         ),
-        'concentrates': (
+        'Concentrates': (
             (data['Total_Terps'] > 5)
         ),
-        'vaporizers': (
+        'Vaporizers': (
             (data['Total_Terps'] > 5)  # Use same logic as concentrates
         )
     }
@@ -575,16 +643,16 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
 
     # Use the same category-specific filters as the heatmap
     filters = {
-        'flower': (
+        'Flower': (
             (data['Total_Terps'] > 2) &
             (data['Total_Terps'] < 6) &
             (data['THC'] < 40) &
             (~data['Subtype'].str.contains('Infused', case=False, na=False))
         ),
-        'concentrates': (
+        'Concentrates': (
             (data['Total_Terps'] > 5)
         ),
-        'vaporizers': (
+        'Vaporizers': (
             (data['Total_Terps'] > 5)
         )
     }
