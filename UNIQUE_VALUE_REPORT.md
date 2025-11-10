@@ -1,0 +1,446 @@
+# Unique Value Report
+
+## Brands
+- & Shine
+- &Shine
+- (the) Essence
+- *Pitt Promo*Belushi's Farm
+- *Pitt Promo*Solventless by Vytal
+- AVD
+- Aerospaced
+- Airo
+- AiroSport
+- Avexia
+- Belushi's Farm
+- Bits
+- Black Budda
+- Black Buddha
+- Black Buddha Cannabis
+- Blazy Susan
+- Boundless
+- Boveda
+- C-Bite
+- CCell
+- Calypso
+- Calypso Bountiful
+- CannaDevices
+- Cartisan
+- Cheetah
+- Cloudious9
+- Common Citizen
+- Cookies
+- Cresco
+- Cresco™
+- Cultivar
+- DOJA
+- Dewbie
+- Dime Bags
+- Doctor Solomon's
+- Double Bear
+- Dr. Dabber
+- Dr. Solomon's
+- Edie Parker
+- Eleven
+- Ethos
+- Evolab
+- FIND
+- FarmaceuticalRX
+- FarmaceuticalRx
+- Find
+- Find.
+- FloraCal
+- FloraCal Farms
+- Flower Foundry
+- Formula 420
+- G Pen
+- G-Pen
+- GRAV Labs
+- Garcia
+- Garcia Hand Picked
+- Gillie Grows
+- Good Green
+- Good News
+- Grassroots
+- Gratitude Gardens
+- Gron
+- Grön
+- Haze
+- Hedy
+- Hijinks
+- Houseplant
+- Human Grade
+- ILERA
+- INCensored
+- INSA
+- Ilera
+- Incensored
+- Insa
+- JAMS
+- Jim's Stash
+- John Daly
+- Khalifa Kush
+- Kind Tree
+- Kovert
+- Kynd
+- LEVEL
+- Later Days
+- Legend
+- Leiffa
+- Lookah
+- LuvBuds
+- MJ Arsenal
+- Maine Trees
+- Maitri
+- Maitri Genetics
+- Maitri Medicinals
+- Modern Flower
+- Modern Flower Ground
+- Momenta
+- Mood by Vytal
+- Moxie
+- Natural Selections
+- Old Pal
+- On The Rocks
+- Ongrok
+- Ooze
+- Organic Remedies
+- Ozium
+- Ozone
+- Ozone Reserve
+- PACKS
+- PAX
+- PHG
+- Packs
+- Pearls
+- Penn Health
+- Penn Health Group
+- PhG
+- Piranha
+- Preferred Gardens
+- Prime
+- Prime Wellness
+- Puffco
+- Pulsar
+- R.O.
+- R.O. Ground
+- R.O. Shake
+- RAW
+- RYOT
+- RYTHM
+- Randy's
+- Redemption
+- Redemption Cannabis
+- Redemption Shake
+- Remedi
+- Resolute Remedies
+- Revel
+- Revelry
+- Revelry Supply
+- Rythm
+- Savvy
+- SeCHe
+- Seche
+- Seed & Strain
+- Select
+- Select Briq
+- Select X
+- Seven Hills
+- Simply Herb
+- Solventless
+- Solventless by Vytal
+- Stache
+- Standard Farms
+- StashLogix
+- Stashlogix
+- Strane
+- Strane Live
+- Strane Reserve
+- Strane Stash
+- Sunnyside
+- Sunshine
+- Supply
+- Supply™
+- Tasteology
+- Terrapin
+- The Botanist
+- The Essence
+- The Lab
+- Triple 7
+- Trulieve
+- Uncommon Kind
+- Valhalla
+- Verano
+- Verano Essence
+- Verano Reserve
+- Vessel
+- Vuber
+- Vytal
+- Vytal Options
+- Vytal Solventless
+- Whole Plants Health
+- Wizard Trees
+- Wonder
+- Wonder Wellness Co.
+- Woods Reserve
+- Wulf
+- Yocan
+- Zenco
+- gLeaf
+- huny
+- iKrusher
+- inc(ensored)
+- inc.ensored
+- mood
+- mood by Vytal
+
+## Categories
+- Accessories
+- Concentrate
+- Edible
+- Flower
+- Oral
+- Tincture
+- Topicals
+- Vaporizers
+- accessories
+- capsules
+- concentrates
+- edibles
+- flower
+- tinctures
+- topicals
+- vape
+- vapes
+
+## Subcategories
+- BADDER
+- BATTERIES
+- BUDDER
+- Blyss Flower
+- Bountiful Flower
+- Bud
+- CAPSULES_TABLETS
+- CARTRIDGES
+- CRUMBLE
+- DEFAULT
+- DEVICES
+- DISPOSABLES
+- DISTILLATE
+- DRINKS
+- Dark Heart Collection
+- FLAVORED
+- Flower
+- GRINDERS
+- GUMMIES
+- Gillie Grows
+- Ground Flower
+- Ground Flower + Sand
+- Grower's Reserve
+- HASH
+- Hometown Grown
+- INFUSED_BUD
+- INFUSED_SHAKE
+- ISOLATE
+- KIEF
+- LIVE_RESIN
+- LOZENGES
+- Live Sauce Disposable Vape Pen
+- Mini Buds
+- Mixed Buds
+- OIL
+- PODS
+- PRE_GROUND
+- Popcorn
+- Pre-Ground
+- Premium
+- Premium Flower
+- Premium Organic Flower
+- ROSIN
+- RSO
+- SAUCE
+- SHAKE_TRIM
+- SHATTER
+- SMALL_BUDS
+- SUBLINGUAL
+- SUGAR
+- Select
+- Select Grind
+- Smalls
+- Strut All-In-One
+- TROCHES
+- UNFLAVORED
+- WAX
+- WHOLE_FLOWER
+- badder
+- balm
+- balms
+- bath-products
+- batteries
+- battery
+- budder
+- capsules-tablets
+- cartridge
+- cartridges
+- cleaning
+- cleaning-solutions
+- concentrates-oil
+- crumble
+- cured-resin-cartridge
+- cured_badder
+- cured_crumble
+- cured_sugar
+- cured_wax
+- dab-tools
+- devices
+- diamonds
+- disposable_pen
+- disposables
+- distillate
+- dropper
+- flavored
+- flower
+- grinders
+- ground_flower
+- hash
+- infused-bud
+- infused-buds
+- infused-shake
+- infused_flower
+- isolate
+- jam
+- kief
+- live-resin
+- live-resin-cartridge
+- live-resin-disposable
+- live-rosin
+- live-rosin-cartridge
+- live-rosin-disposable
+- live_badder
+- live_budder
+- live_cartridge
+- live_disposable_pen
+- live_fresh_press_rosin
+- live_resin
+- live_resin_cartridge
+- live_rosin
+- live_rosin_cartridge
+- live_sand
+- live_sauce
+- live_sugar
+- lotion
+- lotions
+- lozenge
+- patch
+- pods
+- pre-ground
+- premium
+- rosin
+- rso
+- sand
+- sauce
+- shake
+- shake-trim
+- shatter
+- small-buds
+- small_bud
+- smalls
+- softgels
+- solventless_live_rosin
+- solventless_thca
+- sticks-roll-ons
+- storage
+- storage-containers
+- sublingual
+- sugar
+- suppositories
+- swallowable_pills
+- tools
+- transdermal-patches
+- trays
+- troche
+- troches
+- unflavored
+- vaporizers
+- wax
+- whole-flower
+
+## Compound Names
+- "TAC" - Total Active Cannabinoids
+- Alpha Bisabolol
+- Alpha Pinene
+- Beta Caryophyllene
+- Beta Caryophyllene Oxide
+- Beta Myrcene
+- Beta Pinene
+- BetaCaryophyllene
+- BetaMyrcene
+- BetaPinene
+- Bisabolol
+- CBC (Cannabichromene)
+- CBD
+- CBD (Cannabidiol)
+- CBDA (Cannabidiolic acid)
+- CBDV (Cannabidivarin)
+- CBG (Cannabigerol)
+- CBGA (Cannabigerolic acid)
+- CBGVA (Cannabigerovarinic acid)
+- CBN (Cannabinol)
+- Camphene
+- Camphor
+- Carene
+- Caryophyllene
+- Caryophyllene Oxide
+- CaryophylleneOxide
+- Eucalyptol
+- Geraniol
+- Guaiol
+- Humulene
+- Isopulegol
+- Limonene
+- Linalool
+- Myrcene
+- Ocimene
+- Ocimene-1
+- Our Bountiful Flower offers patients
+- Para Cymene
+- Pinene
+- THC
+- THC-D8 (Delta 8-tetrahydrocannabinol)
+- THC-D9 (Delta 9–tetrahydrocannabinol)
+- THCA
+- THCA (Δ9-tetrahydrocannabinolic acid)
+- THCV (Tetrahydrocannabivarin)
+- THCVA (Tetrahydrocanabivarinic acid)
+- Terpinene
+- Terpineol
+- Terpinolene
+- Trans-Caryophyllene
+- Trans-Nerolidol
+- a_terpinene
+- b-Pinene
+- b_caryophyllene
+- b_myrcene
+- b_pinene
+- bisabolol
+- camphene
+- carene
+- caryophyllene
+- caryophyllene_oxide
+- cbd
+- cbda
+- eucalyptol
+- geraniol
+- guaiol
+- humulene
+- isopulegol
+- limonene
+- linalool
+- myrcene
+- ocimene
+- p_cymene
+- pinene
+- terpinolene
+- thc
+- thca
+- trans_nerolidal
+- y_terpinene
