@@ -30,18 +30,6 @@ HEADERS = {
 
 CATEGORIES = ["flower", "vapes", "concentrates"]
 
-def extract_weight_from_cresco_name(name):
-    """
-    Extracts weight in grams from a product name string (e.g., "3.5g", "1g").
-    Uses regex to find patterns like '3.5g', '1g', '500mg'.
-    """
-    name_lower = name.lower()
-    g_match = re.search(r'(\.?\d+\.?\d*)\s*g', name_lower)
-    if g_match: return float(g_match.group(1))
-    mg_match = re.search(r'(\.?\d+\.?\d*)\s*mg', name_lower)
-    if mg_match: return float(mg_match.group(1)) / 1000.0
-    return np.nan
-
 def parse_cresco_products(products, store_name):
     """Parses the 'data' array from the Cresco API response."""
     parsed_products = []
@@ -67,8 +55,8 @@ def parse_cresco_products(products, store_name):
         # Pricing and weight
         price = product.get('discounted_price') or product.get('price')
         data['Price'] = float(price) if price is not None else np.nan
-        data['Weight_Str'] = 'N/A'
-        data['Weight'] = extract_weight_from_cresco_name(data['Name'])
+        data['Weight_Str'] = product.get('sku', {}).get('product', {}).get('weight')
+        data['Weight'] = product.get('sku', {}).get('product', {}).get('weight_in_g')
 
         # Process compounds
         compounds_dict = {}

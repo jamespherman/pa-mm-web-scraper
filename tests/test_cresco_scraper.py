@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch, Mock
 import pandas as pd
 import numpy as np
-from scrapers.cresco_scraper import parse_cresco_products, fetch_cresco_data, extract_weight_from_cresco_name
+from scrapers.cresco_scraper import parse_cresco_products, fetch_cresco_data
 
 class TestCrescoScraper(unittest.TestCase):
 
@@ -15,6 +15,12 @@ class TestCrescoScraper(unittest.TestCase):
                 "category": "Flower",
                 "price": 55.0,
                 "discounted_price": 45.0,
+                "sku": {
+                    "product": {
+                        "weight": "3.5g",
+                        "weight_in_g": 3.5
+                    }
+                },
                 "potency": {
                     "THCA": 23.5,
                     "THC": 0.9,
@@ -28,20 +34,18 @@ class TestCrescoScraper(unittest.TestCase):
                 "category": "tinctures",
                 "price": 60.0,
                 "discounted_price": None,
+                "sku": {
+                    "product": {
+                        "weight": "500mg",
+                        "weight_in_g": 0.5
+                    }
+                },
                 "potency": {
                     "THC": 15.0,
                     "CBD": 15.0
                 }
             }
         ]
-
-    def test_extract_weight_from_name(self):
-        """Test the regex function for extracting weight from product names."""
-        self.assertEqual(extract_weight_from_cresco_name("Product Name 3.5g"), 3.5)
-        self.assertEqual(extract_weight_from_cresco_name("Product 1g"), 1.0)
-        self.assertEqual(extract_weight_from_cresco_name("Product 500mg"), 0.5)
-        self.assertEqual(extract_weight_from_cresco_name("Product .5g"), 0.5)
-        self.assertTrue(np.isnan(extract_weight_from_cresco_name("No weight here")))
 
     def test_parse_cresco_products(self):
         """Test the parsing of a list of products from Cresco JSON."""
@@ -55,6 +59,7 @@ class TestCrescoScraper(unittest.TestCase):
         self.assertEqual(product1['Store'], "Test Store")
         self.assertEqual(product1['Price'], 45.0)
         self.assertEqual(product1['Weight'], 3.5)
+        self.assertEqual(product1['Weight_Str'], "3.5g")
         self.assertEqual(product1['THCa'], 23.5)
         self.assertEqual(product1['THC'], 0.9)
         self.assertEqual(product1['beta-Caryophyllene'], 0.8)
@@ -64,6 +69,7 @@ class TestCrescoScraper(unittest.TestCase):
         self.assertEqual(product2['Name'], "Remedi: Indica Tincture 500mg")
         self.assertEqual(product2['Price'], 60.0)
         self.assertEqual(product2['Weight'], 0.5)
+        self.assertEqual(product2['Weight_Str'], "500mg")
         self.assertNotIn('THCa', product2)
 
     @patch('scrapers.cresco_scraper.requests.get')
