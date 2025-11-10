@@ -17,14 +17,13 @@ This document contains the finalized, canonical mappings for standardizing raw d
 * `Maitri`, `Maitri Genetics`, `Maitri Medicinals` -> **"Maitri"**
 * `Modern Flower`, `Modern Flower Ground` -> **"Modern Flower"**
 * `mood`, `mood by Vytal`, `Mood by Vytal` -> **"mood"**
-* `Ozone`, `Ozone Reserve` -> **"Ozone"**
 * `Penn Health`, `Penn Health Group`, `PHG`, `PhG` -> **"PHG"**
 * `Prime`, `Prime Wellness` -> **"Prime"**
 * `R.O.`, `R.O. Ground`, `R.O. Shake` -> **"R.O."**
 * `RYTHM`, `Rythm` -> **"Rythm"**
 * `SeCHe`, `Seche` -> **"Seche"**
 * `Select`, `Select Briq`, `Select X` -> **"Select"**
-* `Solventless by Vytal`, `Vytal Solventless` -> **"Vytal Solventless"**
+* `Solventless by Vytal`, `Vytal Solventless`, `Solventless` -> **"Vytal Solventless"**
 * `Strane`, `Strane Reserve`, `Strane Stash` -> **"Strane"**
 * `Sunshine`, `Sunshine Cannabis` -> **"Sunshine"**
 * `Supply/Cresco` -> **"Supply"**
@@ -35,29 +34,31 @@ This document contains the finalized, canonical mappings for standardizing raw d
 
 ## 🗂️ Category Map
 
-**Strategy:** Only map medication-related categories. Non-medication types (`Accessories`, `Apparel`, `Gear`, `PRE_ROLLS`, `Pre-Rolls`, `SEEDS`) will be ignored and will not be parsed.
+**Strategy:** Only map medication-related categories. Non-medication types (`Accessories`, `Apparel`, `Gear`, `PRE_ROLLS`, `Pre-Rolls`, `SEEDS`) will be **ignored** and will not be parsed.
 
-* `Concentrate`, `Concentrates` -> **"Concentrates"**
-* `Edible`, `Edibles` -> **"Edibles"**
-* `Flower` -> **"Flower"**
+* `CONCENTRATE`, `Concentrate`, `Concentrates` -> **"Concentrates"**
+* `EDIBLE`, `Edible`, `Edibles` -> **"Edibles"**
+* `FLOWER`, `Flower` -> **"Flower"**
 * `ORALS`, `Oral` -> **"Orals"**
 * `TINCTURES`, `Tincture` -> **"Tinctures"**
-* `Topicals`, `TOPICALS` -> **"Topicals"**
-* `Vaporizers` -> **"Vaporizers"**
+* `TOPICALS`, `Topicals` -> **"Topicals"**
+* `Vaporizers`, `vape` -> **"Vaporizers"**
 
 ---
 
 ## 🗂️ Subcategory Map
 
-**Strategy:** Map all granular variations to simple, high-level subcategories.
+**Strategy:** Map all granular variations to simple, high-level subcategories based on your rules.
 
 ### Flower Subtypes
 * `WHOLE_FLOWER`, `Flower`, `Premium Flower`, `premium`, `Bud` -> **"Flower"**
 * `smalls`, `SMALL_BUDS`, `Popcorn`, `Mini Buds` -> **"Small Buds"**
-* `SHAKE_TRIM`, `shake`, `Ground Flower`, `PRE_GROUND` -> **"Ground/Shake"**
+* `SHAKE_TRIM`, `shake` -> **"Shake"**
+* `Ground Flower`, `PRE_GROUND` -> **"Ground"**
 
 ### Vaporizer Subtypes
-* `CARTRIDGES`, `cartridge`, `cured-resin-cartridge`, `live-resin-cartridge`, `disposable_pen`, `disposables` -> **"Cartridge"**
+* `disposables`, `disposable_pen` -> **"Disposables"**
+* `CARTRIDGES`, `cartridge`, `cured-resin-cartridge`, `live-resin-cartridge`, `pods` -> **"Cartridge"**
 
 ### Concentrate Subtypes
 * `LIVE_RESIN`, `Live Resin`, `live_resin` -> **"Live Resin"**
@@ -76,7 +77,7 @@ This document contains the finalized, canonical mappings for standardizing raw d
 
 ## 🧪 Compound Maps (Terpenes & Cannabinoids)
 
-**Strategy:** All junk strings (e.g., `"Description courtesy of JaneTHC"`) will be **ignored and discarded**.
+**Strategy:** All junk strings (e.g., `"Description courtesy of JaneTHC"`) will be **ignored and discarded**. Most compounds are a 1:1 mapping.
 
 ### Cannabinoid Map
 * `"TAC\" - Total Active Cannabinoids"` -> **"TAC"**
@@ -91,14 +92,13 @@ This document contains the finalized, canonical mappings for standardizing raw d
 * `THCV`, `thcv` -> **"THCv"**
 
 ### Terpene Map
-* `a-Pinene`, `alpha-Pinene` -> **"alpha-Pinene"**
+* `a_terpinene` -> **"alpha-Terpinene"**
 * `alpha-Bisabolol`, `Bisabolol` -> **"alpha-Bisabolol"**
 * `b_caryophyllene`, `Beta Caryophyllene`, `Caryophyllene`, `CARYOPHYLLENE` -> **"beta-Caryophyllene"**
 * `b_myrcene`, `beta-Myrcene`, `BetaMyrcene`, `Myrcene`, `MYRCENE` -> **"beta-Myrcene"**
-* `b_pinene`, `beta-Pinene`, `BetaPinene` -> **"beta-Pinene"**
 * `Camphene` -> **"Camphene"**
-* `Carene` -> **"Carene"**
-* `CaryophylleneOxide` -> **"Caryophyllene Oxide"**
+* `carene` -> **"Carene"**
+* `caryophyllene_oxide`, `CaryophylleneOxide` -> **"Caryophyllene Oxide"**
 * `Eucalyptol` -> **"Eucalyptol"**
 * `Farnesene` -> **"Farnesene"**
 * `Geraniol` -> **"Geraniol"**
@@ -107,7 +107,14 @@ This document contains the finalized, canonical mappings for standardizing raw d
 * `Limonene`, `LIMONENE` -> **"Limonene"**
 * `Linalool`, `LINALOOL` -> **"Linalool"**
 * `Ocimene` -> **"Ocimene"**
+* `p_cymene` -> **"p-Cymene"**
 * `Terpineol` -> **"Terpineol"**
 * `Terpinolene` -> **"Terpinolene"**
-* `trans-nerolidol` -> **"trans-Nerolidol"**
-* `Pinene`, `PINENE` -> **"Pinene (Total)"**
+* `trans_nerolidal`, `trans-nerolidol` -> **"trans-Nerolidol"**
+* `y_terpinene` -> **"gamma-Terpinene"**
+
+### Special Aggregation Rules
+
+* **Pinene:** All Pinene-related keys must be **summed** and stored under the single key **"Pinene"**.
+    * **Source Keys:** `a-Pinene`, `alpha-Pinene`, `b_pinene`, `beta-Pinene`, `BetaPinene`, `Pinene`, `PINENE`
+    * **Target Key:** `Pinene`

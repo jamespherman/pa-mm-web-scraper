@@ -9,6 +9,7 @@ from .scraper_utils import (
     MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
 )
 import re
+import pdb
 
 # --- Constants ---
 BASE_URL = "https://api.crescolabs.com/p/inventory/op/fifo-inventory"
@@ -106,6 +107,7 @@ def fetch_cresco_data(stores):
                     
                     json_response = response.json()
                     products = json_response.get('data')
+                    
                     if not products:
                         print(f"  ...completed category: {category}. Found {total_scraped} products.")
                         break
