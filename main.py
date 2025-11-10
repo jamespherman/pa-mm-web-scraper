@@ -137,12 +137,41 @@ def main():
         # A predefined list of columns ensures a consistent structure for the final DataFrame.
         # This is important for both the Google Sheet and the analysis module.
         final_columns = [
+            # Product Info
             'Name', 'Brand', 'Store', 'Price', 'Weight', 'Weight_Str', 'dpg',
-            'Type', 'Subtype', 'THC', 'THCa', 'CBD', 'Total_Terps',
-            'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
-            'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Caryophyllene Oxide',
-            'Guaiol', 'Humulene', 'alpha-Bisabolol', 'Camphene', 'Ocimene'
+            'Type', 'Subtype',
+            
+            # Cannabinoids
+            'THC', 'THCa', 'CBD', 'CBDa', 'CBG', 'CBGa', 'CBN', 'THCv', 'Delta-8 THC', 'TAC',
+
+            # Terpenes (from STANDARDIZATION_MAPS.md)
+            'Total_Terps',
+            'alpha-Terpinene',
+            'alpha-Bisabolol',
+            'beta-Caryophyllene',
+            'beta-Myrcene',
+            'Camphene',
+            'Carene',
+            'Caryophyllene Oxide',
+            'Eucalyptol',
+            'Farnesene',
+            'Geraniol',
+            'Guaiol',
+            'Humulene',
+            'Limonene',
+            'Linalool',
+            'Ocimene',
+            'p-Cymene',
+            'Terpineol',
+            'Terpinolene',
+            'trans-Nerolidol',
+            'gamma-Terpinene',
+            
+            # Pinene sources (for aggregation in analysis.py)
+            'alpha-Pinene',
+            'beta-Pinene'
         ]
+        
         # `reindex` ensures all columns from `final_columns` are present, filling
         # any missing ones with NaN (which will become empty cells in the sheet).
         combined_df = combined_df.reindex(columns=final_columns)

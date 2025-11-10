@@ -19,13 +19,14 @@ import matplotlib.patches as mpatches
 from matplotlib.colors import LinearSegmentedColormap
 import matplotlib.colors as mcolors
 
-# A predefined list of known terpene columns. This ensures consistency
-# when processing and plotting terpene-related data.
+# A list of ALL standardized terpenes we expect from the scrapers.
+# This list is used to convert all columns to numeric and fill NaNs.
 TERPENE_COLUMNS = [
-    'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
-    'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Caryophyllene Oxide',
-    'Guaiol', 'Humulene', 'alpha-Bisabolol', 'Camphene', 'Ocimene',
-    'Total_Terps'
+    'alpha-Terpinene', 'alpha-Bisabolol', 'beta-Caryophyllene', 'beta-Myrcene',
+    'Camphene', 'Carene', 'Caryophyllene Oxide', 'Eucalyptol', 'Farnesene',
+    'Geraniol', 'Guaiol', 'Humulene', 'Limonene', 'Linalool', 'Ocimene',
+    'p-Cymene', 'Terpineol', 'Terpinolene', 'trans-Nerolidol', 'gamma-Terpinene',
+    'alpha-Pinene', 'beta-Pinene' # Source columns for Pinene aggregation
 ]
 
 # A predefined list of key cannabinoid columns.
@@ -65,7 +66,28 @@ def _convert_to_numeric(df):
 
     # For aggregation and analysis, NaN in terpene columns is not useful.
     # We replace it with 0, assuming that a missing value means zero concentration.
+    # We use .reindex() to add any missing terpene columns as 0, preventing KeyErrors.
+    df = df.reindex(columns=df.columns.union(TERPENE_COLUMNS), fill_value=0)
     df[TERPENE_COLUMNS] = df[TERPENE_COLUMNS].fillna(0)
+
+    # --- Pinene Aggregation (as planned) ---
+    print("Aggregating Pinene columns...")
+    # Sum 'alpha-Pinene' and 'beta-Pinene' into a new 'Pinene' column
+    df['Pinene'] = df['alpha-Pinene'] + df['beta-Pinene']
+    
+    # Drop the original source columns
+    df = df.drop(columns=['alpha-Pinene', 'beta-Pinene'])
+    # --- End Aggregation ---
+
+    # --- Total Terps Calculation ---
+    # Create the final list of columns to sum
+    terps_to_sum = [col for col in TERPENE_COLUMNS if col not in ['alpha-Pinene', 'beta-Pinene']]
+    terps_to_sum.append('Pinene') # Add our new aggregated column
+
+    print("Calculating Total_Terps by summing all final terpene columns...")
+    df['Total_Terps'] = df[terps_to_sum].sum(axis=1)
+    # --- End Calculation ---
+
     return df
 
 def run_analysis(dataframe):
@@ -83,23 +105,29 @@ def run_analysis(dataframe):
         pd.DataFrame: The fully cleaned and processed DataFrame.
     """
     print("\n--- Starting Data Analysis Module ---")
+    
     # Suppress common warnings from pandas/seaborn for cleaner output
     warnings.filterwarnings('ignore', category=FutureWarning)
     warnings.filterwarnings('ignore', category=UserWarning)
+    
     # --- Step 1: Data Cleaning ---
     # Create a new, cleaned dataframe to avoid modifying the original
     cleaned_df = dataframe.copy()
     # Convert types first (critical for all other operations)
     cleaned_df = _convert_to_numeric(cleaned_df)
     print(f"Data cleaning complete.")
+    
     # --- Step 2: Plotting Orchestration ---
     # Create the date-stamped save directory
     today_str = datetime.date.today().strftime('%Y-%m-%d')
     save_dir = os.path.join('figures', today_str)
     os.makedirs(save_dir, exist_ok=True)
     print(f"\nSaving all plots to: {save_dir}")
+    
     # Define the product categories we want to generate plots for
-    CATEGORIES_TO_PLOT = ['flower', 'concentrates', 'vaporizers']
+    CATEGORIES_TO_PLOT = ['Flower', 'Concentrates', 'Vaporizers']
+    
+    # Loop over product categories to generate plots:
     for category in CATEGORIES_TO_PLOT:
         print(f"\n--- Analyzing Category: {category.upper()} ---")
         # Filter the DataFrame for the specific category
@@ -393,8 +421,7 @@ def plot_top_50_heatmap(data, category_name, save_dir):
     # Define the subset of terpenes we want to plot in the heatmap
     TERPS_TO_PLOT = [
         'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
-        'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Humulene',
-        'alpha-Bisabolol', 'Ocimene'
+        'Linalool', 'Pinene', 'Humulene', 'alpha-Bisabolol', 'Ocimene'
     ]
 
     # Category-specific filters to remove outliers (e.g., infused flower)
@@ -543,8 +570,7 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
     # Define the subset of terpenes we want to analyze
     TERPS_TO_PLOT = [
         'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
-        'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Humulene',
-        'alpha-Bisabolol', 'Ocimene'
+        'Linalool', 'Pinene', 'Humulene', 'alpha-Bisabolol', 'Ocimene'
     ]
 
     # Use the same category-specific filters as the heatmap

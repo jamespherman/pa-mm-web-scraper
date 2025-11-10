@@ -7,6 +7,7 @@ import requests
 import pandas as pd
 import numpy as np
 import json
+import pdb
 from .scraper_utils import (
     convert_to_grams, BRAND_MAP, MASTER_CATEGORY_MAP,
     MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
@@ -258,20 +259,24 @@ def parse_product_details(product, store_name):
     compounds_dict = {}
 
     # Handle terpenes
-    for item in product.get('terpenes', []):
-        name = item.get('libraryTerpene', {}).get('name')
-        if name:
-            standard_name = MASTER_COMPOUND_MAP.get(name)
-            if standard_name:
-                compounds_dict[standard_name] = item.get('value')
+    terpenes_list = product.get('terpenes')
+    if terpenes_list is not None:
+        for item in terpenes_list:
+            name = item.get('libraryTerpene', {}).get('name')
+            if name:
+                standard_name = MASTER_COMPOUND_MAP.get(name)
+                if standard_name:
+                    compounds_dict[standard_name] = item.get('value')
 
     # Handle cannabinoids
-    for item in product.get('cannabinoidsV2', []):
-        name = item.get('cannabinoid', {}).get('name')
-        if name:
-            standard_name = MASTER_COMPOUND_MAP.get(name)
-            if standard_name:
-                compounds_dict[standard_name] = item.get('value')
+    cannabinoids_list = product.get('cannabinoidsV2')
+    if cannabinoids_list is not None:
+        for item in cannabinoids_list:
+            name = item.get('cannabinoid', {}).get('name')
+            if name:
+                standard_name = MASTER_COMPOUND_MAP.get(name)
+                if standard_name:
+                    compounds_dict[standard_name] = item.get('value')
 
     data.update(compounds_dict)
 
