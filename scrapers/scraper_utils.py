@@ -8,106 +8,87 @@ import re
 
 # --- Master Standardization Maps ---
 
-# This map is the single source of truth for standardizing terpene names.
-# It accounts for variations in capitalization, spacing, and common abbreviations
-# found across all scraper sources. The key is the raw, lowercase name, and the
-# value is the canonical name we want in the final dataset.
-MASTER_TERPENE_MAP = {
-    # --- Alpha-Pinene ---
-    'alpha-pinene': 'alpha-Pinene', 'a-pinene': 'alpha-Pinene', 'alphapinene': 'alpha-Pinene', 'alpha_pinene': 'alpha-Pinene', 'pinene': 'alpha-Pinene',
-    # --- Beta-Pinene ---
-    'beta-pinene': 'beta-Pinene', 'b-pinene': 'beta-Pinene', 'betapinene': 'beta-Pinene', 'beta_pinene': 'beta-Pinene',
-    # --- Beta-Myrcene ---
-    'beta-myrcene': 'beta-Myrcene', 'myrcene': 'beta-Myrcene', 'b-myrcene': 'beta-Myrcene', 'betamyrcene': 'beta-Myrcene', 'beta_myrcene': 'beta-Myrcene',
-    # --- Limonene ---
-    'limonene': 'Limonene', 'd-limonene': 'Limonene',
-    # --- Beta-Caryophyllene ---
-    'beta-caryophyllene': 'beta-Caryophyllene', 'caryophyllene': 'beta-Caryophyllene', 'b-caryophyllene': 'beta-Caryophyllene', 'betacaryophyllene': 'beta-Caryophyllene', 'beta_caryophyllene': 'beta-Caryophyllene',
-    # --- Linalool ---
-    'linalool': 'Linalool',
-    # --- Terpinolene ---
-    'terpinolene': 'Terpinolene',
-    # --- Humulene ---
-    'humulene': 'Humulene', 'alpha-humulene': 'Humulene', 'a-humulene': 'Humulene',
-    # --- Ocimene ---
-    'ocimene': 'Ocimene', 'beta-ocimene': 'Ocimene', 'b-ocimene': 'Ocimene',
-    # --- Guaiol ---
-    'guaiol': 'Guaiol',
-    # --- Alpha-Bisabolol ---
-    'alpha-bisabolol': 'alpha-Bisabolol', 'bisabolol': 'alpha-Bisabolol', 'a-bisabolol': 'alpha-Bisabolol', 'alphabisabolol': 'alpha-Bisabolol',
-    # --- Camphene ---
-    'camphene': 'Camphene',
-    # --- Caryophyllene Oxide ---
-    'caryophyllene oxide': 'Caryophyllene Oxide', 'caryophylleneoxide': 'Caryophyllene Oxide', 'caryophyllene_oxide': 'Caryophyllene Oxide',
+BRAND_MAP = {
+    # Confirmed Brands
+    "& Shine": "&Shine", "&Shine": "&Shine", "Cresco": "Cresco", "Cresco™": "Cresco",
+    "Doctor Solomon's": "Doctor Solomon's", "Dr. Solomon's": "Doctor Solomon's",
+    "FIND": "Find", "Find": "Find", "Find.": "Find", "FloraCal": "FloraCal Farms",
+    "FloraCal Farms": "FloraCal Farms", "Garcia": "Garcia Hand Picked",
+    "Garcia Hand Picked": "Garcia Hand Picked", "Maitri": "Maitri",
+    "Maitri Genetics": "Maitri", "Maitri Medicinals": "Maitri",
+    "Modern Flower": "Modern Flower", "Modern Flower Ground": "Modern Flower",
+    "mood": "mood", "mood by Vytal": "mood", "Mood by Vytal": "mood",
+    "Ozone": "Ozone", "Ozone Reserve": "Ozone", "Penn Health": "PHG",
+    "Penn Health Group": "PHG", "PHG": "PHG", "PhG": "PHG", "Prime": "Prime",
+    "Prime Wellness": "Prime", "R.O.": "R.O.", "R.O. Ground": "R.O.",
+    "R.O. Shake": "R.O.", "RYTHM": "Rythm", "Rythm": "Rythm",
+    "SeCHe": "Seche", "Seche": "Seche", "Select": "Select", "Select Briq": "Select",
+    "Select X": "Select", "Solventless by Vytal": "Vytal Solventless",
+    "Vytal Solventless": "Vytal Solventless", "Strane": "Strane",
+    "Strane Reserve": "Strane", "Strane Stash": "Strane",
+    "Sunshine": "Sunshine", "Sunshine Cannabis": "Sunshine",
+    "Supply/Cresco": "Supply", "Vytal": "Vytal", "Vytal Options": "Vytal",
 }
 
-# This map standardizes the main product categories.
 MASTER_CATEGORY_MAP = {
-    'vape': 'vaporizers',
-    'vapes': 'vaporizers',
-    'concentrate': 'concentrates',
-    'flower': 'flower',
-    # Add other mappings as discovered from schema reports
+    # Concentrates
+    'Concentrate': 'Concentrates', 'Concentrates': 'Concentrates', 'concentrates': 'Concentrates',
+    # Edibles
+    'Edible': 'Edibles', 'Edibles': 'Edibles', 'edibles': 'Edibles',
+    # Flower
+    'Flower': 'Flower', 'flower': 'Flower',
+    # Orals
+    'ORALS': 'Orals', 'Oral': 'Orals', 'orals': 'Orals',
+    # Tinctures
+    'TINCTURES': 'Tinctures', 'Tincture': 'Tinctures', 'tinctures': 'Tinctures',
+    # Topicals
+    'Topicals': 'Topicals', 'TOPICALS': 'Topicals', 'topicals': 'Topicals',
+    # Vaporizers
+    'Vaporizers': 'Vaporizers', 'vaporizers': 'Vaporizers', 'vapes': 'Vaporizers',
 }
 
-# This map standardizes product subtypes. (Optional but recommended)
 MASTER_SUBCATEGORY_MAP = {
-    'cartridge': 'Cartridges',
-    'cartridges': 'Cartridges',
-    'disposable': 'Disposables',
-    'disposables': 'Disposables',
-    # Add other mappings
+    # Flower Subtypes
+    'WHOLE_FLOWER': 'Flower', 'Flower': 'Flower', 'Premium Flower': 'Flower',
+    'premium': 'Flower', 'Bud': 'Flower', 'smalls': 'Small Buds',
+    'SMALL_BUDS': 'Small Buds', 'Popcorn': 'Small Buds', 'Mini Buds': 'Small Buds',
+    'SHAKE_TRIM': 'Ground/Shake', 'shake': 'Ground/Shake', 'Ground Flower': 'Ground/Shake',
+    'PRE_GROUND': 'Ground/Shake',
+    # Vaporizer Subtypes
+    'CARTRIDGES': 'Cartridge', 'cartridge': 'Cartridge',
+    'cured-resin-cartridge': 'Cartridge', 'live-resin-cartridge': 'Cartridge',
+    'disposable_pen': 'Cartridge', 'disposables': 'Cartridge',
+    # Concentrate Subtypes
+    'LIVE_RESIN': 'Live Resin', 'Live Resin': 'Live Resin', 'live_resin': 'Live Resin',
+    'ROSIN': 'Rosin', 'Rosin': 'Rosin', 'rosin': 'Rosin', 'RSO': 'RSO', 'rso': 'RSO',
+    'SHATTER': 'Shatter', 'shatter': 'Shatter', 'SUGAR': 'Sugar', 'sugar': 'Sugar',
+    'BADDER': 'Badder', 'badder': 'Badder', 'BUDDER': 'Budder', 'budder': 'Budder',
+    'CRUMBLE': 'Crumble', 'crumble': 'Crumble', 'WAX': 'Wax', 'wax': 'Wax',
+    'KIEF': 'Kief', 'kief': 'Kief',
 }
 
-# This map consolidates different brand names and variations into a single,
-# canonical brand. This is moved directly from the old `analysis.py` module.
-brand_map = {
-    # --- GTI ---
-    'Good Green': 'GTI', '&Shine': 'GTI', 'Rythm': 'GTI', 'Rhythm': 'GTI',
-    # --- Jushi ---
-    'The Bank': 'Jushi', 'The Lab': 'Jushi', 'Seche': 'Jushi', 'Lab': 'Jushi',
-    # --- Trulieve ---
-    'TruFlower': 'Trulieve', 'Cultivar Collection': 'Trulieve',
-    'Modern Flower': 'Trulieve', 'Avenue': 'Trulieve', 'Muse': 'Trulieve',
-    'Moxie': 'Trulieve', 'Franklin Labs': 'Trulieve',
-    'Khalifa Kush': 'Trulieve', 'Roll One (Trulieve)': 'Trulieve',
-    # --- Ayr ---
-    'Lost In Translation': 'Ayr', 'Revel': 'Ayr', 'Origyn': 'Ayr',
-    'Seven Hills': 'Ayr', 'Kynd': 'Ayr',
-    # --- Cresco ---
-    'Supply/Cresco': 'Cresco', 'FloraCal': 'Cresco',
-    'Cresco Labs': 'Cresco', 'Sunnyside': 'Cresco',
-    # --- Curaleaf ---
-    'Grass Roots': 'Curaleaf', 'Blades': 'Curaleaf', 'Select': 'Curaleaf', 'Select Briq': 'Curaleaf',
-    # --- Verano ---
-    'Essence': 'Verano', 'Savvy': 'Verano', 'Muv': 'Verano',
-    # --- Vytal ---
-    'Vytal Options': 'Vytal',
-    'Solventless by Vytal': 'Vytal Solventless', # Kept separate per user
-    'mood by Vytal': 'mood', # Mapped to 'mood' per user
-    # --- R.O. ---
-    'R.O. Ground': 'R.O.', 'R.O. Shake': 'R.O.',
-    # --- Strane ---
-    'Strane Stash': 'Strane', 'Strane Reserve': 'Strane',
-    # --- Misc Single-Rule Consolidations ---
-    'The Woods': 'Terrapin',
-    'Cookies': 'Kind Tree', 'Gage': 'Kind Tree',
-    'Standard Farms': 'Standard Farms', 'Old Pal': 'Standard Farms', 'Highsman': 'Standard Farms',
-    'Tyson 2.0': 'Columbia Care', 'Triple Seven': 'Columbia Care', 'Classix': 'Columbia Care',
-    'FarmaceuticalRx': 'FRX',
-    'Maitri Medicinals': 'Maitri',
-    'Maitri Genetics': 'Maitri',
-    'Natural Selections': 'Natural Selections',
-    'Organic Remedies': 'Organic Remedies',
-    'Penn Health Group': 'PHG',
-    'Penn Health': 'PHG',
-    'Prime Wellness': 'Prime',
-    'SupplyTM': 'Supply', 'Supply TM': 'Supply',
-    'Calypso Bountiful': 'Calypso',
-    'Garcia Hand Picked': 'Garcia',
-    'Redemption Shake': 'Redemption',
-    'Sunshine Cannabis': 'Sunshine',
-    'Ozone Reserve': 'Ozone',
+MASTER_COMPOUND_MAP = {
+    # Cannabinoids
+    '"TAC\\" - Total Active Cannabinoids"': "TAC", 'CBD': 'CBD', 'CBDA': 'CBDa',
+    'CBDA (Cannabidiolic acid)': 'CBDa', 'CBG': 'CBG', 'CBG (Cannabigerol)': 'CBG',
+    'CBGA': 'CBGa', 'CBGA (Cannabigerolic acid)': 'CBGa', 'CBN': 'CBN',
+    'd8-THC': 'Delta-8 THC', 'THC': 'THC', 'THC-D9 (Delta 9–tetrahydrocannabinol)': 'THC',
+    'THCA': 'THCa', 'THCA (Δ9-tetrahydrocannabinolic acid)': 'THCa', 'THCV': 'THCv', 'thcv': 'THCv',
+    # Terpenes
+    'a-Pinene': 'alpha-Pinene', 'alpha-Pinene': 'alpha-Pinene', 'alpha-Bisabolol': 'alpha-Bisabolol',
+    'Bisabolol': 'alpha-Bisabolol', 'b_caryophyllene': 'beta-Caryophyllene',
+    'Beta Caryophyllene': 'beta-Caryophyllene', 'Caryophyllene': 'beta-Caryophyllene',
+    'CARYOPHYLLENE': 'beta-Caryophyllene', 'b_myrcene': 'beta-Myrcene',
+    'beta-Myrcene': 'beta-Myrcene', 'BetaMyrcene': 'beta-Myrcene', 'Myrcene': 'beta-Myrcene',
+    'MYRCENE': 'beta-Myrcene', 'b_pinene': 'beta-Pinene', 'beta-Pinene': 'beta-Pinene',
+    'BetaPinene': 'beta-Pinene', 'Camphene': 'Camphene', 'Carene': 'Carene',
+    'CaryophylleneOxide': 'Caryophyllene Oxide', 'Eucalyptol': 'Eucalyptol',
+
+    'Farnesene': 'Farnesene', 'Geraniol': 'Geraniol', 'Guaiol': 'Guaiol',
+    'Humulene': 'Humulene', 'HUMULENE': 'Humulene', 'Limonene': 'Limonene',
+    'LIMONENE': 'Limonene', 'Linalool': 'Linalool', 'LINALOOL': 'Linalool',
+    'Ocimene': 'Ocimene', 'Terpineol': 'Terpineol', 'Terpinolene': 'Terpinolene',
+    'trans-nerolidol': 'trans-Nerolidol', 'Pinene': 'Pinene (Total)', 'PINENE': 'Pinene (Total)',
 }
 
 

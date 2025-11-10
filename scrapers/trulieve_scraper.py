@@ -4,7 +4,10 @@
 import requests
 import pandas as pd
 import numpy as np
-from .scraper_utils import convert_to_grams, MASTER_TERPENE_MAP, brand_map, MASTER_CATEGORY_MAP
+from .scraper_utils import (
+    convert_to_grams, BRAND_MAP, MASTER_CATEGORY_MAP,
+    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
+)
 import re
 
 # --- Constants ---
@@ -25,13 +28,6 @@ HEADERS = {
 
 CATEGORIES = ["flower", "vaporizers", "concentrates", "tinctures", "edibles"]
 
-# Define known terpenes to look for (copied from iheartjane)
-KNOWN_TERPENES = [
-    'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
-    'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Caryophyllene Oxide',
-    'Guaiol', 'Humulene', 'alpha-Bisabolol', 'Camphene', 'Ocimene'
-]
-
 def parse_trulieve_products(products, store_name):
     """
     Parses the 'data' array from the Trulieve API response.
@@ -40,64 +36,49 @@ def parse_trulieve_products(products, store_name):
     parsed_variants = []
     
     for product in products:
-        try:
-            common_name = product.get('name', 'N/A')
-            raw_brand = product.get('brand', 'N/A')
-            raw_category = product.get('category', 'N/A')
-            subcategory = product.get('subcategory', 'N/A')
-            
-            thc = product.get('thc_content')
-            cbd = product.get('cbd_content')
-            
-            terpene_data = {terp: np.nan for terp in KNOWN_TERPENES}
-            total_terps = 0
-            
-            terpenes_list = product.get('terpenes', [])
-            if terpenes_list:
-                for terp in terpenes_list:
-                    name, value = terp.get('name'), terp.get('value')
-                    
-                    if name and value is not None:
-                        clean_name = name.strip().lower().replace('-', '')
-                        standard_name = MASTER_TERPENE_MAP.get(clean_name)
-                        
-                        if standard_name:
-                            terpene_data[standard_name] = value
-                            total_terps += value
-                            
-            total_terps = total_terps if total_terps > 0 else np.nan
+        # Standardize category and skip if not in map
+        category_name = product.get('category')
+        standardized_category = MASTER_CATEGORY_MAP.get(category_name)
+        if not standardized_category:
+            continue
 
-            variants = product.get('variants', [])
-            if not variants: continue
-                
-            for variant in variants:
-                weight_str = variant.get('option')
-                if not weight_str: continue
-                    
-                price = variant.get('sale_unit_price') or variant.get('unit_price')
-                if not price: continue
-                    
-                product_row = {
-                    'Name': common_name,
-                    'Store': store_name,
-                    'Brand': brand_map.get(raw_brand, raw_brand),
-                    'Type': MASTER_CATEGORY_MAP.get(raw_category.lower(), raw_category),
-                    'Subtype': subcategory,
-                    'Weight': convert_to_grams(weight_str),
-                    'Weight_Str': weight_str,
-                    'Price': float(price),
-                    'THC': float(thc) if thc is not None else np.nan,
-                    'CBD': float(cbd) if cbd is not None else np.nan,
-                    'Total_Terps': total_terps,
-                }
-                
-                product_row.update(terpene_data)
-                parsed_variants.append(product_row)
+        # Standardize brand and subcategory
+        brand_name = product.get('brand', 'N/A')
+        subcategory_name = product.get('subcategory')
 
-        except Exception as e:
-            print(f"Error parsing product: {product.get('name')}. Error: {e}")
+        # Base data for all variants of this product
+        common_data = {
+            'Name': product.get('name', 'N/A'),
+            'Brand': BRAND_MAP.get(brand_name, brand_name),
+            'Type': standardized_category,
+            'Subtype': MASTER_SUBCATEGORY_MAP.get(subcategory_name, subcategory_name),
+            'Store': store_name,
+            'THC': product.get('thc_content'),
+            'CBD': product.get('cbd_content'),
+        }
+
+        # Variants represent different weights/prices
+        variants = product.get('variants', [])
+        if not variants:
             continue
             
+        for variant in variants:
+            weight_str = variant.get('option')
+            if not weight_str:
+                continue
+
+            price = variant.get('sale_unit_price') or variant.get('unit_price')
+            if not price:
+                continue
+
+            product_row = common_data.copy()
+            product_row.update({
+                'Weight': convert_to_grams(weight_str),
+                'Weight_Str': weight_str,
+                'Price': float(price),
+            })
+            parsed_variants.append(product_row)
+
     return parsed_variants
 
 
@@ -147,11 +128,6 @@ def fetch_trulieve_data(stores):
 
     df = pd.DataFrame(all_products_list)
     df['dpg'] = df['Price'] / df['Weight']
-    
-    cannabinoid_cols = sorted([col for col in df.columns if col not in KNOWN_TERPENES + ['Name', 'Store', 'Brand', 'Type', 'Subtype', 'Weight', 'Weight_Str', 'Price', 'dpg', 'Total_Terps']])
-    column_order = ['Name', 'Store', 'Brand', 'Type', 'Subtype', 'Weight', 'Weight_Str', 'Price', 'dpg', 'Total_Terps'] + cannabinoid_cols + KNOWN_TERPENES
-    
-    df = df.reindex(columns=column_order)
 
     print(f"\nScraping complete for Trulieve. DataFrame created with {len(df)} rows.")
     return df

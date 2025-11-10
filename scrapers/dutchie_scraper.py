@@ -7,7 +7,10 @@ import requests
 import pandas as pd
 import numpy as np
 import json
-from .scraper_utils import convert_to_grams, MASTER_TERPENE_MAP, brand_map, MASTER_CATEGORY_MAP
+from .scraper_utils import (
+    convert_to_grams, BRAND_MAP, MASTER_CATEGORY_MAP,
+    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
+)
 
 # --- Constants ---
 
@@ -82,13 +85,6 @@ DUTCHIE_STORES = {
         }
     }
 }
-
-# A predefined list of known terpenes to ensure the final DataFrame has a consistent structure.
-KNOWN_TERPENES = [
-    'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
-    'Linalool', 'alpha-Pinene', 'beta-Pinene', 'Caryophyllene Oxide',
-    'Guaiol', 'Humulene', 'alpha-Bisabolol', 'Camphene', 'Ocimene'
-]
 
 def get_all_product_slugs(store_name, store_config):
     """
@@ -230,49 +226,54 @@ def parse_product_details(product, store_name):
         dict: A flattened dictionary containing the key product information.
     """
     
-    raw_brand = product.get('brandName', 'N/A')
-    raw_category = product.get('type', 'N/A')
+    # Standardize category and skip if not in map
+    category_name = product.get('type')
+    standardized_category = MASTER_CATEGORY_MAP.get(category_name)
+    if not standardized_category:
+        return None
+
+    # Standardize brand and subcategory
+    brand_name = product.get('brandName', 'N/A')
+    subcategory_name = product.get('subcategory')
 
     data = {
         'Name': product.get('Name', 'N/A'),
-        'Brand': brand_map.get(raw_brand, raw_brand),
-        'Type': MASTER_CATEGORY_MAP.get(raw_category.lower(), raw_category),
-        'Subtype': product.get('subcategory', 'N/A'),
+        'Brand': BRAND_MAP.get(brand_name, brand_name),
+        'Type': standardized_category,
+        'Subtype': MASTER_SUBCATEGORY_MAP.get(subcategory_name, subcategory_name),
         'Store': store_name
     }
 
-    prices, special_prices = product.get('medicalPrices', []), product.get('medicalSpecialPrices', [])
+    # Pricing and weight
+    prices = product.get('medicalPrices', [])
+    special_prices = product.get('medicalSpecialPrices', [])
     data['Price'] = min(special_prices) if special_prices else (min(prices) if prices else np.nan)
 
     options = product.get('Options', [])
     weight_str = options[0] if options else None
-    data['Weight'], data['Weight_Str'] = convert_to_grams(weight_str), weight_str if weight_str else 'N/A'
+    data['Weight'] = convert_to_grams(weight_str)
+    data['Weight_Str'] = weight_str if weight_str else 'N/A'
 
-    cannabinoid_data = {}
-    if product.get('cannabinoidsV2'):
-        for cannabinoid in product['cannabinoidsV2']:
-            if 'name' in cannabinoid and 'value' in cannabinoid:
-                cannabinoid_data[cannabinoid['name']] = cannabinoid['value']
+    # Process compounds (cannabinoids and terpenes)
+    compounds_dict = {}
 
-    thc_range = (product.get('THCContent') or {}).get('range', [])
-    cbd_range = (product.get('CBDContent') or {}).get('range', [])
-    if 'THC' not in cannabinoid_data and thc_range and thc_range[0] is not None: cannabinoid_data['THC'] = thc_range[0]
-    if 'CBD' not in cannabinoid_data and cbd_range and cbd_range[0] is not None: cannabinoid_data['CBD'] = cbd_range[0]
-    data.update(cannabinoid_data)
+    # Handle terpenes
+    for item in product.get('terpenes', []):
+        name = item.get('libraryTerpene', {}).get('name')
+        if name:
+            standard_name = MASTER_COMPOUND_MAP.get(name)
+            if standard_name:
+                compounds_dict[standard_name] = item.get('value')
 
-    terpene_data = {terp: np.nan for terp in KNOWN_TERPENES}
-    total_terps = 0
-    if product.get('terpenes'):
-        for terp in product['terpenes']:
-            name = terp.get('name', terp.get('libraryTerpene', {}).get('name'))
-            value = terp.get('value')
-            if name and value is not None:
-                standard_name = MASTER_TERPENE_MAP.get(name.strip().lower())
-                if standard_name:
-                    terpene_data[standard_name] = value
-                    total_terps += value
-    data.update(terpene_data)
-    data['Total_Terps'] = total_terps if total_terps > 0 else np.nan
+    # Handle cannabinoids
+    for item in product.get('cannabinoidsV2', []):
+        name = item.get('cannabinoid', {}).get('name')
+        if name:
+            standard_name = MASTER_COMPOUND_MAP.get(name)
+            if standard_name:
+                compounds_dict[standard_name] = item.get('value')
+
+    data.update(compounds_dict)
 
     return data
 
@@ -301,10 +302,6 @@ def fetch_dutchie_data():
 
     df = pd.DataFrame(product_details)
     df['dpg'] = df['Price'] / df['Weight']
-
-    cannabinoid_cols = sorted([col for col in df.columns if col not in KNOWN_TERPENES + ['Name', 'Store', 'Brand', 'Type', 'Subtype', 'Weight', 'Weight_Str', 'Price', 'dpg', 'Total_Terps']])
-    column_order = ['Name', 'Store', 'Brand', 'Type', 'Subtype', 'Weight', 'Weight_Str', 'Price', 'dpg', 'Total_Terps'] + cannabinoid_cols + KNOWN_TERPENES
-    df = df.reindex(columns=column_order)
 
     print("\nScraping complete for Dutchie stores. DataFrame created.")
     return df

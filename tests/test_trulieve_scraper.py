@@ -1,7 +1,6 @@
 import unittest
 from unittest.mock import patch, Mock
 import pandas as pd
-import numpy as np
 from scrapers.trulieve_scraper import parse_trulieve_products, fetch_trulieve_data
 
 class TestTrulieveScraper(unittest.TestCase):
@@ -12,15 +11,10 @@ class TestTrulieveScraper(unittest.TestCase):
             {
                 "name": "Super Lemon Haze",
                 "brand": "Trulieve",
-                "strain_type": "Sativa",
                 "category": "flower",
                 "subcategory": "Sativa Flower",
-                "thc_content": "20.5",
-                "cbd_content": "0.5",
-                "terpenes": [
-                    {"name": "Terpinolene", "value": 0.8},
-                    {"name": "BetaMyrcene", "value": 0.4}
-                ],
+                "thc_content": 20.5,
+                "cbd_content": 0.5,
                 "variants": [
                     {"option": "3.5g", "unit_price": 45.0, "sale_unit_price": None},
                     {"option": "7g", "unit_price": 80.0, "sale_unit_price": 70.0}
@@ -29,12 +23,10 @@ class TestTrulieveScraper(unittest.TestCase):
             {
                 "name": "9LB Hammer",
                 "brand": "Modern Flower",
-                "strain_type": "Indica",
                 "category": "concentrates",
                 "subcategory": "Rosin",
-                "thc_content": "85.0",
+                "thc_content": 85.0,
                 "cbd_content": None,
-                "terpenes": [],
                 "variants": [
                     {"option": "1g", "unit_price": 60.0, "sale_unit_price": None}
                 ]
@@ -44,11 +36,8 @@ class TestTrulieveScraper(unittest.TestCase):
     def test_parse_trulieve_products(self):
         """Test the parsing of a list of products from Trulieve JSON."""
         parsed_data = parse_trulieve_products(self.mock_products_json, "Test Store")
-
-        # The first product has 2 variants, the second has 1. Expect 3 total rows.
         self.assertEqual(len(parsed_data), 3)
 
-        # --- Test the first variant of the first product ---
         variant1 = parsed_data[0]
         self.assertEqual(variant1['Name'], "Super Lemon Haze")
         self.assertEqual(variant1['Brand'], "Trulieve")
@@ -57,24 +46,17 @@ class TestTrulieveScraper(unittest.TestCase):
         self.assertEqual(variant1['Price'], 45.0)
         self.assertEqual(variant1['THC'], 20.5)
         self.assertEqual(variant1['CBD'], 0.5)
-        self.assertEqual(variant1['Terpinolene'], 0.8)
-        self.assertEqual(variant1['beta-Myrcene'], 0.4)
-        self.assertAlmostEqual(variant1['Total_Terps'], 1.2)
-        self.assertTrue(np.isnan(variant1['Limonene'])) # Check for a missing terpene
 
-        # --- Test the second variant (sale price) of the first product ---
         variant2 = parsed_data[1]
         self.assertEqual(variant2['Weight'], 7.0)
-        self.assertEqual(variant2['Price'], 70.0) # Check that sale price is used
+        self.assertEqual(variant2['Price'], 70.0)
 
-        # --- Test the concentrate product ---
         variant3 = parsed_data[2]
         self.assertEqual(variant3['Name'], "9LB Hammer")
         self.assertEqual(variant3['Weight'], 1.0)
         self.assertEqual(variant3['Price'], 60.0)
         self.assertEqual(variant3['THC'], 85.0)
-        self.assertTrue(np.isnan(variant3['CBD'])) # Check for null CBD
-        self.assertTrue(np.isnan(variant3['Total_Terps'])) # Check for no terpenes
+        self.assertIsNone(variant3['CBD'])
 
     @patch('scrapers.trulieve_scraper.requests.get')
     def test_fetch_trulieve_data_flow(self, mock_get):
