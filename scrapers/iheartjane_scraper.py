@@ -6,7 +6,10 @@
 import requests
 import pandas as pd
 import re
-from .scraper_utils import convert_to_grams, MASTER_TERPENE_MAP, brand_map, MASTER_CATEGORY_MAP
+from .scraper_utils import (
+    convert_to_grams, BRAND_MAP, MASTER_CATEGORY_MAP,
+    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
+)
 
 # --- API Constants ---
 # These constants define the endpoint and authentication for the iHeartJane API.
@@ -16,108 +19,80 @@ NEW_JANE_API_KEY = "ce5f15c9-3d09-441d-9bfd-26e87aff5925"
 
 def parse_terpenes_from_text(text):
     """
-    Parses terpene data from a raw text block using regular expressions.
-
-    The iHeartJane API often embeds lab data in a free-text field like 'store_notes'
-    or 'description'. This function uses a regex pattern to find all occurrences of
-    terpene names followed by a percentage value.
-
-    Args:
-        text (str): The block of text to parse.
-
-    Returns:
-        dict: A dictionary of found terpenes and their values, including 'Total_Terps'.
+    Parses compound data from a raw text block using regular expressions.
+    This is a fallback for when structured lab data is not available.
     """
-    terp_data = {}
+    compounds_dict = {}
     if not text:
-        return terp_data
+        return compounds_dict
 
-    # This regex pattern is designed to capture terpene names (which may include
-    # spaces and hyphens) and their corresponding percentage value.
-    pattern = r"([a-zA-Z\s-]+)[\s:]*([\d\.]+)%"
+    pattern = r"([a-zA-Z\s_-]+)[\s:]*([\d\.]+)%"
     matches = re.findall(pattern, text, re.IGNORECASE)
 
-    total_terps = 0
     for name, value in matches:
-        # Standardize the found terpene name using the MASTER_TERPENE_MAP.
-        clean_name = name.strip().lower()
-        official_name = MASTER_TERPENE_MAP.get(clean_name)
+        standard_name = MASTER_COMPOUND_MAP.get(name.strip())
+        if standard_name:
+            compounds_dict[standard_name] = float(value)
 
-        if official_name:
-            val = float(value)
-            # This check prevents double-counting if a terpene is listed twice.
-            if official_name not in terp_data:
-                terp_data[official_name] = val
-                total_terps += val
-
-    if total_terps > 0:
-        terp_data['Total_Terps'] = round(total_terps, 3)
-
-    return terp_data
-
-# A mapping to standardize cannabinoid names from the API response to our
-# desired column names.
-CANNABINOID_MAPPING = {
-    'thca_potency': 'THCa', 'cbd_potency': 'CBD', 'cbg_potency': 'CBG',
-    'cbn_potency': 'CBN', 'thc_potency': 'THC', 'delta_9_thc_potency': 'THC',
-    'delta_8_thc_potency': 'Delta-8 THC'
-}
+    return compounds_dict
 
 def parse_jane_product(product_hit, store_name):
     """
     Parses a single product 'hit' from the iHeartJane API JSON response.
-
-    This function extracts all relevant information for a single product and its
-    variants (different weights and prices), returning a list of dictionaries,
-    where each dictionary represents a distinct product variant.
-
-    Args:
-        product_hit (dict): The JSON object for a single product.
-        store_name (str): The name of the store being scraped.
-
-    Returns:
-        list: A list of dictionaries, each representing a product variant.
     """
     if 'search_attributes' not in product_hit:
         return []
 
-    product_variants = []
     attrs = product_hit['search_attributes']
 
-    # 1. Extract common data shared across all variants of this product.
-    raw_brand = attrs.get('brand')
-    raw_category = attrs.get('kind')
+    # Standardize category and skip if not in map
+    category_name = attrs.get('kind')
+    standardized_category = MASTER_CATEGORY_MAP.get(category_name)
+    if not standardized_category:
+        return []
+
+    # Standardize brand and subcategory
+    brand_name = attrs.get('brand')
+    subcategory_name = attrs.get('kind_subtype')
+
     common_data = {
         'Name': attrs.get('name'),
-        'Brand': brand_map.get(raw_brand, raw_brand),
-        'Type': MASTER_CATEGORY_MAP.get(raw_category.lower(), raw_category) if raw_category else None,
-        'Subtype': attrs.get('kind_subtype'),
+        'Brand': BRAND_MAP.get(brand_name, brand_name),
+        'Type': standardized_category,
+        'Subtype': MASTER_SUBCATEGORY_MAP.get(subcategory_name, subcategory_name),
         'Store': store_name,
-        'THC': attrs.get('percent_thc')
     }
 
-    # 2. Extract potency data from the correct nested field.
-    inventory_potencies = attrs.get('inventory_potencies', [])
-    target_potencies = {}
-    for pot in inventory_potencies:
-        if pot.get('price_id', '') in ['gram', 'eighth_ounce']:
-            target_potencies = pot
-            break
-    if not target_potencies and inventory_potencies:
-        target_potencies = inventory_potencies[0]
+    # --- Tiered Compound Parsing ---
+    compounds_found = False
 
-    if target_potencies:
-        for api_field, our_field in CANNABINOID_MAPPING.items():
-            value = target_potencies.get(api_field)
-            if value is not None:
-                common_data[our_field] = value
+    # 1. Attempt to parse structured lab_results
+    lab_results = attrs.get('lab_results', [])
+    if lab_results:
+        for result in lab_results:
+            compound_name = result.get('compound_name')
+            standard_name = MASTER_COMPOUND_MAP.get(compound_name)
+            if standard_name:
+                common_data[standard_name] = result.get('value')
+                compounds_found = True
 
-    # 3. Extract terpene data by parsing text fields.
-    notes = attrs.get('store_notes', '') or attrs.get('description', '')
-    terpene_data = parse_terpenes_from_text(notes)
-    common_data.update(terpene_data)
+    # 2. Fallback to unstructured text parsing
+    if not compounds_found:
+        store_notes = attrs.get('store_notes', '')
+        if store_notes:
+            common_data.update(parse_terpenes_from_text(store_notes))
+            compounds_found = any(key in MASTER_COMPOUND_MAP.values() for key in common_data)
 
-    # 4. Process all available price/weight variants.
+    # 3. Second fallback to compound_names list
+    if not compounds_found:
+        for name in attrs.get('compound_names', []):
+            standard_name = MASTER_COMPOUND_MAP.get(name)
+            if standard_name:
+                # Value is not available in this field, so mark as present
+                common_data[standard_name] = None
+
+    # Process all available price/weight variants
+    product_variants = []
     available_weights = attrs.get('available_weights', [])
     if not available_weights:
         if attrs.get('price_each'):

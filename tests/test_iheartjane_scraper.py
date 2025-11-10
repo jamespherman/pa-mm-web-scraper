@@ -17,9 +17,9 @@ class TestIHeartJaneScraper(unittest.TestCase):
                 "price_eighth_ounce": 35.0,
                 "price_quarter_ounce": 60.0,
                 "special_price_quarter_ounce": {"discount_price": 55.0},
-                "store_notes": "Terpene Profile: beta-Myrcene: 1.2%, Limonene 0.8%",
-                "inventory_potencies": [
-                    {"price_id": "eighth_ounce", "thca_potency": 22.5, "cbd_potency": 0.5}
+                "lab_results": [
+                    {"compound_name": "THCA", "value": 22.5},
+                    {"compound_name": "CBD", "value": 0.5}
                 ]
             }
         }
@@ -27,37 +27,30 @@ class TestIHeartJaneScraper(unittest.TestCase):
             "search_attributes": {
                 "name": "Test Vape",
                 "brand": "Another Brand",
-                "kind": "Vape",
+                "kind": "Vaporizers",
                 "price_each": 50.0,
-                "description": "b-Caryophyllene: 2.5%",
-                "inventory_potencies": [
-                    {"price_id": "each", "thca_potency": 90.0, "cbg_potency": 2.0}
-                ]
+                "store_notes": "b_caryophyllene: 2.5%",
+                "compound_names": ["THC", "CBG"]
             }
         }
 
     def test_parse_jane_product_variants(self):
         """Test parsing a single product hit with multiple weight variants."""
         variants = parse_jane_product(self.mock_product_hit_flower, "Test Store")
-
-        # Expect two rows, one for each weight
         self.assertEqual(len(variants), 2)
 
-        # Test eighth ounce variant
         variant1 = variants[0]
         self.assertEqual(variant1['Name'], "Test Flower")
         self.assertEqual(variant1['Weight_Str'], "eighth_ounce")
         self.assertEqual(variant1['Weight'], 3.5)
         self.assertEqual(variant1['Price'], 35.0)
         self.assertEqual(variant1['THCa'], 22.5)
-        self.assertEqual(variant1['beta-Myrcene'], 1.2)
 
-        # Test quarter ounce variant (with special price)
         variant2 = variants[1]
         self.assertEqual(variant2['Weight_Str'], "quarter_ounce")
         self.assertEqual(variant2['Weight'], 7.0)
-        self.assertEqual(variant2['Price'], 55.0) # Check that special price is used
-        self.assertEqual(variant2['THCa'], 22.5) # Potency should carry over
+        self.assertEqual(variant2['Price'], 55.0)
+        self.assertEqual(variant2['THCa'], 22.5)
 
     def test_parse_jane_product_each(self):
         """Test parsing a product sold by 'each'."""

@@ -4,7 +4,10 @@
 import requests
 import pandas as pd
 import numpy as np
-from .scraper_utils import convert_to_grams, MASTER_TERPENE_MAP, brand_map, MASTER_CATEGORY_MAP
+from .scraper_utils import (
+    convert_to_grams, BRAND_MAP, MASTER_CATEGORY_MAP,
+    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
+)
 import re
 
 # --- Constants ---
@@ -26,12 +29,6 @@ HEADERS = {
 
 CATEGORIES = ["flower", "vapes", "concentrates"]
 
-KNOWN_TERPENES = [
-    'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene', 'Linalool',
-    'alpha-Pinene', 'beta-Pinene', 'Caryophyllene Oxide', 'Guaiol', 'Humulene',
-    'alpha-Bisabolol', 'Camphene', 'Ocimene'
-]
-
 def extract_weight_from_cresco_name(name):
     """
     Extracts weight in grams from a product name string (e.g., "3.5g", "1g").
@@ -48,39 +45,42 @@ def parse_cresco_products(products, store_name):
     """Parses the 'data' array from the Cresco API response."""
     parsed_products = []
     for product in products:
-        try:
-            raw_brand = product.get('brand', 'N/A')
-            raw_category = product.get('category', 'N/A')
-            data = {
-                'Name': product.get('name', 'N/A'),
-                'Brand': brand_map.get(raw_brand, raw_brand),
-                'Store': store_name,
-                'Type': MASTER_CATEGORY_MAP.get(raw_category.lower(), raw_category),
-                'Subtype': product.get('sku', {}).get('product', {}).get('sub_category')
-            }
-            data['Price'] = float(product.get('discounted_price') or product.get('price')) if product.get('price') is not None else np.nan
-            data['Weight_Str'], data['Weight'] = 'N/A', extract_weight_from_cresco_name(data['Name'])
-            data.update({ 'THC': product.get('bt_potency_thc'), 'THCa': product.get('bt_potency_thca'),
-                          'CBD': product.get('bt_potency_cbd'), 'CBG': product.get('bt_potency_cbg'),
-                          'CBN': product.get('bt_potency_cbn') })
-            terpene_data, total_terps = {terp: np.nan for terp in KNOWN_TERPENES}, 0
-            terpenes_list = product.get('terpenes', [])
-            if terpenes_list:
-                for terp in terpenes_list:
-                    name, value = terp.get('terpene'), terp.get('value')
-                    if name and value is not None:
-                        standard_name = MASTER_TERPENE_MAP.get(name.strip().lower().replace('-', '_'))
-                        if standard_name:
-                            terpene_data[standard_name] = value
-                            total_terps += value
-            if total_terps == 0 and product.get('bt_potency_terps'):
-                total_terps = product.get('bt_potency_terps')
-            data.update(terpene_data)
-            data['Total_Terps'] = total_terps if total_terps > 0 else np.nan
-            parsed_products.append(data)
-        except Exception as e:
-            print(f"Error parsing product: {product.get('name')}. Error: {e}")
+        # Standardize category and skip if not in map
+        category_name = product.get('category')
+        standardized_category = MASTER_CATEGORY_MAP.get(category_name)
+        if not standardized_category:
             continue
+
+        # Standardize brand and subcategory
+        brand_name = product.get('brand', 'N/A')
+        sub_category_name = product.get('sku', {}).get('product', {}).get('sub_category')
+
+        data = {
+            'Name': product.get('name', 'N/A'),
+            'Brand': BRAND_MAP.get(brand_name, brand_name),
+            'Store': store_name,
+            'Type': standardized_category,
+            'Subtype': MASTER_SUBCATEGORY_MAP.get(sub_category_name, sub_category_name)
+        }
+
+        # Pricing and weight
+        price = product.get('discounted_price') or product.get('price')
+        data['Price'] = float(price) if price is not None else np.nan
+        data['Weight_Str'] = 'N/A'
+        data['Weight'] = extract_weight_from_cresco_name(data['Name'])
+
+        # Process compounds
+        compounds_dict = {}
+        potency_dict = product.get('potency', {})
+        if potency_dict:
+            for key, value in potency_dict.items():
+                standard_name = MASTER_COMPOUND_MAP.get(key)
+                if standard_name:
+                    compounds_dict[standard_name] = value
+
+        data.update(compounds_dict)
+        parsed_products.append(data)
+
     return parsed_products
 
 def fetch_cresco_data(stores):
@@ -131,11 +131,6 @@ def fetch_cresco_data(stores):
 
     df = pd.DataFrame(all_products_list)
     df['dpg'] = df['Price'] / df['Weight']
-    
-    cannabinoid_cols = sorted([col for col in df.columns if col not in KNOWN_TERPENES + ['Name', 'Store', 'Brand', 'Type', 'Subtype', 'Weight', 'Weight_Str', 'Price', 'dpg', 'Total_Terps']])
-    column_order = ['Name', 'Store', 'Brand', 'Type', 'Subtype', 'Weight', 'Weight_Str', 'Price', 'dpg', 'Total_Terps'] + cannabinoid_cols + KNOWN_TERPENES
-    
-    df = df.reindex(columns=column_order)
 
     print(f"\nScraping complete for Cresco. DataFrame created with {len(df)} rows.")
     return df

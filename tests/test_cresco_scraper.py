@@ -12,17 +12,15 @@ class TestCrescoScraper(unittest.TestCase):
             {
                 "name": "Cresco Labs: GG#4 3.5g",
                 "brand": "Cresco",
-                "category": "flower",
+                "category": "Flower",
                 "price": 55.0,
                 "discounted_price": 45.0,
-                "bt_potency_thc": 0.9,
-                "bt_potency_thca": 23.5,
-                "bt_potency_cbd": 0.1,
-                "bt_potency_terps": 2.1,
-                "terpenes": [
-                    {"terpene": "beta_caryophyllene", "value": 0.8},
-                    {"terpene": "limonene", "value": 0.5}
-                ]
+                "potency": {
+                    "THCA": 23.5,
+                    "THC": 0.9,
+                    "b_caryophyllene": 0.8,
+                    "Limonene": 0.5
+                }
             },
             {
                 "name": "Remedi: Indica Tincture 500mg",
@@ -30,10 +28,10 @@ class TestCrescoScraper(unittest.TestCase):
                 "category": "tinctures",
                 "price": 60.0,
                 "discounted_price": None,
-                "bt_potency_thc": 15.0,
-                "bt_potency_thca": None,
-                "bt_potency_cbd": 15.0,
-                "terpenes": [] # No terpenes listed
+                "potency": {
+                    "THC": 15.0,
+                    "CBD": 15.0
+                }
             }
         ]
 
@@ -51,28 +49,22 @@ class TestCrescoScraper(unittest.TestCase):
 
         self.assertEqual(len(parsed_data), 2)
 
-        # --- Test the flower product ---
         product1 = parsed_data[0]
         self.assertEqual(product1['Name'], "Cresco Labs: GG#4 3.5g")
         self.assertEqual(product1['Brand'], "Cresco")
         self.assertEqual(product1['Store'], "Test Store")
-        self.assertEqual(product1['Price'], 45.0) # Discounted price
+        self.assertEqual(product1['Price'], 45.0)
         self.assertEqual(product1['Weight'], 3.5)
         self.assertEqual(product1['THCa'], 23.5)
         self.assertEqual(product1['THC'], 0.9)
         self.assertEqual(product1['beta-Caryophyllene'], 0.8)
         self.assertEqual(product1['Limonene'], 0.5)
-        # Total terps should be SUM of terpenes list, not the fallback value
-        self.assertAlmostEqual(product1['Total_Terps'], 1.3)
-        self.assertIsNone(product1['Subtype'])
 
-        # --- Test the tincture product ---
         product2 = parsed_data[1]
         self.assertEqual(product2['Name'], "Remedi: Indica Tincture 500mg")
-        self.assertEqual(product2['Price'], 60.0) # Regular price
+        self.assertEqual(product2['Price'], 60.0)
         self.assertEqual(product2['Weight'], 0.5)
-        self.assertIsNone(product2['THCa'])
-        self.assertTrue(np.isnan(product2['Total_Terps'])) # No terpenes
+        self.assertNotIn('THCa', product2)
 
     @patch('scrapers.cresco_scraper.requests.get')
     def test_fetch_cresco_data_flow(self, mock_get):

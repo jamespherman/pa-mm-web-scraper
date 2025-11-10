@@ -68,85 +68,6 @@ def _convert_to_numeric(df):
     df[TERPENE_COLUMNS] = df[TERPENE_COLUMNS].fillna(0)
     return df
 
-def _clean_item_names(df):
-    """
-    Cleans product names by removing extraneous information like weight, type, etc.
-
-    This function uses a series of regular expressions to strip common, non-descriptive
-    terms from the 'Name' column, creating a new 'Name_Clean' column. This is
-    useful for identifying unique strains and comparing products across brands.
-
-    Args:
-        df (pd.DataFrame): The DataFrame with the 'Name' column to clean.
-
-    Returns:
-        pd.DataFrame: The DataFrame with a new 'Name_Clean' column.
-    """
-    print("Cleaning item names...")
-    if 'Name' not in df.columns:
-        return df
-
-    # Create a copy to avoid SettingWithCopyWarning
-    names = df['Name'].copy()
-
-    # 1. Translate MATLAB 'removeList' to a single regex 'or' (|) pattern
-    # A list of common strings to remove from product names.
-    remove_strings = [
-        "QUARTER IS SMALL BUDS", "Delta 9", "1/8", "Flower", "Postgame",
-        "indica", "Indica", "Sativa", "sativa", "Halftime", "Cartridge",
-        "cartridge", "LAST CALL", "Cart", "cart", "LLR", "concentrate",
-        "DISTILLATE", "LIVE", "BUDDER", "pen", "DART", "RESIN", "AIRO",
-        "POD", "MUST", "BE", "USED", "WITH", "DEVICE", "Disposable",
-        "Live", "Badder", "Rosin", "Resin", "Small Buds", "SMALL BUDS",
-        "CO2", "Oil", "Syringe", "RSO", "Full Spectrum", "iKrusher", "Pod",
-        "Distillate", "Co2", "Rhythm", "LR", "Dart", "Tere", "Pax", "PAX",
-        "Vape", "Plus", "Liquid", "Cliq", "HTE", "Crumble", "Wax",
-        "Ground", "Pre Ground", "PreGround", "Preground", "pre ground", "preground",
-        "Smalls", "Diamonds", "Sauce", "Shatter", "Finished", "Concentrate",
-        "Sugar", "LX", "Infinity", "Cold Pressed Hash", "Cold Pressed",
-        "Truflower", "OR", "Minis", "Belushi's Farms", "Belushi Farm's",
-        "Crystalline", "[3]", "THC/ml", "THC/1 ml", "ml", "- 3.5",
-        "Pre-Pack", "Pre Pack", "Woods Reserve", "Dry", "Au", "Tyson",
-        "Tru ", "Cultivar Collection", "Prime Wellness", "Prime", " l ",
-        "R.O.", "SAT/ IND", "SATIVA", "Select Grind", "Fine Grind", "UHP",
-        "Crystal", "THCa", "FARMACEUTICAX", "VYTAL OPTIONS", "VAULT",
-        "The Bank", "Last Call", "Mystic Spirit", "[I]", "[S]", "THC:",
-        "THC/", "Shake", "Supply", "Solventless", "BX", "Flavored",
-        "[ - ]", "()", "Energize", "[H]", "(I)", "(S)", "(H)", "Hybrid",
-        "(Bag)", "Rest", r"\*", r"\$", "!", r"\^" # Escaped special chars
-    ]
-
-    # Escape special regex characters in the list and join
-    remove_list_regex = r'\b(' + '|'.join(re.escape(s) for s in remove_strings) + r')\b'
-    names = names.str.replace(remove_list_regex, '', flags=re.IGNORECASE)
-
-    # 2. A dictionary of regex patterns to remove weights, percentages, etc.
-    pattern_map = {
-        r'\b\d{1,2}\.\d{1,2}g\b': '',  # e.g., 3.5g, 0.5g
-        r'\b\d{1,2}g\b': '',          # e.g., 1g, 7g
-        r'\b\d{1,4}mg\b': '',         # e.g., 500mg, 100mg
-        r'\b\d{1,3}\s*mg\b': '',      # e.g., 500 mg
-        r'\b\d{1,2}\.\d{1,2}%\b': '', # e.g., 20.5%
-        r'\b\d{1,2}%\b': '',          # e.g., 21%
-        r'\b\d{1,2}\s*THC\b': '',     # e.g., 20 THC
-        r'\s*-\s*$': '',             # Remove trailing ' -'
-        r'^\s*-\s*': '',             # Remove leading ' -'
-        r'\s\s+': ' '                # Collapse multiple whitespaces
-    }
-
-    for pattern, replacement in pattern_map.items():
-        names = names.str.replace(pattern, replacement, flags=re.IGNORECASE)
-
-    # 3. Add the cleaned names as a new column and trim whitespace.
-    df['Name_Clean'] = names.str.strip()
-
-    # If cleaning resulted in an empty string, revert to the original name.
-    df['Name_Clean'] = df.apply(
-        lambda row: row['Name'] if not row['Name_Clean'] else row['Name_Clean'],
-        axis=1
-    )
-    return df
-
 def run_analysis(dataframe):
     """
     The main orchestration function for the analysis module.
@@ -170,9 +91,7 @@ def run_analysis(dataframe):
     cleaned_df = dataframe.copy()
     # Convert types first (critical for all other operations)
     cleaned_df = _convert_to_numeric(cleaned_df)
-    # Clean item names
-    cleaned_df = _clean_item_names(cleaned_df)
-    print(f"Data cleaning complete. New column 'Name_Clean' added.")
+    print(f"Data cleaning complete.")
     # --- Step 2: Plotting Orchestration ---
     # Create the date-stamped save directory
     today_str = datetime.date.today().strftime('%Y-%m-%d')
