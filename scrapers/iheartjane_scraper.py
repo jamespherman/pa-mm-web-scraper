@@ -52,7 +52,7 @@ def parse_jane_product(product_hit, store_name):
         return []
 
     # Standardize brand and subcategory
-    brand_name = attrs.get('brand')
+    brand_name = attrs.get('brand').strip()
     subcategory_name = attrs.get('kind_subtype')
 
     common_data = {

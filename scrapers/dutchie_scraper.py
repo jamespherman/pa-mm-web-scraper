@@ -234,7 +234,7 @@ def parse_product_details(product, store_name):
         return None
 
     # Standardize brand and subcategory
-    brand_name = product.get('brandName', 'N/A')
+    brand_name = product.get('brandName', 'N/A').strip()
     subcategory_name = product.get('subcategory')
 
     data = {

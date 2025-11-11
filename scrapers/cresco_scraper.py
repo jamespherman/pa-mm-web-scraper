@@ -34,6 +34,7 @@ def parse_cresco_products(products, store_name):
     """Parses the 'data' array from the Cresco API response."""
     parsed_products = []
     for product in products:
+        
         # Standardize category and skip if not in map
         category_name = product.get('sku', {}).get('product', {}).get('category')
         standardized_category = MASTER_CATEGORY_MAP.get(category_name)

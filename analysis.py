@@ -37,30 +37,18 @@ def _clean_product_names(df):
     Creates a 'Name_Clean' column by stripping clutter from the 'Name' column.
     
     This function removes:
-    1. Known clutter (brands, types, subtypes)
-    2. Weight patterns (e.g., "3.5g", "500mg")
-    3. General clutter (e.g., "live", "vape", "indica")
-    4. Special characters
+    1. Weight patterns (e.g., "3.5g", "500mg")
+    2. General clutter (e.g., "live", "vape", "indica")
+    3. Special characters
+    4. Row-specific brand names (e.g., removes "Insa" ONLY from Insa products)
     """
     print("Creating 'Name_Clean' column...")
     
     # Start with a copy of the 'Name' column
-    cleaned_names = df['Name'].astype(str).copy()
+    df['Name_Clean'] = df['Name'].astype(str).copy()
     
-    # --- 1. Define Clutter Patterns ---
+    # --- 1. Define General Clutter Patterns ---
     
-    # Pattern for all known brands, types, and subtypes
-    try:
-        brands = [str(b) for b in df['Brand'].unique() if pd.notna(b)]
-        types = [str(t) for t in df['Type'].unique() if pd.notna(t)]
-        subtypes = [str(s) for s in df['Subtype'].unique() if pd.notna(s)]
-        
-        known_clutter_list = sorted(list(set(brands + types + subtypes)), key=len, reverse=True)
-        known_clutter_pattern = re.compile(r'\b(' + '|'.join(re.escape(c) for c in known_clutter_list) + r')\b', re.IGNORECASE)
-    except Exception as e:
-        print(f"  - Warning: Could not build known clutter list: {e}")
-        known_clutter_pattern = re.compile(r'a^') # Empty, non-matching regex
-
     # Pattern for weights (from our analysis)
     weight_pattern = re.compile(
         r'(\d+\.?\d*\s*(g|mg|ml))|'  # 3.5g, 500mg, 1ml
@@ -73,23 +61,58 @@ def _clean_product_names(df):
     general_clutter_words = [
         'live', 'vape', 'pen', 'small', 'ground', 'cured', 'liquid',
         'indica', 'sativa', 'hybrid', 'thc', 'cbd', 'cbn', 'cbg',
-        '10pk', 'pack', '10', 'x'
+        '10pk', 'pack', '10', 'x',
+        'all-in-one', 'all in one', # For "All In One"
+        'disposable', 'dispo',       # For "Disposable"
+        
+        # --- NEW FIX ---
+        # Remove the specific phrases first
+        'Rise LLR', 'Rest LLR',
+        # Also remove the standalone words
+        'Rise', 'Rest', 'LLR',
+        # --- END FIX ---
+        
+        'cart', 'cartridge',        # For "Cart"
+        'co2'                       # For "CO2"
     ]
+    
     general_clutter_pattern = re.compile(r'\b(' + '|'.join(general_clutter_words) + r')\b', re.IGNORECASE)
 
     # Pattern for special characters and extra spaces
     char_pattern = re.compile(r'[|/()\[\]{}:-]+', re.IGNORECASE)
     space_pattern = re.compile(r'\s{2,}') # 2 or more spaces
     
-    # --- 2. Apply Cleaning Steps ---
-    cleaned_names = cleaned_names.str.replace(known_clutter_pattern, '', regex=True)
-    cleaned_names = cleaned_names.str.replace(weight_pattern, '', regex=True)
-    cleaned_names = cleaned_names.str.replace(general_clutter_pattern, '', regex=True)
-    cleaned_names = cleaned_names.str.replace(char_pattern, ' ', regex=True)
-    cleaned_names = cleaned_names.str.replace(space_pattern, ' ', regex=True)
+    # --- 2. Apply General Cleaning Steps ---
+    print("  - Removing general clutter (weights, types, etc.)...")
+    df['Name_Clean'] = df['Name_Clean'].str.replace(weight_pattern, '', regex=True)
+    df['Name_Clean'] = df['Name_Clean'].str.replace(general_clutter_pattern, '', regex=True)
+    df['Name_Clean'] = df['Name_Clean'].str.replace(char_pattern, ' ', regex=True)
+
+    # --- 3. Apply Row-Specific Brand Cleaning ---
+    print("  - Removing row-specific brand names...")
     
-    # Final strip to remove leading/trailing spaces
-    df['Name_Clean'] = cleaned_names.str.strip()
+    # This function is applied to each row.
+    # It builds a specific regex for ONLY that row's brand.
+    def remove_brand_from_name(row):
+        name = row['Name_Clean']
+        brand = str(row['Brand'])
+        
+        if pd.isna(brand) or not brand:
+            return name
+        
+        # Create a regex pattern for just this row's brand
+        # \b ensures we match "Insa" but not "Insane"
+        brand_pattern = re.compile(r'\b(' + re.escape(brand) + r')\b', re.IGNORECASE)
+        
+        # Remove the brand from the name
+        return brand_pattern.sub('', name)
+
+    # Use .apply() to run this function on every row
+    df['Name_Clean'] = df.apply(remove_brand_from_name, axis=1)
+    
+    # --- 4. Final Cleanup ---
+    # Clean up extra spaces created by the removals
+    df['Name_Clean'] = df['Name_Clean'].str.replace(space_pattern, ' ', regex=True).str.strip()
     
     print("  - 'Name_Clean' column created successfully.")
     return df

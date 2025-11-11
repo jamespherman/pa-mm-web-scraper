@@ -16,6 +16,7 @@ from scrapers.iheartjane_scraper import fetch_iheartjane_data
 from scrapers.dutchie_scraper import fetch_dutchie_data
 from scrapers.trulieve_scraper import fetch_trulieve_data
 from scrapers.cresco_scraper import fetch_cresco_data
+from scrapers.sweed_scraper import fetch_sweed_data
 from google_sheets_writer import write_to_google_sheet
 from analysis import run_analysis
 
@@ -102,7 +103,13 @@ def main():
         all_dataframes = []  # A list to hold all our DataFrames
 
         # --- 1. Run Individual Scrapers ---
-        # Each scraper function is called, and its resulting DataFrame is appended to the list.
+        # Each scraper function is called, and its resulting DataFrame is append
+        # to the list.
+        print("\nStarting Sweed (Zen Leaf) Scraper...")
+        sweed_df = fetch_sweed_data()
+        if not sweed_df.empty:
+            all_dataframes.append(sweed_df)
+            
         print("\nStarting iHeartJane Scraper...")
         for store_name, store_id in IHEARTJANE_STORES.items():
             df = fetch_iheartjane_data(store_id, store_name)
@@ -123,7 +130,7 @@ def main():
         dutchie_df = fetch_dutchie_data()
         if not dutchie_df.empty:
             all_dataframes.append(dutchie_df)
-
+        
         # If no scrapers return data, exit gracefully.
         if not all_dataframes:
             print("\nNo data was scraped from any source. Exiting.")

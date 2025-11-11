@@ -9,6 +9,7 @@ from .scraper_utils import (
     MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
 )
 import re
+import pdb
 
 # --- Constants ---
 BASE_URL = "https://api.trulieve.com/api/v2/menu/{store_id}/{category}/MEDICAL"
@@ -36,6 +37,7 @@ def parse_trulieve_products(products, store_name):
     parsed_variants = []
     
     for product in products:
+        
         # Standardize category and skip if not in map
         category_name = product.get('category')
         standardized_category = MASTER_CATEGORY_MAP.get(category_name)

@@ -28,6 +28,13 @@ BRAND_MAP = {
     "Strane Reserve": "Strane", "Strane Stash": "Strane",
     "Sunshine": "Sunshine", "Sunshine Cannabis": "Sunshine",
     "Supply/Cresco": "Supply", "Vytal": "Vytal", "Vytal Options": "Vytal",
+    "*Pitt Promo*Belushi's Farm": "Belushi's Farm",
+    "Black Budda": "Black Buddha",
+    "Calypso Bountiful": "Calypso",
+    "Jim's Stash": "Belushi's Farm",
+    "Redemption Shake": "Redemption",
+    "The Essence": "(the) Essence",
+    "Verano Essence": "(the) Essence",
 }
 
 MASTER_CATEGORY_MAP = {
@@ -67,28 +74,112 @@ MASTER_SUBCATEGORY_MAP = {
     'KIEF': 'Kief', 'kief': 'Kief',
 }
 
-MASTER_COMPOUND_MAP = {
-    # Cannabinoids
-    '"TAC\\" - Total Active Cannabinoids"': "TAC", 'CBD': 'CBD', 'CBDA': 'CBDa',
-    'CBDA (Cannabidiolic acid)': 'CBDa', 'CBG': 'CBG', 'CBG (Cannabigerol)': 'CBG',
-    'CBGA': 'CBGa', 'CBGA (Cannabigerolic acid)': 'CBGa', 'CBN': 'CBN',
-    'd8-THC': 'Delta-8 THC', 'THC': 'THC', 'THC-D9 (Delta 9–tetrahydrocannabinol)': 'THC',
-    'THCA': 'THCa', 'THCA (Δ9-tetrahydrocannabinolic acid)': 'THCa', 'THCV': 'THCv', 'thcv': 'THCv',
-    # Terpenes
-    'a-Pinene': 'alpha-Pinene', 'alpha-Pinene': 'alpha-Pinene', 'alpha-Bisabolol': 'alpha-Bisabolol',
-    'Bisabolol': 'alpha-Bisabolol', 'b_caryophyllene': 'beta-Caryophyllene',
-    'Beta Caryophyllene': 'beta-Caryophyllene', 'Caryophyllene': 'beta-Caryophyllene',
-    'CARYOPHYLLENE': 'beta-Caryophyllene', 'b_myrcene': 'beta-Myrcene',
-    'beta-Myrcene': 'beta-Myrcene', 'BetaMyrcene': 'beta-Myrcene', 'Myrcene': 'beta-Myrcene',
-    'MYRCENE': 'beta-Myrcene', 'b_pinene': 'beta-Pinene', 'beta-Pinene': 'beta-Pinene',
-    'BetaPinene': 'beta-Pinene', 'Camphene': 'Camphene', 'Carene': 'Carene',
-    'CaryophylleneOxide': 'Caryophyllene Oxide', 'Eucalyptol': 'Eucalyptol',
+# scrapers/scraper_utils.py
 
-    'Farnesene': 'Farnesene', 'Geraniol': 'Geraniol', 'Guaiol': 'Guaiol',
-    'Humulene': 'Humulene', 'HUMULENE': 'Humulene', 'Limonene': 'Limonene',
-    'LIMONENE': 'Limonene', 'Linalool': 'Linalool', 'LINALOOL': 'Linalool',
-    'Ocimene': 'Ocimene', 'Terpineol': 'Terpineol', 'Terpinolene': 'Terpinolene',
-    'trans-nerolidol': 'trans-Nerolidol', 'Pinene': 'Pinene (Total)', 'PINENE': 'Pinene (Total)',
+# ... (keep all the other maps above this) ...
+
+MASTER_COMPOUND_MAP = {
+    # --- Cannabinoids (from all scrapers) ---
+    '"TAC\\" - Total Active Cannabinoids"': "TAC",
+    'CBD': 'CBD',
+    'CBDA': 'CBDa', 'CBDA (Cannabidiolic acid)': 'CBDa',
+    'CBG': 'CBG', 'CBG (Cannabigerol)': 'CBG',
+    'CBGA': 'CBGa', 'CBGA (Cannabigerolic acid)': 'CBGa',
+    'CBN': 'CBN',
+    'd8-THC': 'Delta-8 THC',
+    'THC': 'THC', 'THC-D9 (Delta 9–tetrahydrocannabinol)': 'THC', 'Total_THC': 'THC',
+    'THCA': 'THCa', 'THCA (Δ9-tetrahydrocannabinolic acid)': 'THCa',
+    'THCV': 'THCv', 'thcv': 'THCv',
+
+    # --- Terpenes (Comprehensive list from all scraper debugging) ---
+    
+    # Total Terps (Sweed/Cresco)
+    'Total_Terpenes': 'Total_Terps', 'total_terps': 'Total_Terps',
+
+    # a-Terpinene
+    'a_terpinene': 'alpha-Terpinene', 'alpha-Terpinene': 'alpha-Terpinene', 'A Pinene': 'alpha-Terpinene',
+
+    # alpha-Bisabolol
+    'alpha-Bisabolol': 'alpha-Bisabolol', 'Bisabolol': 'alpha-Bisabolol', 'bisabolol': 'alpha-Bisabolol',
+    'BISABOLOL': 'alpha-Bisabolol',
+    
+    # beta-Caryophyllene
+    'b_caryophyllene': 'beta-Caryophyllene', 'B-Caryophyllene': 'beta-Caryophyllene',
+    'Beta Caryophyllene': 'beta-Caryophyllene', 'BetaCaryophyllene': 'beta-Caryophyllene',
+    'Caryophyllene': 'beta-Caryophyllene', 'caryophyllene': 'beta-Caryophyllene',
+    'CARYOPHYLLENE': 'beta-Caryophyllene', 'B_CARYOPHYLLENE': 'beta-Caryophyllene',
+
+    # beta-Myrcene
+    'b_myrcene': 'beta-Myrcene', 'B-Myrcene': 'beta-Myrcene',
+    'Beta Myrcene': 'beta-Myrcene', 'BetaMyrcene': 'beta-Myrcene',
+    'Myrcene': 'beta-Myrcene', 'myrcene': 'beta-Myrcene',
+    'MYRCENE': 'beta-Myrcene', 'B_MYRCENE': 'beta-Myrcene',
+    
+    # beta-Pinene
+    'b_pinene': 'beta-Pinene', 'B-Pinene': 'beta-Pinene',
+    'Beta Pinene': 'beta-Pinene', 'BetaPinene': 'beta-Pinene',
+    'B_PINENE': 'beta-Pinene',
+
+    # alpha-Pinene
+    'a-Pinene': 'alpha-Pinene', 'alpha-Pinene': 'alpha-Pinene', 'A Pinene': 'alpha-Pinene',
+
+    # Camphene
+    'Camphene': 'Camphene', 'camphene': 'Camphene', 'CAMPHENE': 'Camphene',
+    
+    # Carene
+    'Carene': 'Carene', 'carene': 'Carene',
+    
+    # Caryophyllene Oxide
+    'caryophyllene_oxide': 'Caryophyllene Oxide', 'CaryophylleneOxide': 'Caryophyllene Oxide',
+    'Carophyllene Oxide': 'Caryophyllene Oxide', 'CAROPHYLLENE_OXIDE': 'Caryophyllene Oxide',
+
+    # Eucalyptol
+    'Eucalyptol': 'Eucalyptol', 'eucalyptol': 'Eucalyptol',
+    
+    # Farnesene
+    'Farnesene': 'Farnesene', 'farnesene': 'Farnesene',
+    
+    # Geraniol
+    'Geraniol': 'Geraniol', 'geraniol': 'Geraniol',
+    
+    # Guaiol
+    'Guaiol': 'Guaiol', 'guaiol': 'Guaiol',
+    
+    # Humulene
+    'Humulene': 'Humulene', 'humulene': 'Humulene',
+    'HUMULENE': 'Humulene',
+    
+    # Limonene
+    'Limonene': 'Limonene', 'limonene': 'Limonene',
+    'LIMONENE': 'Limonene',
+    
+    # Linalool
+    'Linalool': 'Linalool', 'linalool': 'Linalool',
+    'LINALOOL': 'Linalool',
+    
+    # Ocimene
+    'Ocimene': 'Ocimene', 'ocimene': 'Ocimene',
+    
+    # p-Cymene
+    'p_cymene': 'p-Cymene', 'p-Cymene': 'p-Cymene',
+    
+    # Terpineol
+    'Terpineol': 'Terpineol',
+    
+    # Terpinolene
+    'Terpinolene': 'Terpinolene', 'terpinolene': 'Terpinolene',
+    
+    # trans-Nerolidol
+    'trans_neridal': 'trans-Nerolidol', # Cresco typo
+    'trans_nerolidol': 'trans-Nerolidol', 'trans-Nerolidol': 'trans-Nerolidol',
+    'Nerolidol': 'trans-Nerolidol',
+    
+    # gamma-Terpinene
+    'y_terpinene': 'gamma-Terpinene', 'y-Terpinene': 'gamma-Terpinene',
+    
+    # Pinene (Total)
+    'Pinene': 'Pinene (Total)', 'pinene': 'Pinene (Total)',
+    'PINENE': 'Pinene (Total)'
 }
 
 
