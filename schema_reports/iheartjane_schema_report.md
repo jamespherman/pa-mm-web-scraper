@@ -1,0 +1,520 @@
+# Data Dictionary for `iheartjane_raw_products.json`
+
+Generated from **1580** product records.
+
+## Root Schema
+
+- **ad_token**: `(str)`
+  - *Presence: 100.0%*
+- **flight_id**: `(int)`
+  - *Presence: 1.8%*
+  - *Numeric Range:* `[861384009 - 861648941]`
+- **kevel_token**: `(str)`
+  - *Presence: 1.8%*
+- **my_high_d**: `(str)`
+  - *Presence: 100.0%*
+- **object_id**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["23315416", "24759301", "24965808", "27366335", "28217795", "28615609", "30034240", "30378694", "30453776", "30588151", "30680773", "30737237", "31145625", "31351989", "31450345", "31478750", "31623377", "31730476", "31821856", "31861847", "31883237", "31968823", "31981469", "31997001", "32039576", "32039582", "32222826", "32266847", "32343492", "32366161", "32466568", "32546953", "32585759", "32628355", "32628360", "32628369", "32661517", "32669723", "32673141", "32687528", "32688779", "32732623", "32837466", "32837474", "32837475", "32838315", "32850489", "32851126", "32851127", "32851129", ...]` (and more)
+- **product_id**: `(int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[2710 - 2612231]`
+- **search_attributes**: `(dict)`
+  - *Presence: 7.6%*
+  - **activities**: `(list)`
+    - *Presence: 7.6%*
+  - **aggregate_rating**: `(float, int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[0 - 4.9]`
+  - **allergens**: `(list)`
+    - *Presence: 7.6%*
+  - **allow_multiple_flower_count**: `(bool)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[False - True]`
+  - **amount**: `(str)`
+    - *Presence: 0.3%*
+    - *Unique Values:* `["2g", "300mg", "4.2g"]`
+  - **applicable_brand_special_ids**: `(list)`
+    - *Presence: 0.9%*
+  - **applicable_brand_specials_excluded_user_segments**: `(int, list)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[-1 - -1]`
+  - **applicable_brand_specials_included_user_segments**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[-1 - -1]`
+  - **applicable_bundle_brand_special_ids**: `(dict)`
+    - *Presence: 7.6%*
+    - **discount**: `(list)`
+      - *Presence: 7.6%*
+    - **qualify**: `(list)`
+      - *Presence: 7.6%*
+  - **applicable_bundle_special_ids**: `(dict)`
+    - *Presence: 7.6%*
+    - **discount**: `(list)`
+      - *Presence: 7.6%*
+    - **qualify**: `(list)`
+      - *Presence: 7.6%*
+  - **applicable_cart_total_special_ids**: `(list)`
+    - *Presence: 7.6%*
+  - **applicable_special_ids**: `(list)`
+    - *Presence: 7.6%*
+  - **applicable_special_types**: `(list)`
+    - *Presence: 7.6%*
+  - **at_visible_store**: `(bool)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[False - False]`
+  - **available_for_delivery**: `(bool)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[False - False]`
+  - **available_for_pickup**: `(bool)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[True - True]`
+  - **available_weights**: `(list)`
+    - *Presence: 7.6%*
+  - **best_seller_rank**: `(int)`
+    - *Presence: 1.3%*
+    - *Numeric Range:* `[0 - 24]`
+  - **brand**: `(str)`
+    - *Presence: 7.6%*
+    - *Unique Values:* `["&Shine", "Black Buddha Cannabis", "C-Bite", "Calypso", "Common Citizen", "Cookies", "Cresco™", "DOJA", "Eleven", "FIND", "FarmaceuticalRx", "Flower Foundry", "Garcia Hand Picked", "Good Green", "Grassroots", "Insa", "Later Days", "Legend", "Leiffa", "Maine Trees", "Maitri Genetics", "Modern Flower", "Natural Selections", "Old Pal", "Organic Remedies", "Preferred Gardens", "R.O.", "RYTHM", "Redemption Cannabis", "Savvy", "SeCHe", "Standard Farms", "Strane Reserve", "Supply™", "Terrapin", "gLeaf", "mood by Vytal"]`
+  - **brand_special_prices**: `(dict)`
+    - *Presence: 7.6%*
+    - **eighth_ounce**: `(dict)`
+      - *Presence: 0.3%*
+      - **brand_special_id**: `(int)`
+        - *Presence: 0.3%*
+        - *Numeric Range:* `[886 - 886]`
+      - **discount_label**: `(str)`
+        - *Presence: 0.3%*
+        - *Unique Values:* `["15% back"]`
+      - **price**: `(str)`
+        - *Presence: 0.3%*
+        - *Unique Values:* `["27.2"]`
+      - **title**: `(str)`
+        - *Presence: 0.3%*
+    - **half_ounce**: `(dict)`
+      - *Presence: 0.3%*
+      - **brand_special_id**: `(int)`
+        - *Presence: 0.3%*
+        - *Numeric Range:* `[886 - 886]`
+      - **discount_label**: `(str)`
+        - *Presence: 0.3%*
+        - *Unique Values:* `["15% back"]`
+      - **price**: `(str)`
+        - *Presence: 0.3%*
+        - *Unique Values:* `["102.0", "110.5"]`
+      - **title**: `(str)`
+        - *Presence: 0.3%*
+    - **ounce**: `(dict)`
+      - *Presence: 0.3%*
+      - **brand_special_id**: `(int)`
+        - *Presence: 0.3%*
+        - *Numeric Range:* `[886 - 886]`
+      - **discount_label**: `(str)`
+        - *Presence: 0.3%*
+        - *Unique Values:* `["15% back"]`
+      - **price**: `(str)`
+        - *Presence: 0.3%*
+        - *Unique Values:* `["182.75", "187.0"]`
+      - **title**: `(str)`
+        - *Presence: 0.3%*
+    - **quarter_ounce**: `(dict)`
+      - *Presence: 0.4%*
+      - **brand_special_id**: `(int)`
+        - *Presence: 0.4%*
+        - *Numeric Range:* `[886 - 886]`
+      - **discount_label**: `(str)`
+        - *Presence: 0.4%*
+        - *Unique Values:* `["15% back"]`
+      - **price**: `(str)`
+        - *Presence: 0.4%*
+        - *Unique Values:* `["34.0", "51.0", "63.75"]`
+      - **title**: `(str)`
+        - *Presence: 0.4%*
+    - **two_gram**: `(dict)`
+      - *Presence: 0.1%*
+      - **brand_special_id**: `(int)`
+        - *Presence: 0.1%*
+        - *Numeric Range:* `[904 - 904]`
+      - **discount_label**: `(str)`
+        - *Presence: 0.1%*
+        - *Unique Values:* `["5% back"]`
+      - **price**: `(str)`
+        - *Presence: 0.1%*
+        - *Unique Values:* `["75.05"]`
+      - **title**: `(str)`
+        - *Presence: 0.1%*
+  - **brand_subtype**: `(str)`
+    - *Presence: 5.1%*
+    - *Unique Values:* `["", "Blyss Flower", "Bountiful Flower", "Bud", "Dark Heart Collection", "Flower", "Gillie Grows", "Ground Flower", "Ground Flower + Sand", "Grower's Reserve", "Hometown Grown", "Mini Buds", "Mixed Buds", "Popcorn", "Pre-Ground", "Premium", "Premium Flower", "Premium Organic Flower", "Sativa Dominant", "Select", "Select Grind", "Smalls", "Strut All-In-One"]`
+  - **bucket_price**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[16 - 165]`
+  - **business_licenses**: `(list)`
+    - *Presence: 7.6%*
+  - **cannabinoids**: `(list)`
+    - *Presence: 7.6%*
+  - **category**: `(str)`
+    - *Presence: 7.6%*
+    - *Unique Values:* `["hybrid", "indica", "sativa"]`
+  - **collections**: `(list)`
+    - *Presence: 7.6%*
+  - **compound_names**: `(list)`
+    - *Presence: 7.6%*
+  - **custom_product_subtype**: `(str)`
+    - *Presence: 3.5%*
+    - *Unique Values:* `["Disposable Pens", "Ground Flower", "Infused Flower", "Premium", "Select", "Select Grind", "Smalls"]`
+  - **custom_product_type**: `(str)`
+    - *Presence: 7.6%*
+    - *Unique Values:* `["Flower", "Vapes", "flower"]`
+  - **description**: `(str)`
+    - *Presence: 7.6%*
+  - **discounted_price_eighth_ounce**: `(float, int)`
+    - *Presence: 3.1%*
+    - *Numeric Range:* `[16 - 45]`
+  - **discounted_price_half_ounce**: `(float, int)`
+    - *Presence: 1.6%*
+    - *Numeric Range:* `[63.75 - 91]`
+  - **discounted_price_ounce**: `(float, int)`
+    - *Presence: 0.9%*
+    - *Numeric Range:* `[77 - 165]`
+  - **discounted_price_quarter_ounce**: `(float, int)`
+    - *Presence: 1.9%*
+    - *Numeric Range:* `[24.75 - 56.25]`
+  - **discounted_price_two_gram**: `(float)`
+    - *Presence: 0.3%*
+    - *Numeric Range:* `[23.1 - 59.25]`
+  - **effects**: `(list)`
+    - *Presence: 7.6%*
+  - **feelings**: `(list)`
+    - *Presence: 7.6%*
+  - **flavors**: `(list)`
+    - *Presence: 7.6%*
+  - **has_brand_discount**: `(bool)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[False - True]`
+  - **has_photos**: `(bool)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[False - False]`
+  - **has_thc_potency**: `(bool)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[True - True]`
+  - **image_urls**: `(list)`
+    - *Presence: 7.6%*
+  - **ingredients**: `(list)`
+    - *Presence: 7.6%*
+  - **inventory_potencies**: `(list)`
+    - *Presence: 7.6%*
+    - **cbd_potency**: `(float)`
+      - *Presence: 9.2%*
+      - *Numeric Range:* `[0.0 - 0.85]`
+    - **price_id**: `(str)`
+      - *Presence: 9.2%*
+      - *Unique Values:* `["eighth_ounce", "half_gram", "half_ounce", "ounce", "quarter_ounce", "two_gram"]`
+    - **tac_potency**: `(float)`
+      - *Presence: 9.2%*
+      - *Numeric Range:* `[0.0 - 0.0]`
+    - **thc_potency**: `(float)`
+      - *Presence: 9.2%*
+      - *Numeric Range:* `[19.13 - 83.79]`
+    - **thca_potency**: `(float)`
+      - *Presence: 5.1%*
+      - *Numeric Range:* `[0.0 - 0.0]`
+  - **kind**: `(str)`
+    - *Presence: 7.6%*
+    - *Unique Values:* `["flower", "vape"]`
+  - **kind_subtype**: `(str)`
+    - *Presence: 5.0%*
+    - *Unique Values:* `["", "Blyss Flower", "Bountiful Flower", "Bud", "Dark Heart Collection", "Flower", "Gillie Grows", "Ground Flower", "Ground Flower + Sand", "Grower's Reserve", "Hometown Grown", "Mini Buds", "Mixed Buds", "Popcorn", "Pre-Ground", "Premium", "Premium Flower", "Premium Organic Flower", "Select", "Select Grind", "Smalls", "Strut All-In-One"]`
+  - **lab_result_urls**: `(list)`
+    - *Presence: 7.6%*
+  - **lab_results**: `(list)`
+    - *Presence: 7.6%*
+    - **lab_results**: `(list)`
+      - *Presence: 13.0%*
+      - **compound_name**: `(str)`
+        - *Presence: 136.6%*
+        - *Unique Values:* `["Bisabolol", "CBD", "Caryophyllene", "Humulene", "Limonene", "Linalool", "Myrcene", "Pinene", "THC", "THCA", "Terpinolene", "b-Pinene"]`
+      - **unit**: `(str)`
+        - *Presence: 136.6%*
+        - *Unique Values:* `["%"]`
+      - **unit_id**: `(str)`
+        - *Presence: 136.6%*
+        - *Unique Values:* `["Bisabolol", "CBD", "Caryophyllene", "Humulene", "Limonene", "Linalool", "Myrcene", "Pinene", "THC", "THCA", "Terpinolene", "b-Pinene"]`
+      - **value**: `(float)`
+        - *Presence: 136.6%*
+        - *Numeric Range:* `[0.0 - 83.79]`
+    - **price_id**: `(str)`
+      - *Presence: 13.0%*
+      - *Unique Values:* `["eighth_ounce", "gram", "half_gram", "half_ounce", "ounce", "quarter_ounce", "two_gram"]`
+  - **max_cart_quantity**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[1 - 10]`
+  - **max_cart_quantity_each**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[1 - 10]`
+  - **max_cart_quantity_eighth_ounce**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[0 - 161]`
+  - **max_cart_quantity_gram**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[0 - 10]`
+  - **max_cart_quantity_half_gram**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[1 - 14]`
+  - **max_cart_quantity_half_ounce**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[0 - 114]`
+  - **max_cart_quantity_ounce**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[0 - 87]`
+  - **max_cart_quantity_quarter_ounce**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[0 - 160]`
+  - **max_cart_quantity_two_gram**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[1 - 30]`
+  - **name**: `(str)`
+    - *Presence: 7.6%*
+    - *Unique Values (sample):* `["Afternoon Delight #4", "Berry Gelatoe [4.2g]", "Black Maple #22", "Blue Lobster", "Blueberry Gas", "Blueberry Sour", "Bluenana  [4.2g]", "Bolo", "Cereal Milk", "Cherry Lime Gelato", "Citron", "Cke and Bake", "Cranberry Z", "Delphi Diesel", "Frosted Jungle", "Gahlic Cooks", "Garlic CKIES", "Gelato 41", "Gello", "Gelonade", "Giraffe", "Golden Pineapple", "Goo Berry", "Grape Rntz", "Guava Marker", "Havana Kush", "Highaleah", "Hot Sauce #9", "LA Popz", "La Bomba Ese", "Lazer", "Lemon Gelato CKIES", "Lemon Maraschino", "London Pound C", "MF FNRL", "Ocifer 4 (Jayna's Sunshine)", "PB P", "Permanent Marker", "Purp 30", "Rainbow Mintz", "Sherbie the Love Nug", "Sour Gremlin", "Sunset 41", "Sunshine 4", "Sweet Relief", "Unplug", "Wookie Burger", "Zoap", "Zodacane", "Zsweet Mntz", ...]` (and more)
+  - **net_weight_grams**: `(float, int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[0 - 4.2]`
+  - **objectID**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[2027274 - 32855267]`
+  - **percent_cbd**: `(float)`
+    - *Presence: 0.4%*
+    - *Numeric Range:* `[0.01 - 0.85]`
+  - **percent_cbda**: `(float)`
+    - *Presence: 0.1%*
+    - *Numeric Range:* `[0.104 - 0.104]`
+  - **percent_thc**: `(float)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[19.13 - 83.79]`
+  - **photo_weights**: `(list)`
+    - *Presence: 7.6%*
+  - **photos**: `(list)`
+    - *Presence: 7.6%*
+  - **pos_product_lookup**: `(dict)`
+    - *Presence: 7.6%*
+  - **price_eighth_ounce**: `(int)`
+    - *Presence: 3.7%*
+    - *Numeric Range:* `[23 - 60]`
+  - **price_half_gram**: `(int)`
+    - *Presence: 0.1%*
+    - *Numeric Range:* `[26 - 26]`
+  - **price_half_ounce**: `(int)`
+    - *Presence: 1.8%*
+    - *Numeric Range:* `[70 - 130]`
+  - **price_ounce**: `(int)`
+    - *Presence: 1.1%*
+    - *Numeric Range:* `[110 - 220]`
+  - **price_quarter_ounce**: `(int)`
+    - *Presence: 2.2%*
+    - *Numeric Range:* `[33 - 78]`
+  - **price_two_gram**: `(float, int)`
+    - *Presence: 0.3%*
+    - *Numeric Range:* `[30.8 - 79]`
+  - **product_brand_id**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[15788 - 42245]`
+  - **product_id**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[39415 - 2610300]`
+  - **product_percent_thc**: `(float, int)`
+    - *Presence: 0.3%*
+    - *Numeric Range:* `[16.5 - 20]`
+  - **product_photos**: `(list)`
+    - *Presence: 7.6%*
+    - **id**: `(str)`
+      - *Presence: 18.7%*
+    - **position**: `(int)`
+      - *Presence: 18.7%*
+      - *Numeric Range:* `[0 - 5]`
+    - **urls**: `(dict)`
+      - *Presence: 18.7%*
+      - **extraLarge**: `(str)`
+        - *Presence: 18.7%*
+      - **medium**: `(str)`
+        - *Presence: 18.7%*
+      - **original**: `(str)`
+        - *Presence: 18.7%*
+      - **small**: `(str)`
+        - *Presence: 18.7%*
+  - **quantity_units**: `(str)`
+    - *Presence: 0.7%*
+    - *Unique Values:* `["g"]`
+  - **quantity_value**: `(float, int)`
+    - *Presence: 0.3%*
+    - *Numeric Range:* `[0.3 - 4.2]`
+  - **recommendation**: `(dict)`
+    - *Presence: 7.6%*
+    - **ordinal**: `(int)`
+      - *Presence: 7.6%*
+      - *Numeric Range:* `[2147483647 - 2147483647]`
+  - **review_count**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[0 - 3310]`
+  - **root_subtype**: `(str)`
+    - *Presence: 3.5%*
+    - *Unique Values:* `["Disposables", "Ground Flower", "Infused Flower", "Premium", "Select", "Select Grind", "Smalls"]`
+  - **root_types**: `(list)`
+    - *Presence: 7.6%*
+  - **roots_custom_rows**: `(list)`
+    - *Presence: 7.6%*
+  - **searchable_slug**: `(str)`
+    - *Presence: 7.6%*
+    - *Unique Values (sample):* `["c-bite-mexican-flan-2564272", "calypso-bluenana-4-2g-2610300", "calypso-grape-rntz-2509683", "calypso-grapesy-whoa-2511943", "calypso-grapesy-whoa-2550444", "calypso-guava-marker-2590873", "calypso-sunset-41-2289772", "calypso-zsweet-mntz-2376550", "common-citizen-unplug-2581618", "cookies-moonwalkers-2113234", "cresco-green-line-og-80479", "doja-giraffe-2609044", "doja-permanent-marker-1792609", "eleven-london-pound-c-2558076", "eleven-rainbow-mintz-2579208", "find-cherry-patties-2160740", "gleaf-gello-1119147", "gleaf-la-bomba-ese-2389810", "grassroots-water-ck-2349868", "insa-blueberry-gas-2069785", "insa-cereal-milk-1259822", "insa-gelonade-2479958", "insa-purp-30-2183122", "insa-sunshine-4-1483585", "legend-stankasaurus-2382804", "leiffa-mac-1-1598564", "maitri-genetics-bolo-2530899", "maitri-genetics-zoap-2396008", "modern-flower-jet-fuel-587091", "modern-flower-mf-fnrl-1873989", "old-pal-zodacane-2532133", "r-o-funk-mountain-2596030", "r-o-jet-fuel-2224653", "r-o-the-riddler-8-2599163", "rythm-animal-face-2476577", "rythm-animal-face-592210", "rythm-animal-scout-1951200", "rythm-bananaconda-2069347", "rythm-brownie-scout-39415", "rythm-cranberry-z-2312356", "rythm-garlic-cookies-2360114", "rythm-og-story-320623", "rythm-rose-gold-runtz-2069349", "rythm-secret-sunset-1676705", "rythm-velcroz-1964095", "seche-citron-2586935", "shine-animal-cke-2492324", "supply-blue-pave-1972674", "terrapin-lemon-gas-1859771", "terrapin-sour-tangie-64879", ...]` (and more)
+  - **special_amount**: `(str)`
+    - *Presence: 6.5%*
+    - *Unique Values:* `["25% OFF", "30% OFF", "40% OFF", "50% OFF", "SALE"]`
+  - **special_custom_badge**: `(str)`
+    - *Presence: 0.2%*
+    - *Unique Values:* `["", "FRESH DROP!"]`
+  - **special_id**: `(int)`
+    - *Presence: 6.5%*
+    - *Numeric Range:* `[53049 - 3314808]`
+  - **special_price_each**: `(dict)`
+    - *Presence: 7.6%*
+  - **special_price_eighth_ounce**: `(dict)`
+    - *Presence: 7.6%*
+    - **discount_amount**: `(float)`
+      - *Presence: 3.1%*
+      - *Numeric Range:* `[5.75 - 20.0]`
+    - **discount_percent**: `(str)`
+      - *Presence: 3.1%*
+      - *Unique Values:* `["25.0", "30.0", "40.0", "50.0"]`
+    - **discount_price**: `(str)`
+      - *Presence: 3.1%*
+      - *Unique Values:* `["16.0", "17.25", "20.0", "21.0", "21.6", "22.4", "22.5", "24.0", "26.25", "28.0", "30.0", "31.5", "33.75", "37.5", "45.0"]`
+    - **discount_type**: `(str)`
+      - *Presence: 3.1%*
+      - *Unique Values:* `["percent"]`
+    - **price**: `(str)`
+      - *Presence: 3.1%*
+      - *Unique Values:* `["23.0", "28.0", "30.0", "32.0", "35.0", "36.0", "40.0", "45.0", "50.0", "60.0"]`
+    - **special_custom_badge**: `(str)`
+      - *Presence: 0.1%*
+      - *Unique Values:* `[""]`
+    - **special_id**: `(int)`
+      - *Presence: 3.1%*
+      - *Numeric Range:* `[53049 - 3314808]`
+  - **special_price_gram**: `(dict)`
+    - *Presence: 7.6%*
+  - **special_price_half_gram**: `(dict)`
+    - *Presence: 7.6%*
+  - **special_price_half_ounce**: `(dict)`
+    - *Presence: 7.6%*
+    - **discount_amount**: `(float)`
+      - *Presence: 1.6%*
+      - *Numeric Range:* `[21.25 - 48.0]`
+    - **discount_percent**: `(str)`
+      - *Presence: 1.6%*
+      - *Unique Values:* `["25.0", "30.0", "40.0"]`
+    - **discount_price**: `(str)`
+      - *Presence: 1.6%*
+      - *Unique Values:* `["63.75", "66.5", "70.0", "72.0", "77.0", "82.5", "84.0", "91.0"]`
+    - **discount_type**: `(str)`
+      - *Presence: 1.6%*
+      - *Unique Values:* `["percent"]`
+    - **price**: `(str)`
+      - *Presence: 1.6%*
+      - *Unique Values:* `["100.0", "110.0", "120.0", "130.0", "85.0", "95.0"]`
+    - **special_id**: `(int)`
+      - *Presence: 1.6%*
+      - *Numeric Range:* `[219477 - 3314801]`
+  - **special_price_ounce**: `(dict)`
+    - *Presence: 7.6%*
+    - **discount_amount**: `(float)`
+      - *Presence: 0.9%*
+      - *Numeric Range:* `[33.0 - 86.0]`
+    - **discount_percent**: `(str)`
+      - *Presence: 0.9%*
+      - *Unique Values:* `["25.0", "30.0", "40.0"]`
+    - **discount_price**: `(str)`
+      - *Presence: 0.9%*
+      - *Unique Values:* `["122.5", "129.0", "129.5", "133.0", "138.0", "150.5", "154.0", "165.0", "77.0", "91.0"]`
+    - **discount_type**: `(str)`
+      - *Presence: 0.9%*
+      - *Unique Values:* `["percent"]`
+    - **price**: `(str)`
+      - *Presence: 0.9%*
+      - *Unique Values:* `["110.0", "130.0", "175.0", "184.0", "185.0", "190.0", "215.0", "220.0"]`
+    - **special_id**: `(int)`
+      - *Presence: 0.9%*
+      - *Numeric Range:* `[1901420 - 3314800]`
+  - **special_price_quarter_ounce**: `(dict)`
+    - *Presence: 7.6%*
+    - **discount_amount**: `(float, str)`
+      - *Presence: 1.9%*
+      - *Unique Values:* `["0.0"]`
+      - *Numeric Range:* `[8.25 - 28.0]`
+    - **discount_percent**: `(str)`
+      - *Presence: 1.9%*
+      - *Unique Values:* `["0.0", "25.0", "30.0", "40.0"]`
+    - **discount_price**: `(str)`
+      - *Presence: 1.9%*
+      - *Unique Values:* `["24.75", "28.0", "30.0", "30.75", "34.5", "35.0", "36.0", "37.5", "41.25", "42.0", "45.0", "49.0", "51.0", "52.0", "52.5", "56.25"]`
+    - **discount_type**: `(str)`
+      - *Presence: 1.9%*
+      - *Unique Values:* `["dollar_amount", "percent"]`
+    - **price**: `(str)`
+      - *Presence: 1.9%*
+      - *Unique Values:* `["33.0", "35.0", "40.0", "41.0", "46.0", "50.0", "52.0", "55.0", "60.0", "68.0", "70.0", "75.0"]`
+    - **special_custom_badge**: `(str)`
+      - *Presence: 0.1%*
+      - *Unique Values:* `["FRESH DROP!"]`
+    - **special_id**: `(int)`
+      - *Presence: 1.9%*
+      - *Numeric Range:* `[1901420 - 3314798]`
+  - **special_price_two_gram**: `(dict)`
+    - *Presence: 7.6%*
+    - **discount_amount**: `(float)`
+      - *Presence: 0.3%*
+      - *Numeric Range:* `[7.7 - 19.75]`
+    - **discount_percent**: `(str)`
+      - *Presence: 0.3%*
+      - *Unique Values:* `["25.0"]`
+    - **discount_price**: `(str)`
+      - *Presence: 0.3%*
+      - *Unique Values:* `["23.1", "59.25"]`
+    - **discount_type**: `(str)`
+      - *Presence: 0.3%*
+      - *Unique Values:* `["percent"]`
+    - **price**: `(str)`
+      - *Presence: 0.3%*
+      - *Unique Values:* `["30.8", "79.0"]`
+    - **special_id**: `(int)`
+      - *Presence: 0.3%*
+      - *Numeric Range:* `[3239775 - 3239775]`
+  - **special_title**: `(str)`
+    - *Presence: 6.5%*
+    - *Unique Values:* `["25% off Maine Trees", "40% off  - Clearance", "50% Off - Fall Doorbusters!"]`
+  - **store_id**: `(int)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[2266 - 2913]`
+  - **store_notes**: `(str)`
+    - *Presence: 7.6%*
+  - **store_specific_product**: `(bool)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[False - False]`
+  - **store_types**: `(list)`
+    - *Presence: 7.6%*
+  - **terpenes**: `(list)`
+    - *Presence: 7.6%*
+  - **type**: `(str)`
+    - *Presence: 7.6%*
+    - *Unique Values:* `["hybrid", "indica", "sativa", "vape"]`
+  - **unique_slug**: `(str)`
+    - *Presence: 7.6%*
+    - *Unique Values (sample):* `["c-bite-indica-mexican-flan", "calypso-hybrid-blueberry-sour", "calypso-hybrid-bluenana-4-2g", "calypso-hybrid-grapesy-whoa", "calypso-hybrid-guava-marker", "calypso-hybrid-zsweet-mntz", "calypso-indica-grape-rntz", "calypso-indica-sunset-41", "common-citizen-hybrid-unplug", "cookies-hybrid-moonwalkers", "cresco-hybrid-green-line-og", "doja-hybrid-giraffe", "doja-hybrid-permanent-marker", "eleven-hybrid-london-pound-c", "eleven-hybrid-rainbow-mintz", "find-sativa-cherry-patties", "gleaf-hybrid-gello", "gleaf-hybrid-la-bomba-ese", "grassroots-hybrid-water-ck", "insa-hybrid-blueberry-gas", "insa-hybrid-cereal-milk", "insa-hybrid-gelonade", "insa-indica-purp-30", "insa-indica-sunshine-4", "legend-indica-stankasaurus", "leiffa-hybrid-mac-1", "maitri-genetics-hybrid-zoap", "maitri-genetics-indica-bolo", "modern-flower-hybrid-jet-fuel", "modern-flower-hybrid-mf-fnrl", "old-pal-indica-zodacane", "r-o-hybrid-funk-mountain", "r-o-hybrid-jet-fuel", "r-o-hybrid-the-riddler-8", "rythm-hybrid-bananaconda", "rythm-hybrid-garlic-cookies", "rythm-hybrid-rose-gold-runtz", "rythm-hybrid-velcroz", "rythm-indica-animal-face", "rythm-indica-animal-scout", "rythm-indica-brownie-scout", "rythm-indica-cranberry-z", "rythm-indica-og-story", "rythm-sativa-rebel-sour-300mg", "rythm-sativa-secret-sunset", "seche-hybrid-citron", "shine-indica-animal-cke", "supply-hybrid-blue-pave", "terrapin-hybrid-lemon-gas", "terrapin-sativa-sour-tangie", ...]` (and more)
+  - **url_slug**: `(str)`
+    - *Presence: 7.6%*
+    - *Unique Values (sample):* `["calypso-berry-gelatoe-4-2g", "calypso-blueberry-sour", "calypso-bluenana-4-2g", "calypso-grape-rntz", "calypso-grapesy-whoa", "calypso-guava-marker", "calypso-sherbie-the-love-nug", "calypso-sunset-41", "calypso-zsweet-mntz", "common-citizen-sweet-relief", "common-citizen-unplug", "doja-giraffe", "doja-permanent-marker", "eleven-london-pound-c", "eleven-rainbow-mintz", "farmaceuticalrx-hot-sauce-9", "flower-foundry-havana-kush", "gleaf-gello", "gleaf-la-bomba-ese", "grassroots-delphi-diesel", "grassroots-gahlic-cooks", "insa-blueberry-gas", "insa-cereal-milk", "insa-cherry-lime-gelato", "insa-gelonade", "insa-purp-30", "insa-sunshine-4", "leiffa-mac-1", "maine-trees-blue-lobster", "maitri-genetics-bolo", "maitri-genetics-gelato-41", "maitri-genetics-wookie-burger", "maitri-genetics-zoap", "modern-flower-mf-fnrl", "modern-flower-sour-gremlin", "mood-by-vytal-black-maple-22", "old-pal-zodacane", "organic-remedies-apple-frit", "organic-remedies-cke-and-bake", "preferred-gardens-la-popz", "preferred-gardens-lazer", "redemption-cannabis-goo-berry", "rythm-afternoon-delight-4", "rythm-cranberry-z", "rythm-garlic-cookies", "rythm-lemon-gelato-ckies", "rythm-rebel-sour-300mg", "seche-citron", "strane-reserve-frosted-jungle", "strane-reserve-highaleah", ...]` (and more)
+  - **visible**: `(bool)`
+    - *Presence: 7.6%*
+    - *Numeric Range:* `[True - True]`
+- **store_name_scraped**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["Maitri (PGH)", "Rise"]`

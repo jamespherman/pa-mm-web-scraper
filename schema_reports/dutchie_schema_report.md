@@ -1,0 +1,1911 @@
+# Data Dictionary for `dutchie_raw_products.json`
+
+Generated from **2548** product records.
+
+## Root Schema
+
+- **AdditionalOptions**: `(NoneType, list)`
+  - *Presence: 100.0%*
+- **CBD**: `(NoneType)`
+  - *Presence: 100.0%*
+- **CBDContent**: `(NoneType, dict)`
+  - *Presence: 100.0%*
+  - **range**: `(NoneType, list)`
+    - *Presence: 97.3%*
+  - **unit**: `(str)`
+    - *Presence: 97.3%*
+    - *Unique Values:* `["MILLIGRAMS", "MILLIGRAMS_PER_GRAM", "PERCENTAGE"]`
+- **DispensaryID**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["5fa0829005bb2400cfc4b694", "607dc27bfde18500b5e8dd52", "621900cebbc5580e15476deb", "66fef50576b5d1b3703a1890", "66fef58038ff55ae0d700b55"]`
+- **Image**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `[""]`
+- **Name**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["6" Soft PIpe Cleaners | 44pk", "Alma Case | Black", "Alma Case | Black with Lock", "Animal Mntz", "Black Label Cleaner | 12oz.", "Black Maple | Badder | 3g", "Black | 2" Brush", "Black | 7" Brush Set", "California", "Cherry | 25mg Troche | 10pk", "Crestone | Maroon", "Dart Battery", "Dotsero Dugout Case | Black", "Dotsero Dugout | Camo", "Dotsero Dugout | Orange Pixel", "Dotsero Dugout | Tie Dye", "Forza | Live Sugar | 1g", "Grape WEPA! #3 | 7g", "Grape | 10mg Troche | 10pk", "Grip | Concentrate Vaporizer", "Grip | Replacement Coil", "Highland 3.0 | Black", "LC Ckies | Live Budder | 1g", "LCP | Live Budder | 1g", "Legacy | Live Budder | 2g", "Loov | Replacement Glass", "Mango | 10mg Troche | 10pk", "Mango | 50mg Troche | 10pk", "OG Bloobs", "OGKB 2.1", "Orange Label Cleaner | 12oz.", "Orange | 10mg Troche | 10pk", "Perfect Cell", "Permanent Marker", "Pink Lady | Live Sugar | 1g", "Pura Vida | Live Sugar | 1g", "SHEEP FACED | Crumble | 2g", "Serving Tray (7x5)", "Silverton Small Case | Black", "Silverton Small Case | Tan", "SmartJar | Large | Green", "SmartJar | Medium", "SmartJar | Small", "Sour Gak", "Super Lemon Haze #6", "Tri-Color | 2" Brush", "Tri-Color | 7" Brush Set", "Volume Knob Grinder | 63mm", "Wizard Spray #1", "Zsunami #22", ...]` (and more)
+- **Options**: `(list)`
+  - *Presence: 100.0%*
+- **POSMetaData**: `(NoneType, dict)`
+  - *Presence: 100.0%*
+  - **activeBatchTags**: `(list)`
+    - *Presence: 38.0%*
+    - **tagId**: `(str)`
+      - *Presence: 15.8%*
+      - *Unique Values:* `["1243", "1244", "1547", "1549", "1648"]`
+  - **canonicalBrandId**: `(NoneType, str)`
+    - *Presence: 38.0%*
+    - *Unique Values (sample):* `["4239", "4240", "4241", "4242", "4243", "4246", "4247", "4248", "4250", "4252", "4253", "4254", "4257", "4261", "4262", "4263", "4265", "4266", "4337", "4366", "4449", "4456", "4472", "4485", "4505", "4506", "4507", "4840", "4863", "4901", "5023", "5050", "5057", "5070", "5151", "5207", "5209", "5274", "5306", "5800", "5842", "5843", "5913", "5943", "5996", "6103", "6379", "6393", "6412", "6435", ...]` (and more)
+  - **canonicalBrandName**: `(NoneType, str)`
+    - *Presence: 38.0%*
+    - *Unique Values (sample):* `["&Shine", "Belushi's Farm", "Boveda", "Cresco", "Double Bear", "Dr. Solomon's", "FarmaceuticalRX", "G Pen", "Good Green", "Good News", "Grassroots", "Gratitude Gardens", "Haze", "INSA", "Ilera", "Kind Tree", "Kovert", "Leiffa", "Level", "Lookah", "Maitri Medicinals", "Modern Flower", "Mood", "OZONE", "Old Pal", "Ooze", "Organic Remedies", "Ozone Reserve", "PHG", "PIranha", "Pearls", "Prime Wellness", "Pulsar", "R.O.", "Remedi", "Revel", "Rythm", "Select", "Select Briq", "Select Elite", "Simply Herb", "Standard Farms", "Supply", "The Botanist", "Valhalla", "Vytal", "Vytal Solventless", "Wonder", "Wulf", "Yocan", ...]` (and more)
+  - **canonicalCategory**: `(str)`
+    - *Presence: 38.0%*
+    - *Unique Values:* `["Accessories", "Badder", "Balms", "Budder", "Capsules", "Concentrate", "Crumble", "Distillate", "Electronics", "Grinders", "Hash", "Kief", "Liquids", "Live Resin", "Lotions", "Other Topicals", "Patches", "Pills", "RSO", "Rosin", "Sand", "Sauce", "Shake", "Shatter", "Storage", "Sugar", "Tier 1 Flower", "Tinctures", "Troches", "Vape - Cartridge", "Vape - Disposable", "Vape - Live Resin Cartridge", "Vape - Live Resin Disposable", "Vape - Live Rosin Cartridge", "Vape - Live Rosin Disposable", "Wax"]`
+  - **canonicalCategoryId**: `(str)`
+    - *Presence: 38.0%*
+    - *Unique Values:* `["1821438", "1821440", "1821441", "1821443", "1821444", "1821448", "1821449", "1821450", "1821451", "1821453", "1821454", "1821455", "1821456", "1821457", "1821458", "1821459", "1821460", "1821463", "1821466", "1821467", "1821469", "1821470", "1821471", "1821472", "1821476", "1821481", "1821518", "1821519", "1821695", "1821696", "1821708", "1821709", "1822450", "1822451", "1822452", "1822453"]`
+  - **canonicalID**: `(str)`
+    - *Presence: 38.0%*
+    - *Unique Values (sample):* `["491208", "491221", "493872", "500262", "501240", "502552", "529998", "532199", "534744", "535447", "537590", "550948", "554728", "556197", "559902", "561416", "584201", "585266", "585267", "585690", "586346", "588052", "594425", "595288", "596105", "596123", "596410", "600991", "600994", "601417", "601418", "601419", "602168", "602634", "604018", "604201", "607151", "607152", "617687", "619550", "620360", "620362", "620363", "620366", "621240", "621511", "621514", "622490", "622539", "622655", ...]` (and more)
+  - **canonicalImgUrl**: `(str)`
+    - *Presence: 38.0%*
+  - **canonicalLabResultUrl**: `(NoneType)`
+    - *Presence: 38.0%*
+  - **canonicalName**: `(str)`
+    - *Presence: 38.0%*
+    - *Unique Values (sample):* `["1:1 Balm (500mg)", "Ah Pul T", "Animal Face", "BananaConda Cartridge", "Banoreoz", "Banoreoz Small Flower", "Berry Troches 100mg | 2 Pack", "Berry Troches 10mg | 10 Pack", "Berry Troches 10mg | 2 Pack", "Berry Troches 50mg | 10 Pack", "Berry Troches 50mg | 2 Pack", "Biscotti Pie #2 Live Rosin", "Chaos Kush", "Chem Bruleez", "Chem Don Live Resin Cartridge", "Chill - Concord Syrup (200mg)", "Chill Syrup | Unflavored", "Clem Kush Disposable Pen", "Dark Matter", "Depth Charge", "Fire OG Live Resin Cartridge", "GARLIC CKIES", "Garlic Thunder Smalls", "Gasberry", "Gelato 2.0", "Golden Goat", "Hindu GDP Live Rosin", "LAYER CKE Mixed Buds", "LCP", "Lemon G Sherb", "Modified Jet", "Mountain Apple", "Nine Lions #7 Live Rosin", "Ogre Kush", "Oishii Live Rosin", "PK Crasher", "Permanent Marker", "Rainbow Belts 3.0 Live Rosin", "Rainbow Beltz", "Rescue 3:1 Balm (120mg)", "Rescue THC Lotion (200mg)", "Scarlet Fire #7", "Seahorse PRO Plus", "Slow N Sweet", "Sticky Glue Live Rosin", "THC Roll-On Gel (300mg)", "Too Cool", "Unscented THC Lotion (300mg)", "WC Watermelon Z", "Wookie Burger", ...]` (and more)
+  - **canonicalPackageId**: `(str)`
+    - *Presence: 38.0%*
+    - *Unique Values (sample):* `["00549", "198715110043", "198715520866", "DSXH10M5LV000010", "DSXH11T000000042", "DSXH30M000000011", "FX0D100000000002", "FX0D11TWDG000004", "FX0DTHCQ5J000002", "JWYCMODSFD000001", "JWYCROG3DC000001", "KGSBMDA0IJ000004", "KGSBMDA5ME000004", "KGSBMDA8GR000002", "KGSBMDABV3000002", "KGSBMDACQ3000004", "KGSBMDAFJ5000001", "KGSBMDAH3R000004", "KGSBMDAH7O000004", "KGSBMDAL5I000008", "KGSBMDAN3C000006", "KGSBMDAO9A000005", "KGSBMDASH3000016", "KGSBMDATGR000018", "KGSBMDAVCL000001", "KGSBMDAYU5000001", "KGSBMDAZO2000001", "KGSBMDAZOD000002", "L7UQBISVDC000003", "L7UQSTITV1000009", "L7UQSUPFWZ000032", "MHPMWOOFDO000012", "O5FCTOOUGK000003", "OF4CGRALNI000004", "OF4CGRAXV3000005", "PACR01-D21-2101.IN8U3WI", "UCETCRE4D0000051", "UCETCREVPM000030", "UCETCREW8P000270", "UCETCREWIW000112", "UCETSUPAAD000038", "UCETSUPTOW000002", "X3JLPRIIJ2000001", "XWDTDRS1KC000132", "XWDTDRS5TW000214", "XWDTDRSFOJ000085", "XWDTGTIFSQ000030", "XWDTGTIIE6000004", "XWDTGTIR4M000047", "XWDTGTIUGG000005", ...]` (and more)
+  - **canonicalProductTags**: `(list)`
+    - *Presence: 38.0%*
+    - **tagId**: `(str)`
+      - *Presence: 8.0%*
+      - *Unique Values:* `["1547", "1648"]`
+  - **canonicalSKU**: `(str)`
+    - *Presence: 38.0%*
+    - *Unique Values (sample):* `["00843567", "04274612", "04282604", "05601154", "06686327", "07273829", "08701162", "09994392", "18622577", "22233908", "22655512", "24351854", "25393515", "27985742", "29620146", "30721583", "31734675", "37782486", "40625218", "43269340", "45495932", "46947904", "47074248", "52059850", "52069506", "54626139", "55382615", "62342989", "64102237", "64740001", "65107572", "67109881", "70732635", "74782238", "76384018", "77387562", "80215668", "83098611", "83402439", "88800845", "89102003", "89643993", "89732891", "90538828", "91463803", "91661219", "92194574", "95377689", "97222483", "97415636", ...]` (and more)
+  - **canonicalStrainId**: `(NoneType, str)`
+    - *Presence: 38.0%*
+    - *Unique Values:* `["59399", "62922", "62923", "62924", "62926"]`
+  - **canonicalVendorId**: `(NoneType, str)`
+    - *Presence: 38.0%*
+    - *Unique Values:* `["10003", "10010", "10013", "10021", "10024", "10029", "10042", "10044", "10046", "10047", "10236", "10263", "10288", "10289", "10321", "10322", "10330", "10356", "10361", "10404", "10704", "10708", "10956", "9989", "9990", "9991", "9992", "9993", "9994", "9997", "9998"]`
+  - **children**: `(list)`
+    - *Presence: 38.0%*
+    - **activeBatchTags**: `(list)`
+      - *Presence: 38.0%*
+      - **tagId**: `(str)`
+        - *Presence: 15.8%*
+        - *Unique Values:* `["1243", "1244", "1547", "1549", "1648"]`
+    - **canonicalBrandId**: `(NoneType, str)`
+      - *Presence: 38.0%*
+      - *Unique Values (sample):* `["4239", "4240", "4241", "4242", "4243", "4246", "4247", "4248", "4250", "4252", "4253", "4254", "4257", "4261", "4262", "4263", "4265", "4266", "4337", "4366", "4449", "4456", "4472", "4485", "4505", "4506", "4507", "4840", "4863", "4901", "5023", "5050", "5057", "5070", "5151", "5207", "5209", "5274", "5306", "5800", "5842", "5843", "5913", "5943", "5996", "6103", "6379", "6393", "6412", "6435", ...]` (and more)
+    - **canonicalBrandName**: `(NoneType)`
+      - *Presence: 38.0%*
+    - **canonicalCategory**: `(str)`
+      - *Presence: 38.0%*
+      - *Unique Values:* `["Accessories", "Badder", "Balms", "Budder", "Capsules", "Concentrate", "Crumble", "Distillate", "Electronics", "Grinders", "Hash", "Kief", "Liquids", "Live Resin", "Lotions", "Other Topicals", "Patches", "Pills", "RSO", "Rosin", "Sand", "Sauce", "Shake", "Shatter", "Storage", "Sugar", "Tier 1 Flower", "Tinctures", "Troches", "Vape - Cartridge", "Vape - Disposable", "Vape - Live Resin Cartridge", "Vape - Live Resin Disposable", "Vape - Live Rosin Cartridge", "Vape - Live Rosin Disposable", "Wax"]`
+    - **canonicalCategoryId**: `(str)`
+      - *Presence: 38.0%*
+      - *Unique Values:* `["1821438", "1821440", "1821441", "1821443", "1821444", "1821448", "1821449", "1821450", "1821451", "1821453", "1821454", "1821455", "1821456", "1821457", "1821458", "1821459", "1821460", "1821463", "1821466", "1821467", "1821469", "1821470", "1821471", "1821472", "1821476", "1821481", "1821518", "1821519", "1821695", "1821696", "1821708", "1821709", "1822450", "1822451", "1822452", "1822453"]`
+    - **canonicalEffectivePotencyMg**: `(float, int)`
+      - *Presence: 38.0%*
+      - *Numeric Range:* `[0 - 1765.2]`
+    - **canonicalID**: `(str)`
+      - *Presence: 38.0%*
+      - *Unique Values (sample):* `["491208", "491221", "493872", "500262", "501240", "502552", "529998", "532199", "534744", "535447", "537590", "550948", "554728", "556197", "559902", "561416", "584201", "585266", "585267", "585690", "586346", "588052", "594425", "595288", "596105", "596123", "596410", "600991", "600994", "601417", "601418", "601419", "602168", "602634", "604018", "604201", "607151", "607152", "617687", "619550", "620360", "620362", "620363", "620366", "621240", "621511", "621514", "622490", "622539", "622655", ...]` (and more)
+    - **canonicalImgUrl**: `(str)`
+      - *Presence: 38.0%*
+    - **canonicalLabResultUrl**: `(NoneType)`
+      - *Presence: 38.0%*
+    - **canonicalName**: `(str)`
+      - *Presence: 38.0%*
+      - *Unique Values (sample):* `["1:1 Balm (500mg)", "Ah Pul T", "Animal Face", "BananaConda Cartridge", "Banoreoz", "Banoreoz Small Flower", "Berry Troches 100mg | 2 Pack", "Berry Troches 10mg | 10 Pack", "Berry Troches 10mg | 2 Pack", "Berry Troches 50mg | 10 Pack", "Berry Troches 50mg | 2 Pack", "Biscotti Pie #2 Live Rosin", "Chaos Kush", "Chem Bruleez", "Chem Don Live Resin Cartridge", "Chill - Concord Syrup (200mg)", "Chill Syrup | Unflavored", "Clem Kush Disposable Pen", "Dark Matter", "Depth Charge", "Fire OG Live Resin Cartridge", "GARLIC CKIES", "Garlic Thunder Smalls", "Gasberry", "Gelato 2.0", "Golden Goat", "Hindu GDP Live Rosin", "LAYER CKE Mixed Buds", "LCP", "Lemon G Sherb", "Modified Jet", "Mountain Apple", "Nine Lions #7 Live Rosin", "Ogre Kush", "Oishii Live Rosin", "PK Crasher", "Permanent Marker", "Rainbow Belts 3.0 Live Rosin", "Rainbow Beltz", "Rescue 3:1 Balm (120mg)", "Rescue THC Lotion (200mg)", "Scarlet Fire #7", "Seahorse PRO Plus", "Slow N Sweet", "Sticky Glue Live Rosin", "THC Roll-On Gel (300mg)", "Too Cool", "Unscented THC Lotion (300mg)", "WC Watermelon Z", "Wookie Burger", ...]` (and more)
+    - **canonicalPackageId**: `(str)`
+      - *Presence: 38.0%*
+      - *Unique Values (sample):* `["00549", "198715110043", "198715520866", "DSXH10M5LV000010", "DSXH11T000000042", "DSXH30M000000011", "FX0D100000000002", "FX0D11TWDG000004", "FX0DTHCQ5J000002", "JWYCMODSFD000001", "JWYCROG3DC000001", "KGSBMDA0IJ000004", "KGSBMDA5ME000004", "KGSBMDA8GR000002", "KGSBMDABV3000002", "KGSBMDACQ3000004", "KGSBMDAFJ5000001", "KGSBMDAH3R000004", "KGSBMDAH7O000004", "KGSBMDAL5I000008", "KGSBMDAN3C000006", "KGSBMDAO9A000005", "KGSBMDASH3000016", "KGSBMDATGR000018", "KGSBMDAVCL000001", "KGSBMDAYU5000001", "KGSBMDAZO2000001", "KGSBMDAZOD000002", "L7UQBISVDC000003", "L7UQSTITV1000009", "L7UQSUPFWZ000032", "MHPMWOOFDO000012", "O5FCTOOUGK000003", "OF4CGRALNI000004", "OF4CGRAXV3000005", "PACR01-D21-2101.IN8U3WI", "UCETCRE4D0000051", "UCETCREVPM000030", "UCETCREW8P000270", "UCETCREWIW000112", "UCETSUPAAD000038", "UCETSUPTOW000002", "X3JLPRIIJ2000001", "XWDTDRS1KC000132", "XWDTDRS5TW000214", "XWDTDRSFOJ000085", "XWDTGTIFSQ000030", "XWDTGTIIE6000004", "XWDTGTIR4M000047", "XWDTGTIUGG000005", ...]` (and more)
+    - **canonicalProductTags**: `(list)`
+      - *Presence: 38.0%*
+      - **tagId**: `(str)`
+        - *Presence: 8.0%*
+        - *Unique Values:* `["1547", "1648"]`
+    - **canonicalSKU**: `(str)`
+      - *Presence: 38.0%*
+      - *Unique Values (sample):* `["00843567", "04274612", "04282604", "05601154", "06686327", "07273829", "08701162", "09994392", "18622577", "22233908", "22655512", "24351854", "25393515", "27985742", "29620146", "30721583", "31734675", "37782486", "40625218", "43269340", "45495932", "46947904", "47074248", "52059850", "52069506", "54626139", "55382615", "62342989", "64102237", "64740001", "65107572", "67109881", "70732635", "74782238", "76384018", "77387562", "80215668", "83098611", "83402439", "88800845", "89102003", "89643993", "89732891", "90538828", "91463803", "91661219", "92194574", "95377689", "97222483", "97415636", ...]` (and more)
+    - **canonicalStrainId**: `(NoneType, str)`
+      - *Presence: 38.0%*
+      - *Unique Values:* `["59399", "62922", "62923", "62924", "62926"]`
+    - **canonicalVendorId**: `(NoneType, str)`
+      - *Presence: 38.0%*
+      - *Unique Values:* `["10003", "10010", "10013", "10021", "10024", "10029", "10042", "10044", "10046", "10047", "10236", "10263", "10288", "10289", "10321", "10322", "10330", "10356", "10361", "10404", "10704", "10708", "10956", "9989", "9990", "9991", "9992", "9993", "9994", "9997", "9998"]`
+    - **kioskQuantityAvailable**: `(int)`
+      - *Presence: 38.0%*
+      - *Numeric Range:* `[1 - 25]`
+    - **medPrice**: `(NoneType)`
+      - *Presence: 38.0%*
+    - **option**: `(str)`
+      - *Presence: 38.0%*
+      - *Unique Values:* `[".15g", ".1g", ".25g", ".2g", ".3g", ".4g", ".5g", ".6g", "0.008g", "0.025g", "0.02g", "0.03g", "0.05g", "0.075g", "0.12g", "0.21g", "0.375g", "1.2g", "14g", "1g", "28.3g", "28g", "2g", "3.5g", "3g", "4.2g", "4g", "7g", "8g", "N/A"]`
+    - **packageQuantity**: `(NoneType)`
+      - *Presence: 38.0%*
+    - **price**: `(int)`
+      - *Presence: 38.0%*
+      - *Numeric Range:* `[2 - 155]`
+    - **quantity**: `(int)`
+      - *Presence: 38.0%*
+      - *Numeric Range:* `[1 - 25]`
+    - **quantityAvailable**: `(int)`
+      - *Presence: 38.0%*
+      - *Numeric Range:* `[1 - 25]`
+    - **recEquivalent**: `(NoneType)`
+      - *Presence: 38.0%*
+    - **recPrice**: `(int)`
+      - *Presence: 38.0%*
+      - *Numeric Range:* `[2 - 155]`
+    - **standardEquivalent**: `(NoneType)`
+      - *Presence: 38.0%*
+  - **integrationID**: `(str)`
+    - *Presence: 38.0%*
+    - *Unique Values:* `["6850b53253a262b4ca8380c4", "6850b54e54975effaaf2cd4a"]`
+- **Prices**: `(list)`
+  - *Presence: 100.0%*
+- **Status**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["Active", "Inactive"]`
+- **StoreName**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["Ascend (Cranberry)", "Ascend (Monaca)", "Ethos (Harmar)", "Ethos (North Fayette)", "Ethos (Pleasant Hills)"]`
+- **THC**: `(NoneType)`
+  - *Presence: 100.0%*
+- **THCContent**: `(NoneType, dict)`
+  - *Presence: 100.0%*
+  - **range**: `(NoneType, list)`
+    - *Presence: 97.3%*
+  - **unit**: `(str)`
+    - *Presence: 97.3%*
+    - *Unique Values:* `["MILLIGRAMS", "MILLIGRAMS_PER_GRAM", "PERCENTAGE"]`
+- **bottleDepositTaxCents**: `(NoneType)`
+  - *Presence: 100.0%*
+- **brand**: `(NoneType, dict)`
+  - *Presence: 100.0%*
+  - **description**: `(str)`
+    - *Presence: 99.6%*
+    - *Unique Values:* `[""]`
+  - **id**: `(str)`
+    - *Presence: 99.6%*
+  - **imageUrl**: `(NoneType, str)`
+    - *Presence: 99.6%*
+    - *Unique Values:* `[""]`
+  - **name**: `(str)`
+    - *Presence: 99.6%*
+    - *Unique Values (sample):* `["&Shine", "(the) Essence", "Belushi's Farm", "Bits", "Blazy Susan", "Calypso", "Cresco ", "Double Bear", "Eleven", "Ethos", "FarmaceuticalRX", "FloraCal Farms", "Garcia Hand Picked", "Good Green", "Good News", "Grassroots", "Incensored", "Insa", "Kind Tree", "LEVEL", "Legend", "Leiffa", "Lookah", "LuvBuds", "Modern Flower", "Moxie", "Natural Selections", "Old Pal", "Organic Remedies ", "Penn Health Group", "Prime Wellness", "Pulsar", "RAW", "RYTHM", "Randy's", "Remedi", "Resolute Remedies", "Savvy", "Select", "Select X", "Simply Herb", "Standard Farms", "Stashlogix", "Strane", "Supply", "The Lab", "Valhalla", "Verano", "Wonder Wellness Co.", "inc(ensored)", ...]` (and more)
+  - **parentBrandId**: `(NoneType, str)`
+    - *Presence: 99.6%*
+- **brandId**: `(NoneType, str)`
+  - *Presence: 100.0%*
+- **brandLogo**: `(NoneType, str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `[""]`
+- **brandName**: `(NoneType, str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["&Shine", "(the) Essence", "Belushi's Farm", "Bits", "Blazy Susan", "Calypso", "Cresco ", "Double Bear", "Eleven", "Ethos", "FarmaceuticalRX", "FloraCal Farms", "Garcia Hand Picked", "Good Green", "Good News", "Grassroots", "Incensored", "Insa", "Kind Tree", "LEVEL", "Legend", "Leiffa", "Lookah", "LuvBuds", "Modern Flower", "Moxie", "Natural Selections", "Old Pal", "Organic Remedies ", "Penn Health Group", "Prime Wellness", "Pulsar", "RAW", "RYTHM", "Randy's", "Remedi", "Resolute Remedies", "Savvy", "Select", "Select X", "Simply Herb", "Standard Farms", "Stashlogix", "Strane", "Supply", "The Lab", "Valhalla", "Verano", "Wonder Wellness Co.", "inc(ensored)", ...]` (and more)
+- **cName**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["6-bristle-pipe-cleaners-44pk", "6-soft-pipe-cleaners-44pk", "alma-case-black", "alma-case-black-with-lock", "animal-mntz", "black-2-brush", "black-7-brush-set", "black-label-cleaner-12oz-", "black-maple-badder-3g", "california", "cherry-25mg-troche-10pk", "citrus-daydream-rso-1000mg", "dart-battery", "dotsero-dugout-case-black", "forza-live-sugar-1g", "grape-10mg-troche-10pk-17176", "grape-wepa-3-7g", "grip-concentrate-vaporizer", "grip-replacement-coil", "lemon-yuzu-50mg-troche-10pk", "loov-multi-purpose-vaporizer", "loov-replacement-coils-5pk", "loov-replacement-glass", "mango-10mg-troche-10pk", "mango-50mg-troche-10pk-35386", "mixed-berry-10mg-troche-10pk", "og-bloobs-44303", "ogkb-2-1", "orange-10mg-troche-10pk", "orange-label-cleaner-12oz-", "permanent-marker", "pink-lady-live-sugar-1g", "pura-vida-live-sugar-1g", "res-tips-cotton-swabs-100ct", "serving-tray-7x5-", "sheep-faced-crumble-2g", "silverton-medium-case-orange", "silverton-small-case-black", "silverton-small-case-tan", "sour-gak", "strawberry-2-5mg-troche-20pk", "super-lemon-haze-6", "tri-color-2-brush", "tri-color-7-brush-set", "unicorn-mini-assorted-colors", "volume-knob-grinder-63mm", "watermelon-40mg-troche-10pk", "white-grape-10mg-troche-10pk", "wizard-spray-1", "zsunami-22", ...]` (and more)
+- **cannabinoidsV2**: `(NoneType, list)`
+  - *Presence: 100.0%*
+  - **cannabinoid**: `(dict)`
+    - *Presence: 434.0%*
+    - **description**: `(str)`
+      - *Presence: 434.0%*
+    - **name**: `(str)`
+      - *Presence: 434.0%*
+      - *Unique Values:* `["CBC (Cannabichromene)", "CBD (Cannabidiol)", "CBDA (Cannabidiolic acid)", "CBDV (Cannabidivarin)", "CBG (Cannabigerol)", "CBGA (Cannabigerolic acid)", "CBN (Cannabinol)", "THCV (Tetrahydrocannabivarin)"]`
+  - **unit**: `(str)`
+    - *Presence: 434.0%*
+    - *Unique Values:* `["MILLIGRAMS", "MILLIGRAMS_PER_GRAM", "PERCENTAGE"]`
+  - **value**: `(float, int)`
+    - *Presence: 434.0%*
+    - *Numeric Range:* `[0 - 1646.6]`
+- **certificateOfAnalysisEnabled**: `(bool)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[False - True]`
+- **collectionCardBadge**: `(NoneType, dict)`
+  - *Presence: 100.0%*
+  - **color**: `(str)`
+    - *Presence: 24.0%*
+    - *Unique Values:* `["#004aaa", "#0b99e6", "#39ab03", "#5710a3", "#7a68a0", "#a17e28", "#b06896", "#c0c100", "#c58ebc", "#ec9017", "#f35000"]`
+  - **title**: `(str)`
+    - *Presence: 24.0%*
+    - *Unique Values:* `["Fresh Finds at Ascend", "Limonene - Mood Elevation", "Limonene - Uplifting", "Myrcene - Sedation/Relaxation", "Pinene - Alertness", "Ratio Products", "Terpinolene - Energy"]`
+- **comingSoon**: `(NoneType, bool)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[False - False]`
+- **createdAt**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["1655396041956", "1699903816141", "1703092127941", "1703627526269", "1708099050119", "1708797676078", "1712511218804", "1714436068981", "1715291969003", "1721750058768", "1721852963941", "1725484755827", "1729017875210", "1731458535076", "1732746324013", "1733260067943", "1733677350351", "1734539530029", "1736010076657", "1736182851675", "1736196761777", "1740513721653", "1740514244151", "1740514368281", "1744215938192", "1750166987025", "1750167044002", "1750714502713", "1750772356986", "1751981591248", "1752586621746", "1753210597000", "1754590086844", "1756252502719", "1756314867476", "1756492070455", "1756494051487", "1756494213090", "1756494658074", "1756500410683", "1756657553808", "1757524683689", "1757546330117", "1757612755346", "1757613033675", "1758029485899", "1758030118081", "1758654722630", "1758824018250", "1761317356314", ...]` (and more)
+- **description**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["", "
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.
+", "
+
+Batch: OCFR4250528H
+", "
+Batch: CHG251007-7G
+", "250815HC2
+", "250904HG
+", "BATCH. CRS250804F
+", "BATCH: PR.251010G
+", "BATCH:250902HS
+", "Batch:  JUPL250722H
+", "Batch:  OLAW250407H3
+", "Batch:  PR.250821F
+", "Batch:  PR.250910B
+", "Batch:  PR.250922G
+", "Batch: 1.D9.HK.251020
+", "Batch: 250619HA
+", "Batch: 250812WBDV0001
+", "Batch: 250904HP
+", "Batch: 250912HT
+", "Batch: 250920ClemDV0031
+", "Batch: 250920SwFuDV0005
+", "Batch: 250922ChJuDV0005
+", "Batch: 250925HA
+", "Batch: 251010DeStDV0001
+", "Batch: CHG6250828H
+", "Batch: CHIM251007-7G
+", "Batch: F.JuGa4.250616H
+", "Batch: GARL250819H1
+", "Batch: OCFR4250812H5
+", "Batch: PR.241113B
+", "Batch: PR.250314M
+", "Batch: PR.250319C
+", "Batch: PR.250731B
+", "Batch: PR.250804AB
+", "Batch: PR.250911H
+", "Batch: PR.250926Z
+", "Batch: PR.251002K
+", "Batch: PR.251009D
+", "Batch: PR.251015C
+", "Batch: PR.251016C
+", "Batch: PR.251016I
+", "Batch: PR.251022
+", "Batch: SL.JarGreenSm.6.17.25
+", "Batch: VZ250811F
+", "Batch:PR.251014D
+", "JOMO250930H2
+", "PR.250717AD
+", "PR.250720C
+", "PR.250729AL
+", "PR.250915C
+", ...]` (and more)
+- **descriptionHtml**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["", "<p>250815HC2</p>", "<p>250904HG</p>", "<p>B250916BMSH</p>", "<p>BATCH. CRS250804F</p>", "<p>BATCH: PR.251010G</p>", "<p>BATCH:250902HS</p>", "<p>Batch:  JUPL250722H</p>", "<p>Batch:  OLAW250407H3</p>", "<p>Batch:  PR.250821F</p>", "<p>Batch:  PR.250910B</p>", "<p>Batch:  PR.250916F</p>", "<p>Batch:  PR.250922G</p>", "<p>Batch: 1.D9.HK.251020</p>", "<p>Batch: 250619HA</p>", "<p>Batch: 250812WBDV0001</p>", "<p>Batch: 250904HP</p>", "<p>Batch: 250912HT</p>", "<p>Batch: CHG6250828H</p>", "<p>Batch: CHIM251007-7G</p>", "<p>Batch: F.JuGa4.250616H</p>", "<p>Batch: GARL250819H1</p>", "<p>Batch: LO250915F1</p>", "<p>Batch: OCFR4250812H5</p>", "<p>Batch: PR.241113B</p>", "<p>Batch: PR.250314M</p>", "<p>Batch: PR.250319C</p>", "<p>Batch: PR.250731B</p>", "<p>Batch: PR.250804AB</p>", "<p>Batch: PR.250909C</p>", "<p>Batch: PR.250911H</p>", "<p>Batch: PR.250918P</p>", "<p>Batch: PR.250926Z</p>", "<p>Batch: PR.251002K</p>", "<p>Batch: PR.251015C</p>", "<p>Batch: PR.251016C</p>", "<p>Batch: PR.251016I</p>", "<p>Batch: PR.251016O</p>", "<p>Batch: PR.251022</p>", "<p>Batch: RCRB250626A-5C</p>", "<p>Batch: VZ250811F</p>", "<p>JOMO250930H2</p>", "<p>PR.250417A</p>", "<p>PR.250717AD</p>", "<p>PR.250720C</p>", "<p>PR.250729AL</p>", "<p>PR.250911D</p>", "<p>PR.250915C</p>", "<p>PR.251013D</p>", "<p>﻿PR.250918J</p>", ...]` (and more)
+- **duplicatedProductId**: `(NoneType, str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["5f3434bf6584a7012f8b17fa", "606741463ae740f3a7111645", "60ad9077b2b91a00c944fccc", "60ad9171365ec500cfda6f33", "61b926b8499f4000ae8b377f", "620c157ce3366e4cc70a7812", "634d9e94bb5e0500d5e28794", "65a16e194f7e980048bc5f8a", "662055e94f01d9006c9e1489", "66208ada4f01d9004e9ddc97", "66208bfd21495f006c0f108a", "66208c807da77d00824e1f7c", "6633f4bc3c82470082603b95", "6655abbd9440c0005d03f25f", "67b8cf3195e367004a9a3976", "683a1eb36619e00007cce22f", "683a208bb004f10007c764cd", "683a20fb6619e00007cce786", "683a21026619e00007cce87b", "683a41086619e00007cd405d", "683a410a6619e00007cd4076", "683a42fa086b34000786058a", "683a43bc086b3400078607d7", "683a43c5086b34000786085b", "683a44126619e00007cd477b", "6903a4f166154f00a671379b"]`
+- **effects**: `(dict)`
+  - *Presence: 100.0%*
+  - **Calm**: `(int)`
+    - *Presence: 15.9%*
+    - *Numeric Range:* `[9 - 9]`
+  - **Creative**: `(int)`
+    - *Presence: 6.9%*
+    - *Numeric Range:* `[8 - 8]`
+  - **Energetic**: `(int)`
+    - *Presence: 22.8%*
+    - *Numeric Range:* `[5 - 9]`
+  - **Euphoric**: `(int)`
+    - *Presence: 8.2%*
+    - *Numeric Range:* `[8 - 8]`
+  - **Focused**: `(int)`
+    - *Presence: 6.9%*
+    - *Numeric Range:* `[8 - 8]`
+  - **Happy**: `(int)`
+    - *Presence: 31.0%*
+    - *Numeric Range:* `[8 - 9]`
+  - **Inspired**: `(int)`
+    - *Presence: 6.9%*
+    - *Numeric Range:* `[8 - 8]`
+  - **Pain-Relief**: `(int)`
+    - *Presence: 24.1%*
+    - *Numeric Range:* `[5 - 7]`
+  - **Relaxed**: `(int)`
+    - *Presence: 24.1%*
+    - *Numeric Range:* `[6 - 9]`
+  - **Sleepy**: `(int)`
+    - *Presence: 8.2%*
+    - *Numeric Range:* `[8 - 8]`
+  - **calm**: `(int)`
+    - *Presence: 30.8%*
+    - *Numeric Range:* `[0 - 9]`
+  - **clearMind**: `(int)`
+    - *Presence: 1.6%*
+    - *Numeric Range:* `[0 - 9]`
+  - **creative**: `(int)`
+    - *Presence: 14.3%*
+    - *Numeric Range:* `[0 - 8]`
+  - **energetic**: `(int)`
+    - *Presence: 43.2%*
+    - *Numeric Range:* `[0 - 9]`
+  - **euphoric**: `(int)`
+    - *Presence: 13.7%*
+    - *Numeric Range:* `[8 - 8]`
+  - **focused**: `(int)`
+    - *Presence: 14.3%*
+    - *Numeric Range:* `[0 - 8]`
+  - **happy**: `(int)`
+    - *Presence: 58.8%*
+    - *Numeric Range:* `[0 - 9]`
+  - **inspired**: `(int)`
+    - *Presence: 14.2%*
+    - *Numeric Range:* `[0 - 8]`
+  - **painRelief**: `(int)`
+    - *Presence: 1.5%*
+    - *Numeric Range:* `[5 - 7]`
+  - **relaxed**: `(int)`
+    - *Presence: 44.9%*
+    - *Numeric Range:* `[0 - 9]`
+  - **sleepy**: `(int)`
+    - *Presence: 14.3%*
+    - *Numeric Range:* `[0 - 8]`
+  - **uplifted**: `(int)`
+    - *Presence: 0.4%*
+    - *Numeric Range:* `[0 - 5]`
+- **enterpriseProductId**: `(NoneType, str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["68511e5d3c644a0007b95875", "68511e5d3c644a0007b95884", "68512950b0c7b400075e7462", "68512952b0c7b400075e74cb", "6851295db0c7b400075e7677", "6851295eb0c7b400075e76d4", "6851295eb0c7b400075e76d7", "6851295eb0c7b400075e771c", "68512960748690000799bf67", "68512961b0c7b400075e7857", "68512961b0c7b400075e7866", "68512963b0c7b400075e7917", "68512963b0c7b400075e7932", "68512963b0c7b400075e7944", "68512964b0c7b400075e79a4", "68512967748690000799c1ba", "68512967748690000799c1c9", "68512967b0c7b400075e7ae2", "6851296d748690000799c35f", "68512976748690000799c5a3", "68512c29748690000799e22c", "68512c2b748690000799e293", "68512c9c472b210007098730", "6853459df8a1f100076878d1", "685af330d328e30007256ae0", "685c6eff03ef9a00074499cb", "686d8a9471db1e0007632e85", "686e70c8bd6ba200073c7032", "6870140ed41f9700074c3917", "687ac294d8098a000721d144", "688927042d1573000739434b", "688a94d42ec76400070f64b3", "68927cbf4afd9600076f3d91", "6893c128b5d50100073d0771", "6895209918f93200074f005a", "689b6dd8793f6b00075314db", "68b8aa516ea1640007bbaaf2", "68bb3e6860a6940007653a6d", "68bf3e2ac4f9ba0007b8e408", "68d5476a423c680007004321", "68e68078318cc6000751493c", "68e68078318cc60007514941", "68e68078318cc60007514949", "68e68078318cc60007514953", "68e6a1a0ea3f050007976f35", "68e97e0f5016ca0007e6d829", "68e97e0f5016ca0007e6d835", "68f7d671a88ed6000781cb38", "68f9340dee018000073786ed", "68f95d262cddf10007815c3f", ...]` (and more)
+- **featured**: `(NoneType, dict)`
+  - *Presence: 100.0%*
+  - **current**: `(NoneType, bool)`
+    - *Presence: 7.5%*
+    - *Numeric Range:* `[True - True]`
+  - **endTime**: `(NoneType, str)`
+    - *Presence: 7.5%*
+    - *Unique Values:* `["1756392467543", "1756491884081", "1757341637276", "1757347478634", "1757947459229", "1758556229628", "1761331058201", "1761575852233", "1761598179946", "1762528881831", "1762556620218", "1762617503116", "1762645132680"]`
+  - **startTime**: `(str)`
+    - *Presence: 7.5%*
+    - *Unique Values (sample):* `["1758225097638", "1759674328365", "1759680805399", "1759696117777", "1760565526567", "1760624210019", "1761052959444", "1761078973248", "1761331479449", "1761331600794", "1761405376664", "1761436115221", "1761491898745", "1761492002252", "1761583265383", "1761585090038", "1761683977182", "1761835637313", "1761835845309", "1761848705690", "1761860879327", "1761921133742", "1762031659801", "1762365830430", "1762368444345", "1762448191292", "1762451011820", "1762551166740", "1762552000151", "1762555193631", "1762614607232", "1762616086531", "1762616198785", "1762616224612", "1762618191516", "1762618212048", "1762618226972", "1762618484373", "1762625682141", "1762625711617", "1762625832433", "1762627253726", "1762637918886", "1762638115459", "1762638889952", "1762638984160", "1762639023819", "1762639183372", "1762639350311", "1762641631440", ...]` (and more)
+- **id**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["62ab56c9ca8d92009d6ebc9a", "65527948dde6bc0009d7e59b", "65831f9f0a3714000afc3155", "658b4b06b6875700095791c7", "65cf85ea9ef2a9000998a14f", "65da2eec2ee121000976b21c", "6612d8f26e13f7273e03b095", "663037e41fff815cf4656b8d", "663d4741919651a5598d13bf", "669fd22a84d3e8eb99ae804c", "66a16423d4d09055349577e7", "66d8ced395ab0b43df5d1400", "670eb8135568a5fa3768f18c", "6733f5e71531cb3e6bf8008c", "67479c54f2a1697c6ec23fda", "674f73236e9f7353245ff2fb", "6755d1268776c3cedc28b777", "6762f90afd9c434dfdf69aa2", "6779695ce75d1e6eeb7691f4", "677c0c43ac4e51b29e519426", "677c4299f670a4307af12ed5", "67be21b957eec4d803493859", "67be23c498cde80a28f5486a", "67be24408ce05c3841ce07e4", "67f69f8240b4de1b30e30b6c", "68516dcb63cdad50e774345e", "68516e040037a877c950c2bd", "6859c886e0a8447d132e4bdb", "685aaa848aff5c7e86d5a018", "686d1e1789382479f08d38ed", "6876597d22e0b735957aff03", "687fdee5cfd02f0fe3ad4479", "6894eb86ed0e9bfa22253d99", "68ae4956dae6c537d96ef4a0", "68af3cf3bdf3ad44be372734", "68b1f1263572dc5b707d6b54", "68b1f8e33f9dac6631422d8f", "68b1f985aec04509e3b37518", "68b1fb422cf7367ca48daf0b", "68b211ba40031c6963b787e6", "68b477919a7d5c903adb8955", "68c1b2cb4c659b9cdc562740", "68c2075a65e7d64a0c23ff7c", "68c30ad3d8d96ed2def94da5", "68c30be93eee8105efb41808", "68c966ad2954af998cca1ad7", "68c9692673640e5340eba7a3", "68d2f1021d61fada63e6f386", "68d5865231866a662ab4c256", "68fb91ecd668a031e4d29a8d", ...]` (and more)
+- **images**: `(list)`
+  - *Presence: 100.0%*
+  - **active**: `(bool)`
+    - *Presence: 103.8%*
+    - *Numeric Range:* `[False - True]`
+  - **description**: `(NoneType, str)`
+    - *Presence: 103.8%*
+    - *Unique Values:* `[""]`
+  - **url**: `(str)`
+    - *Presence: 103.8%*
+- **isBelowKioskThreshold**: `(NoneType, bool)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[False - False]`
+- **isBelowThreshold**: `(NoneType, bool)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[False - False]`
+- **libraryProductId**: `(NoneType, str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["5e98da09b71de100bb87b7f1", "5f3434bf6584a7012f8b17fa", "601b345f0b358800cf7bb59f", "601b38bf116d6300b483e49e", "601b392be954b600d3c22dcc", "60ba63df7900df00bb2bcaaa", "61b392240dbb400099c3db43", "61b7c9ec83fc53007b87ef67", "61b926b8499f4000ae8b377f", "620c157ce3366e4cc70a7812", "620d7d8efd724500c9437347", "62eda9c67cd563696e1747f5", "634d9e94bb5e0500d5e28794", "63b3ff5ffefe9500cfa1c59e", "63ed29e9f4d5ca004fc05ac9", "65a16e194f7e980048bc5f8a", "65cfc2f75771040078333074", "662055e94f01d9006c9e1489", "6655abbd9440c0005d03f25f", "66d9b2ca65eac700538bd6c5", "6797d1328220f8000715f03c", "67b774fd637d2b0079af09b0", "67b8cf3195e367004a9a3976", "67fdc526d3d0f50007435a00", "6807f627430cdc00078b1106", "6807f627430cdc00078b1110", "683a1eb56619e00007cce243", "683a20fb6619e00007cce786", "683a21026619e00007cce87b", "683a41086619e00007cd405d", "683a44126619e00007cd477b", "683a488f086b340007861672", "6890c527072e28006107eb62", "68926a28fd33ac005e2e67ee", "689a03bfa3c44a0091d71ffc", "68e6ad0f254adc006645c570", "68e9369bc25d9600af7519e2", "68f272b778ed5a00912ac55b", "68f7bf309c016f00078bb1ee", "68f7bf439c016f00078bb350", "68f7bf4b9c016f00078bb3e8", "68f7bf5b9c016f00078bb527", "68fbb152d8c5a000071a18a1", "68fbce437dcd410007d2222b", "6903a4f166154f00a671379b", "690527e23b7e570007cdfa98", "690527e33b7e570007cdfaa0", "690527e33b7e570007cdfaa4", "QrvjtXZdKsMr4TCXj", "ysq5szYAB5chbPmnh", ...]` (and more)
+- **libraryProductScore**: `(NoneType, float, int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[2.2875848 - 100]`
+- **limitsPerCustomer**: `(NoneType, list)`
+  - *Presence: 100.0%*
+  - **key**: `(str)`
+    - *Presence: 0.2%*
+    - *Unique Values:* `["1/4oz", "1/8oz", "1g"]`
+  - **value**: `(str)`
+    - *Presence: 0.2%*
+    - *Unique Values:* `["Unlimited"]`
+- **manualInventory**: `(NoneType, list)`
+  - *Presence: 100.0%*
+  - **inventory**: `(int)`
+    - *Presence: 62.0%*
+    - *Numeric Range:* `[0 - 169]`
+  - **option**: `(str)`
+    - *Presence: 62.0%*
+    - *Unique Values:* `[".3g", ".5g", "1/2oz", "1/4oz", "1/8oz", "1g", "1gC", "1oz", "2g", "2gC", "3.5gC", "3gC", "N/A"]`
+- **measurements**: `(NoneType, dict)`
+  - *Presence: 100.0%*
+  - **netWeight**: `(dict)`
+    - *Presence: 38.0%*
+    - **unit**: `(str)`
+      - *Presence: 38.0%*
+      - *Unique Values:* `["MILLIGRAMS"]`
+    - **values**: `(list)`
+      - *Presence: 38.0%*
+  - **volume**: `(NoneType)`
+    - *Presence: 38.0%*
+- **medicalOnly**: `(bool)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[False - True]`
+- **medicalPrices**: `(list)`
+  - *Presence: 100.0%*
+- **medicalSpecialPrices**: `(list)`
+  - *Presence: 100.0%*
+- **nonArmsLength**: `(NoneType)`
+  - *Presence: 100.0%*
+- **optionsBelowKioskThreshold**: `(list)`
+  - *Presence: 100.0%*
+- **optionsBelowThreshold**: `(list)`
+  - *Presence: 100.0%*
+- **pastCNames**: `(list)`
+  - *Presence: 100.0%*
+- **pricingTierData**: `(NoneType)`
+  - *Presence: 100.0%*
+- **rawOptions**: `(NoneType, list)`
+  - *Presence: 100.0%*
+- **recOnly**: `(NoneType, bool)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[False - False]`
+- **recPrices**: `(list)`
+  - *Presence: 100.0%*
+- **recSpecialPrices**: `(list)`
+  - *Presence: 100.0%*
+- **special**: `(NoneType, bool)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[True - True]`
+- **specialData**: `(NoneType, dict)`
+  - *Presence: 100.0%*
+  - **bogoSpecials**: `(NoneType, list)`
+    - *Presence: 70.6%*
+    - **applyRewardsToConditions**: `(NoneType)`
+      - *Presence: 9.3%*
+    - **bogoConditionLogicOperator**: `(str)`
+      - *Presence: 9.3%*
+      - *Unique Values:* `["and", "or"]`
+    - **bogoConditions**: `(list)`
+      - *Presence: 9.3%*
+      - **brandId**: `(NoneType, str)`
+        - *Presence: 9.1%*
+      - **brandIds**: `(NoneType, list)`
+        - *Presence: 9.1%*
+      - **brandName**: `(NoneType, str)`
+        - *Presence: 9.1%*
+        - *Unique Values:* `["Eleven", "Natural Selections"]`
+      - **brandNames**: `(NoneType)`
+        - *Presence: 9.1%*
+      - **categoryIds**: `(NoneType, list)`
+        - *Presence: 9.1%*
+      - **categoryName**: `(NoneType, str)`
+        - *Presence: 9.1%*
+        - *Unique Values:* `["disposables", "live-resin-disposable"]`
+      - **categoryNames**: `(NoneType)`
+        - *Presence: 9.1%*
+      - **enterpriseProductId**: `(NoneType)`
+        - *Presence: 9.1%*
+      - **enterpriseProductIds**: `(NoneType, list)`
+        - *Presence: 9.1%*
+      - **exclusions**: `(NoneType)`
+        - *Presence: 9.1%*
+      - **inventoryTags**: `(NoneType)`
+        - *Presence: 9.1%*
+      - **productGroup**: `(str)`
+        - *Presence: 9.1%*
+        - *Unique Values:* `["brands", "categories"]`
+      - **productId**: `(NoneType)`
+        - *Presence: 9.1%*
+      - **productIds**: `(NoneType)`
+        - *Presence: 9.1%*
+      - **productTags**: `(NoneType)`
+        - *Presence: 9.1%*
+      - **quantity**: `(NoneType, int)`
+        - *Presence: 9.1%*
+        - *Numeric Range:* `[1 - 1]`
+      - **requiresSingleSku**: `(NoneType, bool)`
+        - *Presence: 9.1%*
+        - *Numeric Range:* `[False - False]`
+      - **selectedCategoriesAndSubcategories**: `(NoneType, list)`
+        - *Presence: 9.1%*
+      - **strainIds**: `(NoneType)`
+        - *Presence: 9.1%*
+      - **subcategoryIds**: `(NoneType)`
+        - *Presence: 9.1%*
+      - **subcategoryNames**: `(NoneType)`
+        - *Presence: 9.1%*
+      - **totalQuantity**: `(NoneType, dict)`
+        - *Presence: 9.1%*
+        - **enabled**: `(bool)`
+          - *Presence: 6.9%*
+          - *Numeric Range:* `[True - True]`
+        - **maxQuantity**: `(NoneType)`
+          - *Presence: 6.9%*
+        - **quantity**: `(int)`
+          - *Presence: 6.9%*
+          - *Numeric Range:* `[1 - 2]`
+        - **quantityOperator**: `(str)`
+          - *Presence: 6.9%*
+          - *Unique Values:* `["greaterThanEqualTo"]`
+      - **totalSpend**: `(NoneType)`
+        - *Presence: 9.1%*
+      - **totalWeight**: `(NoneType)`
+        - *Presence: 9.1%*
+      - **vendorIds**: `(NoneType)`
+        - *Presence: 9.1%*
+      - **weight**: `(NoneType, str)`
+        - *Presence: 9.1%*
+        - *Unique Values:* `["Any Weight"]`
+      - **weightOperator**: `(NoneType, str)`
+        - *Presence: 9.1%*
+        - *Unique Values:* `["equalTo"]`
+      - **weights**: `(NoneType)`
+        - *Presence: 9.1%*
+    - **bogoRewardLogicOperator**: `(str)`
+      - *Presence: 9.3%*
+      - *Unique Values:* `["and", "or"]`
+    - **bogoRewards**: `(list)`
+      - *Presence: 9.3%*
+      - **applicationRules**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **brandId**: `(NoneType, str)`
+        - *Presence: 11.6%*
+        - *Unique Values:* `["Randy's"]`
+      - **brandIds**: `(NoneType, list)`
+        - *Presence: 11.6%*
+      - **brandName**: `(NoneType, str)`
+        - *Presence: 11.6%*
+        - *Unique Values:* `["Randy's"]`
+      - **brandNames**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **categoryIds**: `(NoneType, list)`
+        - *Presence: 11.6%*
+      - **categoryName**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **categoryNames**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **discountAmount**: `(NoneType, int)`
+        - *Presence: 11.6%*
+        - *Numeric Range:* `[20 - 30]`
+      - **discountType**: `(NoneType, str)`
+        - *Presence: 11.6%*
+        - *Unique Values:* `["percentDiscount"]`
+      - **dollarDiscount**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **enterpriseProductId**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **enterpriseProductIds**: `(NoneType, list)`
+        - *Presence: 11.6%*
+      - **exclusions**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **inventoryTags**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **percentDiscount**: `(NoneType, str)`
+        - *Presence: 11.6%*
+        - *Unique Values:* `["40.00"]`
+      - **productGroup**: `(str)`
+        - *Presence: 11.6%*
+        - *Unique Values:* `["categories", "individual"]`
+      - **productId**: `(NoneType, str)`
+        - *Presence: 11.6%*
+        - *Unique Values:* `["67b8bd4cf4b02f41a2cdf229"]`
+      - **productIds**: `(NoneType, list)`
+        - *Presence: 11.6%*
+      - **productTags**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **quantity**: `(NoneType, int)`
+        - *Presence: 11.6%*
+        - *Numeric Range:* `[1 - 1]`
+      - **requiresSingleSku**: `(NoneType, bool)`
+        - *Presence: 11.6%*
+        - *Numeric Range:* `[False - False]`
+      - **selectedCategoriesAndSubcategories**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **strainIds**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **subcategoryIds**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **subcategoryNames**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **targetPrice**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **totalQuantity**: `(NoneType, dict)`
+        - *Presence: 11.6%*
+        - **enabled**: `(bool)`
+          - *Presence: 8.2%*
+          - *Numeric Range:* `[True - True]`
+        - **maxQuantity**: `(NoneType, int)`
+          - *Presence: 8.2%*
+          - *Numeric Range:* `[10000 - 10000]`
+        - **quantity**: `(int)`
+          - *Presence: 8.2%*
+          - *Numeric Range:* `[1 - 3]`
+        - **quantityOperator**: `(str)`
+          - *Presence: 8.2%*
+          - *Unique Values:* `["between", "greaterThanEqualTo"]`
+      - **totalSpend**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **totalWeight**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **vendorIds**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **weight**: `(NoneType)`
+        - *Presence: 11.6%*
+      - **weightOperator**: `(NoneType, str)`
+        - *Presence: 11.6%*
+        - *Unique Values:* `["equalTo"]`
+      - **weights**: `(NoneType, list)`
+        - *Presence: 11.6%*
+    - **createdBy**: `(str)`
+      - *Presence: 9.3%*
+      - *Unique Values:* `["650390ed746d4f0009408c25", "ArmageddonDiscountSync"]`
+    - **directPOSProductIdMapping**: `(bool)`
+      - *Presence: 9.3%*
+      - *Numeric Range:* `[False - True]`
+    - **discountBehavior**: `(NoneType)`
+      - *Presence: 9.3%*
+    - **discountBundle**: `(NoneType)`
+      - *Presence: 9.3%*
+    - **discountPrecedence**: `(str)`
+      - *Presence: 9.3%*
+      - *Unique Values:* `["lowToHigh"]`
+    - **discountStacking**: `(bool)`
+      - *Presence: 9.3%*
+      - *Numeric Range:* `[False - True]`
+    - **discountToCart**: `(NoneType)`
+      - *Presence: 9.3%*
+    - **endStamp**: `(str)`
+      - *Presence: 9.3%*
+      - *Unique Values:* `["1762726200000", "1764543600000"]`
+    - **excludeConditionItemsFromRewards**: `(NoneType)`
+      - *Presence: 9.3%*
+    - **excludedProducts**: `(dict)`
+      - *Presence: 9.3%*
+      - **conditions**: `(NoneType)`
+        - *Presence: 9.3%*
+      - **rewards**: `(NoneType)`
+        - *Presence: 9.3%*
+    - **isRecurring**: `(NoneType)`
+      - *Presence: 9.3%*
+    - **itemsForAPrice**: `(NoneType)`
+      - *Presence: 9.3%*
+    - **menuType**: `(str)`
+      - *Presence: 9.3%*
+      - *Unique Values:* `["both", "medical"]`
+    - **minorVersion**: `(int)`
+      - *Presence: 9.3%*
+      - *Numeric Range:* `[0 - 0]`
+    - **nonStackingBehavior**: `(str)`
+      - *Presence: 9.3%*
+      - *Unique Values:* `["favorCustomer"]`
+    - **payByBankIncentiveEnabled**: `(NoneType)`
+      - *Presence: 9.3%*
+    - **paymentRestrictions**: `(NoneType)`
+      - *Presence: 9.3%*
+    - **qualifyingConditionOptions**: `(list)`
+      - *Presence: 9.3%*
+    - **qualifyingOptions**: `(list)`
+      - *Presence: 9.3%*
+    - **qualifyingRewardOptions**: `(list)`
+      - *Presence: 9.3%*
+    - **rawPOSWeightMapping**: `(bool)`
+      - *Presence: 9.3%*
+      - *Numeric Range:* `[False - True]`
+    - **recurringEndDate**: `(NoneType)`
+      - *Presence: 9.3%*
+    - **redemptionLimit**: `(NoneType, int)`
+      - *Presence: 9.3%*
+      - *Numeric Range:* `[10 - 10]`
+    - **settingsDerivedFrom**: `(str)`
+      - *Presence: 9.3%*
+      - *Unique Values:* `["dispensary", "special"]`
+    - **skipV4Merge**: `(NoneType)`
+      - *Presence: 9.3%*
+    - **sourceId**: `(NoneType, str)`
+      - *Presence: 9.3%*
+      - *Unique Values:* `["53927", "54222", "55531", "55532", "55536", "55537"]`
+    - **specialId**: `(str)`
+      - *Presence: 9.3%*
+      - *Unique Values:* `["6876ca7a1be84b00a83a73d3", "6886a15e990e600007f848de", "6886a15ecf23f30007a825c6", "6899341f84be470007b507d0", "6899342359db340007e3296e", "69076540411fe40007fa57cf", "690765b89cd233000772a93c", "690765f74b8f940007f1d929", "6907666fa2c0f2000743a4a2"]`
+    - **specialName**: `(str)`
+      - *Presence: 9.3%*
+    - **specialType**: `(str)`
+      - *Presence: 9.3%*
+      - *Unique Values:* `["bogo"]`
+    - **stackingBehavior**: `(str)`
+      - *Presence: 9.3%*
+      - *Unique Values:* `["compounding", "cumulative"]`
+    - **stackingMode**: `(NoneType, str)`
+      - *Presence: 9.3%*
+      - *Unique Values:* `["non-stacking", "stacking"]`
+    - **totalQuantity**: `(dict)`
+      - *Presence: 9.3%*
+      - **enabled**: `(bool)`
+        - *Presence: 9.3%*
+        - *Numeric Range:* `[False - False]`
+      - **maxQuantity**: `(NoneType)`
+        - *Presence: 9.3%*
+      - **quantity**: `(NoneType)`
+        - *Presence: 9.3%*
+      - **quantityOperator**: `(NoneType)`
+        - *Presence: 9.3%*
+    - **totalSpend**: `(dict)`
+      - *Presence: 9.3%*
+      - **enabled**: `(bool)`
+        - *Presence: 9.3%*
+        - *Numeric Range:* `[False - False]`
+      - **maximumSpend**: `(NoneType)`
+        - *Presence: 9.3%*
+      - **minimumSpend**: `(NoneType)`
+        - *Presence: 9.3%*
+      - **spendOperator**: `(NoneType)`
+        - *Presence: 9.3%*
+    - **totalWeight**: `(dict)`
+      - *Presence: 9.3%*
+      - **enabled**: `(bool)`
+        - *Presence: 9.3%*
+        - *Numeric Range:* `[False - False]`
+      - **weight**: `(NoneType)`
+        - *Presence: 9.3%*
+      - **weightOperator**: `(NoneType)`
+        - *Presence: 9.3%*
+    - **useGreedOptimizedCalculator**: `(NoneType)`
+      - *Presence: 9.3%*
+    - **useLatestCartCalculator**: `(NoneType)`
+      - *Presence: 9.3%*
+    - **useTotalQtyCalcsFix**: `(bool)`
+      - *Presence: 9.3%*
+      - *Numeric Range:* `[True - True]`
+    - **version**: `(int)`
+      - *Presence: 9.3%*
+      - *Numeric Range:* `[3 - 3]`
+  - **saleSpecials**: `(NoneType, list)`
+    - *Presence: 70.6%*
+    - **createdBy**: `(str)`
+      - *Presence: 69.9%*
+      - *Unique Values:* `["5f5ac69c4508af00b350ce1d", "6414b3d080a6f5014686bdcf", "650390ed746d4f0009408c25", "6798ed7cc34b9982e7fdb5a4", "ArmageddonDiscountSync"]`
+    - **directPOSProductIdMapping**: `(bool)`
+      - *Presence: 69.9%*
+      - *Numeric Range:* `[False - True]`
+    - **discount**: `(int)`
+      - *Presence: 69.9%*
+      - *Numeric Range:* `[3 - 35]`
+    - **discountStacking**: `(bool)`
+      - *Presence: 69.9%*
+      - *Numeric Range:* `[False - False]`
+    - **dollarDiscount**: `(bool)`
+      - *Presence: 69.9%*
+      - *Numeric Range:* `[False - True]`
+    - **eligibleProductOptions**: `(NoneType, list)`
+      - *Presence: 69.9%*
+    - **menuType**: `(str)`
+      - *Presence: 69.9%*
+      - *Unique Values:* `["both", "medical"]`
+    - **minorVersion**: `(int)`
+      - *Presence: 69.9%*
+      - *Numeric Range:* `[0 - 0]`
+    - **nonStackingBehavior**: `(str)`
+      - *Presence: 69.9%*
+      - *Unique Values:* `["favorCustomer"]`
+    - **payByBankIncentiveEnabled**: `(NoneType)`
+      - *Presence: 69.9%*
+    - **paymentRestrictions**: `(NoneType)`
+      - *Presence: 69.9%*
+    - **percentDiscount**: `(bool)`
+      - *Presence: 69.9%*
+      - *Numeric Range:* `[False - True]`
+    - **rawPOSWeightMapping**: `(bool)`
+      - *Presence: 69.9%*
+      - *Numeric Range:* `[False - True]`
+    - **saleDiscounts**: `(NoneType, list)`
+      - *Presence: 69.9%*
+      - **brandIds**: `(NoneType, list)`
+        - *Presence: 5.1%*
+      - **brandNames**: `(NoneType)`
+        - *Presence: 5.1%*
+      - **categoryIds**: `(NoneType, list)`
+        - *Presence: 5.1%*
+      - **categoryNames**: `(NoneType)`
+        - *Presence: 5.1%*
+      - **discountAmount**: `(int)`
+        - *Presence: 5.1%*
+        - *Numeric Range:* `[3 - 25]`
+      - **discountType**: `(str)`
+        - *Presence: 5.1%*
+        - *Unique Values:* `["dollarDiscount", "percentDiscount"]`
+      - **enterpriseProductIds**: `(NoneType)`
+        - *Presence: 5.1%*
+      - **exclusions**: `(NoneType, list)`
+        - *Presence: 5.1%*
+        - **brandIds**: `(NoneType)`
+          - *Presence: 0.7%*
+        - **brandNames**: `(NoneType)`
+          - *Presence: 0.7%*
+        - **categoryIds**: `(NoneType)`
+          - *Presence: 0.7%*
+        - **categoryNames**: `(NoneType)`
+          - *Presence: 0.7%*
+        - **enterpriseProductIds**: `(NoneType)`
+          - *Presence: 0.7%*
+        - **inventoryTags**: `(NoneType)`
+          - *Presence: 0.7%*
+        - **matchOperator**: `(str)`
+          - *Presence: 0.7%*
+          - *Unique Values:* `["or"]`
+        - **productGroup**: `(str)`
+          - *Presence: 0.7%*
+          - *Unique Values:* `["individual"]`
+        - **productIds**: `(list)`
+          - *Presence: 0.7%*
+        - **productTags**: `(NoneType)`
+          - *Presence: 0.7%*
+        - **strainIds**: `(NoneType)`
+          - *Presence: 0.7%*
+        - **subcategoryIds**: `(NoneType)`
+          - *Presence: 0.7%*
+        - **subcategoryNames**: `(NoneType)`
+          - *Presence: 0.7%*
+        - **vendorIds**: `(NoneType)`
+          - *Presence: 0.7%*
+        - **weightOperator**: `(NoneType)`
+          - *Presence: 0.7%*
+        - **weights**: `(NoneType)`
+          - *Presence: 0.7%*
+      - **inventoryTags**: `(NoneType)`
+        - *Presence: 5.1%*
+      - **productGroup**: `(str)`
+        - *Presence: 5.1%*
+        - *Unique Values:* `["brands", "categories", "individual"]`
+      - **productIds**: `(NoneType, list)`
+        - *Presence: 5.1%*
+      - **productTags**: `(NoneType)`
+        - *Presence: 5.1%*
+      - **strainIds**: `(NoneType)`
+        - *Presence: 5.1%*
+      - **subcategoryIds**: `(NoneType)`
+        - *Presence: 5.1%*
+      - **subcategoryNames**: `(NoneType)`
+        - *Presence: 5.1%*
+      - **vendorIds**: `(NoneType)`
+        - *Presence: 5.1%*
+      - **weightOperator**: `(NoneType, str)`
+        - *Presence: 5.1%*
+        - *Unique Values:* `["equalTo"]`
+      - **weights**: `(NoneType, list)`
+        - *Presence: 5.1%*
+    - **settingsDerivedFrom**: `(str)`
+      - *Presence: 69.9%*
+      - *Unique Values:* `["dispensary", "special"]`
+    - **skipV4Merge**: `(NoneType)`
+      - *Presence: 69.9%*
+    - **source**: `(NoneType, str)`
+      - *Presence: 69.9%*
+      - *Unique Values:* `["POS"]`
+    - **sourceId**: `(NoneType, str)`
+      - *Presence: 69.9%*
+      - *Unique Values:* `["53745", "53746", "54355", "54356", "54997", "54998", "55120", "55528", "55651", "55674", "55676"]`
+    - **specialId**: `(str)`
+      - *Presence: 69.9%*
+      - *Unique Values:* `["64a09c577e64ac004b2b8560", "683dfdca20c575007580369a", "68616bfa1cbca0007bc30b43", "68616bfa1cbca0007bc30b46", "6875b7c4383c61000794ab4d", "6875b8b3e51afc00075eed86", "68a2c11d698d190007afff61", "68a2c11d8fa4d100070dde6d", "68d6d6797aa2c70007197ab9", "68d6d6b57df3110007c2e1e3", "68dc1e6ef981660087479018", "68e2e7103d84ef000724c600", "6904fc254323150063cae929", "690628a0752f600007959050", "690b59fdf33cde0007c92de3", "690b59fef46faa0007ca81ad", "690cc5fc05d45700070a2ea7", "690cc6ebb629640007bcc6ed", "690f76ec0be1e300663e17a9", "690f76ec0be1e300663e17af", "690f76ec0be1e300663e17b2"]`
+    - **specialName**: `(str)`
+      - *Presence: 69.9%*
+      - *Unique Values:* `["20% Off all Terrapin Brands!", "Check out our Fall Sale"]`
+    - **specialRestrictions**: `(dict)`
+      - *Presence: 69.9%*
+      - **625487e2e1dbb000966b0a4c**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6255a266c5f83d009c7c23b1**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **627007b8f15e8c00a8c405b7**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **62eb0613f7eecd25123296b0**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **62f153a95ba86d36a70e8a90**: `(dict)`
+        - *Presence: 0.0%*
+        - **discountType**: `(str)`
+          - *Presence: 0.0%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **6334de1ef94f6d00b89e083a**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **634d88472a95c600b23eea30**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **638555fc7e0c1800f6e72682**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6387aa3affe75b00bb95ab08**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **639e6300d198e600e5f74c5e**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **63b6f9e31a95d000b6471561**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **63b759acbc34fd00e0d28e69**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **63ed0cb4ddb6b40070dfb4f2**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **643dbb5e3f369e006aa4b57e**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **645d4310bad68f005cbf7f36**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **652eec17b1ae8d0009dd5530**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **657a0fdd97b70f000902ec4f**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **65a1afbf4c4b430009c5c907**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **65a1cb3fac372d0009cfcd09**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **65c00a9e3288e400096fcbd5**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **65d7a30431f6e50009f242d1**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **65df6c72c35df00009252867**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **65e624c2b3f5170009119383**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **65f8a6f977697c0009bb8937**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **660495376618abdffb6b49d9**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6606cf7b7fef8544f54b0984**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **660b56b7ac7d3277892b5718**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **660c37b2b2808342d83a3912**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **66149fe9009d506a8a971215**: `(dict)`
+        - *Presence: 0.0%*
+        - **discountType**: `(str)`
+          - *Presence: 0.0%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **661dbb4feee88576dcbd88d2**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **661ddec8ad0c3585470b4899**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **662689845d9c0bcc61a209ac**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **66305b021ad1555d8ac39004**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6650df85bda831029a71a934**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6658801dacb1082047427e66**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6659d729c73979d579b3e72d**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6659dac2aaac27b7203cb02f**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **665ea7403bf946bbe3941f27**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **666315ccd02fbe366c1d354f**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **66677af33afc350ec188668e**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6692903e028ecf7a7fab7431**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **669291293daee917520ee78f**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **66afd409a0d2fb88f87e6329**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **66d75a40e5e8da8667d67554**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **66e046a69e8eac19f99cdfe0**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **66e7499f5514f5879193ceaa**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **66e855b7dd47bfb389a0d717**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **66eb1fc0351343f746e911ed**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6702b03d18fff2a58ae1dcef**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **670aa096c88221b019fdedc4**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **67360c295c99fa23934e1c0b**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **673e840eb99da644e20e1a3e**: `(dict)`
+        - *Presence: 0.0%*
+        - **discountType**: `(str)`
+          - *Presence: 0.0%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **674e0a79963f45e798c8afcb**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **674e18b42a81b6ff306b3487**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6755d2ff689e0adfd71d9061**: `(dict)`
+        - *Presence: 0.0%*
+        - **discountType**: `(str)`
+          - *Presence: 0.0%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **6758a4b8b9826d1439359ec2**: `(dict)`
+        - *Presence: 0.0%*
+        - **discountType**: `(str)`
+          - *Presence: 0.0%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **67796ff699e4205d8d304fb6**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **677c0a509744bd5e22d9bdf7**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **67b205ab31223f42f5edfbc9**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **67b20ae292b383e441530e8f**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **67c078712eb38198662b10db**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **67c490af5c983d8bd1fc40a1**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **67c79c8231b562f366ed375f**: `(dict)`
+        - *Presence: 0.0%*
+        - **discountType**: `(str)`
+          - *Presence: 0.0%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **67dded6e27c9b01ecce6411a**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **67fd0fc94b03f039365007aa**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **67ffee02949fe74807201611**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6818c5ccb3bd47306e6f0e61**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6818c729b31638018515a020**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6821f8f4aeda9ee82a2b04b0**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **682210ccdfb87c79b178f8c0**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **683b0c62a2ff906c83ec3e13**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68419d838f822e85c3f2dc7d**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68430be1cea4965ee154ec7f**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68471e1d2ee0329f62a94a64**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6848362ac37d7d61bdc402b9**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **684b17ae62fe53a2aadf61bf**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **684f0c1fe6ad959e220e45b5**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68516bd96dbcbc6a7a5cd8f4**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68580829d80424079d9a23b8**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68580c440bf753344b0ddc0e**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6859a6804b6890cc4841d1ae**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **685aa8478aff5c7e86d5a001**: `(dict)`
+        - *Presence: 0.0%*
+        - **discountType**: `(str)`
+          - *Presence: 0.0%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **68616ce5662c06067a138115**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6861701a5ccb8917bae10d9a**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **686318a68d4490a1399b85e2**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68631e159ea92237a5833e6f**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **686583c67c3323465df4e712**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **686bc89ec6c79ea0bcd5f355**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **686eb415225bce25ba4701b6**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **686ff38ff0700268492f9528**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6872ca456fe335eca8da1dfd**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **687664f135b2249c4bb19b2d**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **687803346b436380b22d4a07**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **687e880c09612175d96db495**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68823bd0b2f57095ebe27959**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **688389e3d3caae9b2e7d0e39**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68838a29a34b53bd8f027b5e**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68838ade600a0d83e231c007**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68838b9d470f9944f1697d32**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **688bdb75261d0a30f0e3e943**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6891019ca5f55ef1dd333337**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **689110c527396fa54aedc454**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **689142e26d2cfe5090462c90**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6893d10ab6824a871e1ad77f**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **689754c4c4ff29cc520c14fe**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **689b42a9c4601af7a872d408**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **689e2f53d555ee1f6eecc64c**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68a6517ef4ec9a4bb667e631**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68b1c968d0b42569b0d78167**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68b1ce28ecef08dbfef529c0**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68b1ff114fbf78d1d5310d22**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68b65021907f6381dfc18f73**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68b6508893f6789858c291cb**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68b6584807faf9470c883336**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68b7264c6d0080ffec4d832b**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68b8a6139879872210d50d0c**: `(dict)`
+        - *Presence: 0.0%*
+        - **discountType**: `(str)`
+          - *Presence: 0.0%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **68bb30038fc8fe0eede6b5f4**: `(dict)`
+        - *Presence: 0.0%*
+        - **discountType**: `(str)`
+          - *Presence: 0.0%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **68bed7f1f437c0b9f412bae7**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68c1be5d7deab614e954a67c**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68c1c246535e71e31ab50837**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68c1c463f02e157babdcc177**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68c1c9642f87a74b0c2abe07**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68c1ef219c8435ba79aeae14**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68c30f382f86039ff1f5e4c2**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68c322db7cbb7bb2bcb34126**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68c323d11511ed7ce3ea4b26**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68c3265c316fd31d1e58c1ea**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68c8155cce52e92b8187a79e**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68c9a8c0edda0fefcba74a5a**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68c9aa10a06429d9e4576186**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68c9aae3ae0ff467468bbfa9**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68cc0ca83b58017361cd700c**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68cc14966ad5b152ed843b24**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68cd7df3e02aa18d1ee21912**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68d0136a1f33fa76304b5a9c**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68d013e3b33af29574933efd**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68d17ad7ff957ed9dce53a26**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68d18beaa8865ea12071d612**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68d1b45159d7534f92673cd5**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68dab61879388735031a4e4b**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68dbea4ece28dccb8aed2c7d**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68dbec5803489f6ebf03ef5c**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68dd69234a62b3477751878f**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68dd7565944fc1107f36dfbd**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68ddab7effa3ada7bf0659ce**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68ddade3b0c5a2af05a768cd**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68e3eec58f352815fb4b463f**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68e4500dd2e35387195c8f26**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68e4516e35a2e53f5a92adcd**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68e451bb73213fdca9951fe9**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68e454b00e6b0c75ebc0f043**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68e7bce452ac3ac1f8fd1166**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68ed088007d109c0535298a4**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68ed230914d14021d43d1d6c**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68ed2574adbed89aa639ded5**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68ed7e65fa6a6671f220969e**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68f0f32750cb20588a86b6ea**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68f0f69fc4c4623e3abd5da5**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68f0f6c9b1c21d187a418cfa**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68f0f6fc3fc788d84218271e**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68f63e61d9fac24253e5fcad**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68f7f293e64655411750effd**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68fa3330542695f0adcd06ec**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68ff705c919aeb9e7317f4a5**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68ff778778969b540bebd446**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68ff7902b6ebe63c8c9c5661**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68ff7cacaa57b78f5a94f90a**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68ff7d16db36904303075504**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **68ffdfdea325c22981faf56e**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **6902196ed51ab91c0ea97225**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **69021ba72c525bab82e8e6be**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **690b6b368908854cf8122cee**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **690b70ca8fcac016ad760d5c**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **690b86ed1bd13d420c9b245f**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **690ba20065428adc8c5b56c5**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **690ba410e2336e1108fdaeee**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **690ba58616e87db2b0eef50f**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **690d067f762b44dcc672221b**: `(dict)`
+        - *Presence: 2.0%*
+        - **discountType**: `(str)`
+          - *Presence: 2.0%*
+          - *Unique Values:* `["dollarDiscount"]`
+      - **Accessories**: `(dict)`
+        - *Presence: 61.6%*
+        - **discountType**: `(str)`
+          - *Presence: 61.6%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **Concentrate**: `(dict)`
+        - *Presence: 61.6%*
+        - **discountType**: `(str)`
+          - *Presence: 61.6%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **Flower**: `(dict)`
+        - *Presence: 61.6%*
+        - **discountType**: `(str)`
+          - *Presence: 61.6%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **Oral**: `(dict)`
+        - *Presence: 61.6%*
+        - **discountType**: `(str)`
+          - *Presence: 61.6%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **Tincture**: `(dict)`
+        - *Presence: 61.6%*
+        - **discountType**: `(str)`
+          - *Presence: 61.6%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **Topicals**: `(dict)`
+        - *Presence: 61.6%*
+        - **discountType**: `(str)`
+          - *Presence: 61.6%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **Vaporizers**: `(dict)`
+        - *Presence: 61.6%*
+        - **discountType**: `(str)`
+          - *Presence: 61.6%*
+          - *Unique Values:* `["percentDiscount"]`
+      - **f4cb2b3f-7215-4e35-ab5e-65a91271ce47**: `(dict)`
+        - *Presence: 1.1%*
+        - **discountType**: `(str)`
+          - *Presence: 1.1%*
+          - *Unique Values:* `["percentDiscount"]`
+    - **specialType**: `(str)`
+      - *Presence: 69.9%*
+      - *Unique Values:* `["sale"]`
+    - **stackingBehavior**: `(str)`
+      - *Presence: 69.9%*
+      - *Unique Values:* `["compounding", "cumulative"]`
+    - **stackingMode**: `(NoneType, str)`
+      - *Presence: 69.9%*
+      - *Unique Values:* `["non-stacking"]`
+    - **targetPrice**: `(bool)`
+      - *Presence: 69.9%*
+      - *Numeric Range:* `[False - False]`
+    - **useGreedOptimizedCalculator**: `(NoneType)`
+      - *Presence: 69.9%*
+    - **useLatestCartCalculator**: `(NoneType)`
+      - *Presence: 69.9%*
+    - **useTotalQtyCalcsFix**: `(bool)`
+      - *Presence: 69.9%*
+      - *Numeric Range:* `[True - True]`
+    - **version**: `(int)`
+      - *Presence: 69.9%*
+      - *Numeric Range:* `[3 - 3]`
+- **specialIdsPerOption**: `(list)`
+  - *Presence: 100.0%*
+  - **conditionIds**: `(list)`
+    - *Presence: 100.0%*
+  - **option**: `(str)`
+    - *Presence: 100.0%*
+    - *Unique Values:* `[".15g", ".1g", ".25g", ".2g", ".3g", ".4g", ".5g", ".6g", "0.008g", "0.025g", "0.02g", "0.03g", "0.05g", "0.075g", "0.12g", "0.21g", "0.375g", "1.2g", "1/2oz", "1/4oz", "1/8oz", "14g", "1g", "1gC", "1oz", "28.3g", "28g", "2g", "2gC", "3.5g", "3.5gC", "3g", "3gC", "4.2g", "4g", "7g", "8g", "N/A"]`
+  - **rewardIds**: `(list)`
+    - *Presence: 100.0%*
+- **strainType**: `(NoneType, str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["1 to 1", "20 to 1", "5 to 1", "High CBD", "Hybrid", "Indica", "Indica-Hybrid", "N/A", "Sativa", "THC"]`
+- **subcategory**: `(NoneType, str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["", "badder", "balms", "bath-products", "batteries", "budder", "capsules-tablets", "cartridges", "cleaning-solutions", "concentrates-oil", "crumble", "cured-resin-cartridge", "dab-tools", "devices", "diamonds", "disposables", "flavored", "grinders", "hash", "infused-bud", "infused-buds", "infused-shake", "isolate", "jam", "kief", "live-resin", "live-resin-cartridge", "live-resin-disposable", "live-rosin", "live-rosin-cartridge", "live-rosin-disposable", "lotions", "pods", "pre-ground", "premium", "rosin", "sauce", "shake-trim", "shatter", "small-buds", "sticks-roll-ons", "storage-containers", "sublingual", "sugar", "suppositories", "transdermal-patches", "trays", "unflavored", "wax", "whole-flower", ...]` (and more)
+- **terpenes**: `(list)`
+  - *Presence: 100.0%*
+  - **id**: `(str)`
+    - *Presence: 1097.7%*
+  - **libraryTerpene**: `(dict)`
+    - *Presence: 1097.7%*
+    - **aromas**: `(list)`
+      - *Presence: 1097.7%*
+    - **description**: `(str)`
+      - *Presence: 1097.7%*
+    - **effects**: `(list)`
+      - *Presence: 1097.7%*
+    - **name**: `(str)`
+      - *Presence: 1097.7%*
+      - *Unique Values:* `["Alpha Bisabolol", "Alpha Pinene", "Beta Caryophyllene", "Beta Caryophyllene Oxide", "Beta Myrcene", "Beta Pinene", "Bisabolol", "Camphene", "Camphor", "Carene", "Caryophyllene", "Caryophyllene Oxide", "Eucalyptol", "Geraniol", "Guaiol", "Humulene", "Isopulegol", "Limonene", "Linalool", "Myrcene", "Ocimene", "Ocimene-1", "Para Cymene", "Pinene", "Terpinene", "Terpineol", "Terpinolene", "Trans-Caryophyllene", "Trans-Nerolidol"]`
+  - **terpeneId**: `(str)`
+    - *Presence: 1097.7%*
+  - **unit**: `(str)`
+    - *Presence: 1097.7%*
+    - *Unique Values:* `["MILLIGRAMS", "MILLIGRAMS_PER_GRAM", "PERCENTAGE"]`
+  - **unitSymbol**: `(str)`
+    - *Presence: 1097.7%*
+    - *Unique Values:* `["%", "mg", "mg/g"]`
+  - **value**: `(NoneType, float, int)`
+    - *Presence: 1097.7%*
+    - *Numeric Range:* `[0 - 84.39]`
+- **type**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["Accessories", "Concentrate", "Edible", "Flower", "Oral", "Tincture", "Topicals", "Vaporizers"]`
+- **updatedAt**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["2025-08-10T17:27:16.878Z", "2025-08-29T19:00:51.576Z", "2025-09-11T16:55:23.288Z", "2025-09-11T16:56:37.598Z", "2025-09-11T16:57:37.456Z", "2025-09-18T19:51:38.217Z", "2025-10-05T14:47:48.127Z", "2025-10-08T17:33:48.945Z", "2025-10-08T20:20:06.818Z", "2025-10-08T20:51:29.946Z", "2025-10-08T20:57:15.022Z", "2025-10-08T21:31:09.703Z", "2025-10-08T21:52:07.531Z", "2025-10-08T22:05:07.991Z", "2025-10-08T22:05:54.318Z", "2025-10-14T19:49:38.551Z", "2025-10-15T21:58:46.352Z", "2025-10-18T14:24:22.050Z", "2025-10-21T20:06:11.627Z", "2025-10-24T14:49:16.399Z", "2025-10-25T15:38:54.907Z", "2025-10-26T15:18:18.841Z", "2025-10-26T15:20:02.992Z", "2025-10-27T15:21:56.744Z", "2025-10-28T23:53:22.708Z", "2025-10-30T14:50:44.388Z", "2025-10-31T14:32:15.776Z", "2025-11-01T21:14:20.134Z", "2025-11-02T15:38:43.815Z", "2025-11-02T20:59:17.898Z", "2025-11-03T15:04:55.846Z", "2025-11-03T19:44:37.736Z", "2025-11-07T15:10:22.932Z", "2025-11-07T21:36:01.032Z", "2025-11-07T21:37:18.580Z", "2025-11-07T21:39:31.505Z", "2025-11-07T21:39:55.759Z", "2025-11-07T22:36:07.067Z", "2025-11-07T22:39:54.115Z", "2025-11-08T15:36:39.489Z", "2025-11-08T16:10:12.645Z", "2025-11-08T16:10:27.573Z", "2025-11-08T16:36:52.712Z", "2025-11-08T18:14:44.916Z", "2025-11-08T18:15:12.454Z", "2025-11-08T21:54:53.056Z", "2025-11-08T21:56:25.044Z", "2025-11-08T21:59:44.258Z", "2025-11-08T22:40:32.365Z", "2025-11-08T23:42:32.691Z", ...]` (and more)
+- **useBetterPotencyTaxes**: `(NoneType)`
+  - *Presence: 100.0%*
+- **vapeTaxApplicable**: `(NoneType)`
+  - *Presence: 100.0%*
+- **weight**: `(int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[0 - 9999999]`
+- **wholesalePrices**: `(NoneType)`
+  - *Presence: 100.0%*

@@ -122,6 +122,7 @@ MASTER_COMPOUND_MAP = {
 
     # alpha-Pinene
     'a-Pinene': 'alpha-Pinene', 'alpha-Pinene': 'alpha-Pinene', 'A Pinene': 'alpha-Pinene',
+    'Alpha Pinene': 'alpha-Pinene',
 
     # Camphene
     'Camphene': 'Camphene', 'camphene': 'Camphene', 'CAMPHENE': 'Camphene',

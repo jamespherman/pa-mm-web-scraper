@@ -59,21 +59,18 @@ def _clean_product_names(df):
     
     # Pattern for general clutter (from our analysis)
     general_clutter_words = [
+        'live resin budder', 'live sauce', 'live resin badder', 'live budder',
+        'live sauce', 'refresh', 'live badder', 'badder', 'crumble',
+         'mixed buds', 'sugar leaf', 'pre-roll', 'pre ground', 'pre pack',
+         'all in one', 'all-in-one', 'Rise LLR', 'Rest LLR','aio'
         'live', 'vape', 'pen', 'small', 'ground', 'cured', 'liquid',
         'indica', 'sativa', 'hybrid', 'thc', 'cbd', 'cbn', 'cbg',
         '10pk', 'pack', '10', 'x',
-        'all-in-one', 'all in one', # For "All In One"
-        'disposable', 'dispo',       # For "Disposable"
-        
-        # --- NEW FIX ---
-        # Remove the specific phrases first
-        'Rise LLR', 'Rest LLR',
-        # Also remove the standalone words
+        'disposable', 'dispo',
         'Rise', 'Rest', 'LLR',
-        # --- END FIX ---
-        
-        'cart', 'cartridge',        # For "Cart"
-        'co2'                       # For "CO2"
+        'cart', 'cartridge',
+        'co2','1oz', 'buds', 'bud', 
+        'flower', 'littles', 'pre',
     ]
     
     general_clutter_pattern = re.compile(r'\b(' + '|'.join(general_clutter_words) + r')\b', re.IGNORECASE)
@@ -207,6 +204,14 @@ def run_analysis(dataframe):
     cleaned_df = _clean_product_names(cleaned_df)
     
     print(f"Data cleaning complete.")
+
+    # --- 4. Remove Terpene Outliers ---
+    # (User requested to remove any products with > 18% total terpenes as errors)
+    original_count = len(cleaned_df)
+    cleaned_df = cleaned_df[cleaned_df['Total_Terps'] <= 18].copy()
+    removed_count = original_count - len(cleaned_df)
+    if removed_count > 0:
+        print(f"Removed {removed_count} products with Total_Terps > 18%.")
     
     # --- Step 2: Plotting Orchestration ---
     # Create the date-stamped save directory
@@ -221,16 +226,28 @@ def run_analysis(dataframe):
     # Loop over product categories to generate plots:
     for category in CATEGORIES_TO_PLOT:
         print(f"\n--- Analyzing Category: {category.upper()} ---")
+
         # Filter the DataFrame for the specific category
         category_df = cleaned_df[cleaned_df['Type'] == category].copy()
+        
+        # --- GLOBAL FLOWER FILTER ---
+        # If the category is Flower, globally remove all Infused products
+        # so no plotting function has to do this individually.
+        if category == 'Flower':
+            category_df = category_df[~category_df['Subtype'].str.contains('Infused', case=False, na=False)]
+        # --- END GLOBAL FILTER ---
+
         if category_df.empty:
             print(f"No data found for category '{category}'. Skipping plots.")
             continue
+        
         # --- Call plotting functions ---
         # Plot 1: Brand vs. Total Terpenes Violin Plot
         plot_brand_violin(category_df, category, save_dir)
+
         # Plot 2: Top 50 Terpiest Products Heatmap
         plot_top_50_heatmap(category_df, category, save_dir)
+
         # Plot 3: Dominant Terpene Summary Figure
         plot_dominant_terp_summary(category_df, category, save_dir)
 
@@ -365,16 +382,21 @@ def plot_value_scatterplot(data, category_name, save_dir):
     ].copy()
 
     # --- 2. Remove Extreme Outliers for Readability ---
+    # This functionality has been removed / commented-out.
+    df_plot = df_filtered.copy()
 
     # Calculate the 95th percentile for DPG and Terps
-    dpg_limit = df_filtered['dpg'].quantile(0.95)
-    terp_limit = df_filtered['Total_Terps'].quantile(0.95)
+    # dpg_limit = df_filtered['dpg'].quantile(0.95)
+    # terp_limit = df_filtered['Total_Terps'].quantile(0.95)
 
     # Filter to keep only data within these "reasonable" limits
-    df_plot = df_filtered[
-        (df_filtered['dpg'] <= dpg_limit) &
-        (df_filtered['Total_Terps'] <= terp_limit)
-    ]
+    # df_plot = df_filtered[
+    #     (df_filtered['dpg'] <= dpg_limit) &
+    #     (df_filtered['Total_Terps'] <= terp_limit)
+    # ]
+    
+    # Remove any rows with a None/NaN brand before sorting
+    df_plot = df_plot.dropna(subset=['Brand'])
 
     if df_plot.empty:
         print(f"    SKIPPING: No valid DPG vs. Terpene data found for {category_name}.")
@@ -601,9 +623,7 @@ def plot_top_50_heatmap(data, category_name, save_dir):
     plt.title(f'Top {len(top_50_df)} Terpiest {category_name.title()} Products', fontsize=18)
     plt.ylabel('Product | Brand | Profile', fontsize=16)
     plt.xticks(rotation=45, ha='right', fontsize=10)
-    plt.yticks(fontsize=11)
-    ax.xaxis.tick_top()  # Move X-axis labels to the top
-    ax.xaxis.set_label_position('top')
+    plt.yticks(fontsize=13)
 
     # Force a draw so matplotlib can calculate the actual rendered size
     fig.canvas.draw()
@@ -611,22 +631,38 @@ def plot_top_50_heatmap(data, category_name, save_dir):
     # Get the renderer to calculate text bounding boxes
     renderer = fig.canvas.get_renderer()
     
+    # Find the maximum label height in pixels
+    max_height_pixels = 0
+    for label in ax.get_xticklabels():
+        bbox = label.get_window_extent(renderer=renderer)
+        if bbox.height > max_height_pixels:
+            max_height_pixels = bbox.height
+
+    # Convert pixel height to a fraction of the total figure height
+    fig_height_pixels = fig.get_window_extent().height
+
+    # Add 20px padding
+    total_bottom_pixels = max_height_pixels + 20 
+
+    # Calculate the new bottom margin (0.0 = 0% height)
+    new_bottom_margin = (total_bottom_pixels / fig_height_pixels)
+
     # Find the maximum label width in pixels
     max_width_pixels = 0
     for label in ax.get_yticklabels():
         bbox = label.get_window_extent(renderer=renderer)
         if bbox.width > max_width_pixels:
             max_width_pixels = bbox.width
-    
+
     # Convert pixel width to a fraction of the total figure width
     fig_width_pixels = fig.get_window_extent().width
     new_left_margin = (max_width_pixels / fig_width_pixels)
-    
+
     # Add a small 2% padding to the right of the text
     new_left_margin += 0.02
 
     # Manually adjust subplot spacing
-    fig.subplots_adjust(left=new_left_margin, top=0.95, bottom=0.05, right=0.98)
+    fig.subplots_adjust(left=new_left_margin, top=0.95, bottom=new_bottom_margin, right=0.98)
 
     # Define the output filename
     filename = os.path.join(save_dir, f'top_50_heatmap_{category_name}.png')

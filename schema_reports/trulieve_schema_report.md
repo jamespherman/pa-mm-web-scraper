@@ -1,0 +1,239 @@
+# Data Dictionary for `trulieve_raw_products.json`
+
+Generated from **2182** product records.
+
+## Root Schema
+
+- **api_created_at**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["2022-07-01 20:48:11", "2022-10-15 14:40:14", "2022-12-03 15:32:40", "2023-11-16 23:19:10", "2023-12-14 23:23:13", "2023-12-19 19:10:22", "2024-02-23 13:18:35", "2024-02-28 13:06:39", "2024-03-08 15:49:54", "2024-04-03 20:40:43", "2024-04-17 12:53:29", "2024-04-25 12:06:21", "2024-07-11 02:06:19", "2024-08-01 14:28:53", "2024-08-28 20:59:06", "2024-09-06 01:47:16", "2024-10-04 02:52:55", "2024-11-07 19:17:32", "2024-12-19 21:42:07", "2024-12-28 03:16:14", "2025-01-09 02:46:08", "2025-01-22 02:43:49", "2025-01-28 02:57:54", "2025-02-01 23:07:15", "2025-02-06 01:56:41", "2025-02-07 23:03:00", "2025-02-20 15:45:45", "2025-03-06 14:45:03", "2025-03-31 17:08:57", "2025-04-08 21:06:24", "2025-04-09 21:31:56", "2025-04-10 23:42:22", "2025-04-15 23:41:57", "2025-04-28 21:32:05", "2025-05-09 19:38:46", "2025-05-18 19:40:38", "2025-05-22 19:31:00", "2025-05-27 23:51:58", "2025-05-29 02:07:43", "2025-06-27 01:56:12", "2025-06-29 18:26:00", "2025-07-10 02:18:30", "2025-07-27 15:59:47", "2025-07-31 02:30:32", "2025-08-06 02:25:12", "2025-08-13 16:23:39", "2025-08-21 00:02:19", "2025-08-22 02:30:19", "2025-09-02 15:13:10", "2025-09-04 13:08:03", ...]` (and more)
+- **brand**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["&Shine", "(the) Essence", "Belushi's Farm", "Black Buddha", "Cookies", "Cresco ", "Cultivar", "Eleven", "Find.", "FloraCal Farms", "Garcia Hand Picked", "Gillie Grows", "Good Green", "Grassroots", "Gratitude Gardens", "Insa", "Khalifa Kush", "Kind Tree", "Kynd", "Later Days", "Legend", "Modern Flower", "Modern Flower Ground", "Mood by Vytal", "Natural Selections", "Old Pal", "Organic Remedies ", "PACKS", "PHG", "Prime Wellness", "R.O.", "R.O. Ground", "R.O. Shake", "RYTHM", "Redemption", "Redemption Shake", "Revelry", "Standard Farms", "Strane", "Strane Reserve", "Sunshine", "Supply", "The Botanist", "Triple 7", "Verano", "Vytal", "Whole Plants Health", "gLeaf", "mood", "mood by Vytal", ...]` (and more)
+- **brand_description**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `[""]`
+- **cannabinoids**: `(list)`
+  - *Presence: 100.0%*
+  - **name**: `(str)`
+    - *Presence: 3.5%*
+    - *Unique Values:* `["CBG (Cannabigerol)", "CBN (Cannabinol)"]`
+  - **unit**: `(str)`
+    - *Presence: 3.5%*
+    - *Unique Values:* `["MILLIGRAMS", "PERCENTAGE"]`
+  - **value**: `(int)`
+    - *Presence: 3.5%*
+    - *Numeric Range:* `[40 - 1000]`
+- **category**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["accessories", "concentrates", "edibles", "flower", "tinctures", "vapes"]`
+- **cbd_content**: `(float, int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[0 - 480.56]`
+- **cbd_content_unit**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["%", "mg"]`
+- **created_at**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["2025-04-14T05:34:20.000000Z", "2025-09-07T22:28:34.000000Z", "2025-09-07T22:28:35.000000Z", "2025-09-07T22:28:36.000000Z", "2025-09-10T14:43:42.000000Z", "2025-09-13T16:43:04.000000Z", "2025-09-14T01:40:40.000000Z", "2025-09-14T01:40:41.000000Z", "2025-09-18T12:42:47.000000Z", "2025-09-19T02:39:16.000000Z", "2025-09-20T20:38:51.000000Z", "2025-09-21T17:37:36.000000Z", "2025-09-21T17:37:37.000000Z", "2025-09-21T17:37:38.000000Z", "2025-09-21T18:37:56.000000Z", "2025-09-25T13:39:46.000000Z", "2025-09-25T13:39:47.000000Z", "2025-09-26T14:38:50.000000Z", "2025-09-28T18:39:04.000000Z", "2025-09-29T13:37:42.000000Z", "2025-10-03T16:42:26.000000Z", "2025-10-03T16:42:27.000000Z", "2025-10-07T20:46:11.000000Z", "2025-10-08T12:45:10.000000Z", "2025-10-09T14:47:23.000000Z", "2025-10-10T22:49:44.000000Z", "2025-10-10T22:49:45.000000Z", "2025-10-14T14:47:25.000000Z", "2025-10-14T14:47:27.000000Z", "2025-10-17T05:51:36.000000Z", "2025-10-17T22:49:56.000000Z", "2025-10-23T21:02:19.000000Z", "2025-10-23T21:02:20.000000Z", "2025-10-23T21:02:21.000000Z", "2025-10-24T20:08:27.000000Z", "2025-10-29T16:01:42.000000Z", "2025-10-30T13:18:19.000000Z", "2025-10-30T13:18:20.000000Z", "2025-10-30T13:18:22.000000Z", "2025-10-30T19:08:53.000000Z", "2025-10-30T19:08:55.000000Z", "2025-10-31T19:59:24.000000Z", "2025-11-04T17:59:16.000000Z", "2025-11-05T16:17:43.000000Z", "2025-11-05T16:17:45.000000Z", "2025-11-07T00:16:45.000000Z", "2025-11-07T00:16:46.000000Z", "2025-11-08T02:16:10.000000Z", "2025-11-08T02:16:13.000000Z", "2025-11-08T02:16:16.000000Z", ...]` (and more)
+- **description**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["", "(ICC x Grapefruit Durban)", "(Tina x Grease Monkey #3)", "(Zkittlez x Face Off OG)", "--", "--
+"]`
+- **display_category**: `(dict)`
+  - *Presence: 100.0%*
+  - **id**: `(int)`
+    - *Presence: 100.0%*
+    - *Numeric Range:* `[14 - 22]`
+  - **name**: `(str)`
+    - *Presence: 100.0%*
+    - *Unique Values:* `["Accessories", "Concentrates", "Edibles", "Flower", "Tinctures", "Vapes"]`
+  - **slug**: `(str)`
+    - *Presence: 100.0%*
+    - *Unique Values:* `["accessories", "concentrates", "edibles", "flower", "tinctures", "vapes"]`
+- **display_category_id**: `(int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[14 - 22]`
+- **effects**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["", "CALM,CLEAR_MIND,HAPPY,RELAXED", "CALM,CREATIVE,HAPPY,RELAXED", "CALM,ENERGETIC,HAPPY,RELAXED", "CALM,HAPPY,INSPIRED,UPLIFTED", "CALM,HAPPY,RELAXED", "CALM,HAPPY,RELAXED,CLEAR_MIND", "CALM,HAPPY,RELAXED,ENERGETIC", "CALM,HAPPY,RELAXED,SLEEPY", "CALM,HAPPY,RELAXED,UPLIFTED", "CALM,INSPIRED,RELAXED,SLEEPY", "CLEAR_MIND,CALM,RELAXED,HAPPY", "CREATIVE,RELAXED", "FOCUSED,HAPPY,RELAXED", "HAPPY,RELAXED,SLEEPY", "HAPPY,RELAXED,UPLIFTED", "RELAXED,HAPPY,CALM,ENERGETIC", "RELAXED,SLEEPY", "RELAXED,SLEEPY,HAPPY"]`
+- **id**: `(int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[39750294 - 258634292]`
+- **image_url**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `[""]`
+- **images**: `(list)`
+  - *Presence: 100.0%*
+  - **active**: `(bool)`
+    - *Presence: 156.4%*
+    - *Numeric Range:* `[False - True]`
+  - **created_at**: `(NoneType)`
+    - *Presence: 156.4%*
+  - **id**: `(int)`
+    - *Presence: 156.4%*
+    - *Numeric Range:* `[66509 - 220060]`
+  - **order**: `(int)`
+    - *Presence: 156.4%*
+    - *Numeric Range:* `[0 - 4]`
+  - **product_id**: `(str)`
+    - *Presence: 156.4%*
+    - *Unique Values (sample):* `["62bf5d8bac365a0001425a8d", "634ac64e434191000cf46b9c", "638b6c18e3c48c000cb5d520", "6556a36eb8d54a00014fd734", "6581ea9e7fe5ee000160d225", "65df2fdf05d8110001e475a4", "65eb33a20d4c7c0001328aa4", "660dbecbfb74ea0001b75614", "661fc6493a04f30001f84ca2", "662a473d00b1fd0001fb0c77", "668f3e1b174e6a0001524f08", "66ab9ba5966c50000143515b", "66ab9ba5966c500001435166", "66cf8f9a6a54c3000186302e", "66ff5887ddb88b00017be7ec", "66ff5887ddb88b00017be7f6", "672d124c73cc9e9048e20d17", "6764932fe8915143354d3081", "6764932fe8915143354d3082", "676f6d7e1e79ab3ef27b555b", "677f3870cd8e4de2b9c90277", "67905b65ba8ff28698774679", "679847b223cfe184620e0b0b", "679ea9235b8d2b8553e862f0", "679ea9235b8d2b8553e86333", "67a416d9048c67bc68834f1b", "67a69124528e769b9dd44a96", "67b74e2944e89f6c0f72db52", "67c9b4ef3504dbcf207c75f9", "67f58fd03fd6c247145808aa", "67f6e74c3c936cee8d9154bc", "67f8575eca5148aa61d3a0b5", "680ff3d5b917e08cb3cfc57c", "681e59c6705fb377dea1f01a", "682f7b749f1d7e1b68c16290", "6836501ef664618a12395f7a", "685dfa3c8e68351e51bc5d18", "685dfa3c8e68351e51bc5d1b", "685dfa3c8e68351e51bc5d38", "686f22f65fe3a14e1edb3ba2", "68864cf32bec4dd784237769", "688ad548a5fa5b6d31577128", "688ad548a5fa5b6d3157712e", "6892bd0834925831864b97e1", "689cbc0b3f2d2902140113ea", "68a6620bb9bdf1ec07d04d4a", "68a7d63bd0ca3b29a5065874", "68b70986ccca280bc8cdc54e", "68b98f3306141ac4ef395e31", "68b98f3306141ac4ef395e47", ...]` (and more)
+  - **updated_at**: `(NoneType)`
+    - *Presence: 156.4%*
+  - **url**: `(str)`
+    - *Presence: 156.4%*
+    - *Unique Values:* `[""]`
+- **lab_result_url**: `(NoneType)`
+  - *Presence: 100.0%*
+- **med_unit_price**: `(float, int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[1 - 420]`
+- **menu_setting_order**: `(int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[1 - 1170]`
+- **menu_type**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["MEDICAL"]`
+- **name**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["Baby Turtle | 3.5g", "Baby Turtle | 7g Smalls", "Blue Pave", "Blue Zashimi", "Burnt Orange", "Chemex Sativa Flower 3.5g", "Cherry AK Indica Flower 3.5g", "Cherry Punch | 3.5g", "Cresco | Durban | 3.5g", "Crown", "Funk Mountain | 1g", "GMO Pop Flower 3.5g", "Garlic Drip", "Garlic Gas | 3.5g", "Glass Jaw", "Guava T*rt", "Guelah Papaya #9", "Gush Mintz (GSH MNTS) | 14g", "Head Cracker", "Holy Grail Kush | 28g", "Hot Stuff", "Khalifa Kush | 3.5g", "Khalifa Mints | 3.5g", "Kush Crasher", "LA Kush CKE #2", "LA Kush Cake (K) | 3.5g", "Lemon Gelato CKIES", "Neon Daydream", "Nine Lions", "Novarine", "Papaya Don #4", "Papaya Fuel", "Pnk Crtz | 14g", "Rebel Sour 2.0 | 4.5g", "Red Biscotti | 3.5g", "Shadowberry | 28g", "Singapore Sling 9 | 3.5g", "Slow N Sweet", "Soul Safari | 28g", "Soul Safari | 3.5g", "Sour Blueberry #2", "Sour Gremlin Flower | 14g", "Sour Gremlin Indica | 3.5g", "Sour Gremlin | 1g", "Sour Gremlin | 28g", "VelcroZ", "WC Watermelon Z", "White Glue CKIES", "Whoopie P | 3.5g", "Z-Face Hybrid Flower 3.5g", ...]` (and more)
+- **popularity**: `(int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[1 - 1170]`
+- **product_id**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["62bf5d8bac365a0001425a8d", "634ac64e434191000cf46b9c", "638b6c18e3c48c000cb5d520", "6556a36eb8d54a00014fd734", "6581ea9e7fe5ee000160d225", "65df2fdf05d8110001e475a4", "65eb33a20d4c7c0001328aa4", "660dbecbfb74ea0001b75614", "661fc6493a04f30001f84ca2", "662a473d00b1fd0001fb0c77", "668f3e1b174e6a0001524f08", "66ab9ba5966c50000143515b", "66ab9ba5966c500001435166", "66cf8f9a6a54c3000186302e", "66ff5887ddb88b00017be7ec", "66ff5887ddb88b00017be7f6", "672d124c73cc9e9048e20d17", "6764932fe8915143354d3081", "6764932fe8915143354d3082", "676f6d7e1e79ab3ef27b555b", "677f3870cd8e4de2b9c90277", "67905b65ba8ff28698774679", "679847b223cfe184620e0b0b", "679ea9235b8d2b8553e862f0", "679ea9235b8d2b8553e86333", "67a416d9048c67bc68834f1b", "67a69124528e769b9dd44a96", "67b74e2944e89f6c0f72db52", "67c9b4ef3504dbcf207c75f9", "67f58fd03fd6c247145808aa", "67f6e74c3c936cee8d9154bc", "67f8575eca5148aa61d3a0b5", "680ff3d5b917e08cb3cfc57c", "681e59c6705fb377dea1f01a", "682f7b749f1d7e1b68c16290", "6836501ef664618a12395f7a", "685dfa3c8e68351e51bc5d18", "685dfa3c8e68351e51bc5d1b", "685dfa3c8e68351e51bc5d38", "686f22f65fe3a14e1edb3ba2", "68864cf32bec4dd784237769", "688ad548a5fa5b6d31577128", "688ad548a5fa5b6d3157712e", "6892bd0834925831864b97e1", "689cbc0b3f2d2902140113ea", "68a6620bb9bdf1ec07d04d4a", "68a7d63bd0ca3b29a5065874", "68b70986ccca280bc8cdc54e", "68b98f3306141ac4ef395e31", "68b98f3306141ac4ef395e47", ...]` (and more)
+- **quantity**: `(int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[1 - 25]`
+- **rec_unit_price**: `(float, int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[1 - 420]`
+- **sku**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["10358517", "10811319", "11497434", "14666899", "14769262", "15436929", "15506937", "15711842", "15777743", "15782628", "15791629", "16243854", "16469735", "16471005", "16545484", "17108032", "17607292", "17803948", "17803966", "17975938", "18005711", "18133059", "18220704", "18250029", "18250200", "18250344", "18256933", "18326849", "18341427", "18423705", "18599100", "18782228", "18914575", "18930865", "18990958", "18990975", "19170235", "19201859", "19208014", "19208029", "19369607", "19448191", "19472559", "19530288", "19535869", "19689336", "19806859", "19807032", "19827184", "9383827", ...]` (and more)
+- **slug**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values (sample):* `["Cresco_-Blue_Pave", "Cresco_-Burnt_Orange", "Cresco_-Cresco__Durban__35g", "Cresco_-Crown", "Cresco_-GMO_Pop_Flower_35g", "Cresco_-Hot_Stuff", "Cresco_-Kush_Crasher", "Cresco_-Slow_N_Sweet", "Cresco_-WC_Watermelon_Z", "FloraCal_Farms-Outlaw", "Good_Green-Blue_Zashimi", "Good_Green-Garlic_Drip", "Good_Green-Head_Cracker", "Good_Green-White_Glue_CKIES", "Grassroots-Biscotti_Ck", "Grassroots-Foreign_Kush_Mints", "Grassroots-Jah_Chee_Ck", "Grassroots-Modified_Jet", "Grassroots-Novarine", "Grassroots-Nuclear_Muff", "Khalifa_Kush-Baby_Turtle__35g", "Kind_Tree-Bubble_G_Wedding", "Kind_Tree-Dub_Bub", "Kind_Tree-Nutty_Putty", "Kind_Tree-Rebel_OG", "Kind_Tree-ZCream", "Kind_Tree-ZCream_Small_Buds", "Legend-Cherlato_21_Small_Buds", "Modern_Flower-Pnk_Crtz__14g", "Modern_Flower-Whoopie_P__35g", "Natural_Selections-SuperBoof", "Prime_Wellness-Papaya_Don_4", "RO-Rebel_Sour_20__45g", "RO-Singapore_Sling_9__35g", "RO-Sour_Gremlin_Flower__14g", "RO-Sour_Gremlin_Indica__35g", "RYTHM-LA_Kush_CKE_2", "RYTHM-Lemon_Gelato_CKIES", "RYTHM-VelcroZ", "Standard_Farms-Glass_Jaw", "Standard_Farms-Neon_Daydream", "Standard_Farms-Nine_Lions", "Standard_Farms-Papaya_Fuel", "Standard_Farms-Reckless_Ruby", "Standard_Farms-Senpai", "Standard_Farms-White_Inferno", "Strane_Reserve-Guava_Trt", "Sunshine-Garlic_Gas__35g", "Sunshine-Red_Biscotti__35g", "Verano-Minty_Haze_35g", ...]` (and more)
+- **source**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["dutchie"]`
+- **specials**: `(list)`
+  - *Presence: 100.0%*
+  - **id**: `(int)`
+    - *Presence: 31.9%*
+    - *Numeric Range:* `[20562197 - 21417482]`
+  - **menu_display_configuration**: `(dict)`
+    - *Presence: 31.9%*
+    - **description**: `(str)`
+      - *Presence: 31.9%*
+      - *Unique Values:* `[""]`
+    - **image**: `(str)`
+      - *Presence: 31.9%*
+    - **name**: `(str)`
+      - *Presence: 31.9%*
+      - *Unique Values:* `["30% off GTI & Insa", "35% off Momenta", "50% off Moxie", "Last Call (40% to 75% Off)", "PA 50% Off AYR"]`
+  - **menu_type**: `(str)`
+    - *Presence: 31.9%*
+    - *Unique Values:* `["BOTH"]`
+  - **name**: `(str)`
+    - *Presence: 31.9%*
+    - *Unique Values:* `["Last Call (40% to 75% Off)", "PA 30% off GTI & Insa", "PA 35% off Momenta", "PA 50% Off AYR", "PA 50% off Moxie"]`
+  - **redemption_limit**: `(NoneType)`
+    - *Presence: 31.9%*
+  - **schedule_configuration**: `(dict)`
+    - *Presence: 31.9%*
+    - **days**: `(NoneType)`
+      - *Presence: 31.9%*
+    - **endDate**: `(NoneType)`
+      - *Presence: 31.9%*
+    - **endStamp**: `(str)`
+      - *Presence: 31.9%*
+      - *Unique Values:* `["2025-11-10T03:00:00.000Z", "2025-11-11T03:00:00.000Z", "2025-12-01T03:00:00.000Z"]`
+    - **recurringEndTime**: `(NoneType)`
+      - *Presence: 31.9%*
+    - **recurringStartTime**: `(NoneType)`
+      - *Presence: 31.9%*
+    - **setEndDate**: `(NoneType)`
+      - *Presence: 31.9%*
+    - **startStamp**: `(str)`
+      - *Presence: 31.9%*
+      - *Unique Values:* `["2025-07-10T11:56:39.000Z", "2025-09-19T02:00:00.000Z", "2025-10-22T02:00:00.000Z", "2025-10-31T16:04:53.000Z", "2025-11-04T09:09:59.017Z", "2025-11-04T10:03:26.580Z", "2025-11-07T03:00:00.000Z", "2025-11-08T03:00:00.000Z"]`
+  - **special_id**: `(str)`
+    - *Presence: 31.9%*
+    - *Unique Values:* `["686faaeafc6bd5008557a0ee", "688bccac5de02c0093e7bc4c", "68c9d041aff5fd00a66c528f", "68c9d041aff5fd00a66c52b0", "68f7a361d16c800063d094d3", "6904de6911d1be009f944d07", "6909c36579b928009cc4a424", "6909cfc2bb907d00ae0e620f", "690d2fddfb6e4a007d1090b9", "690d2fdefb6e4a007d1090da", "690d309afb6e4a00a510c205", "690d309bfb6e4a00a510c226", "690d33539c4faa00a6875775", "690d33549c4faa00a6875796"]`
+  - **store_id**: `(int)`
+    - *Presence: 31.9%*
+    - *Numeric Range:* `[86 - 90]`
+  - **type**: `(str)`
+    - *Presence: 31.9%*
+    - *Unique Values:* `["SALE"]`
+- **staff_pick**: `(int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[0 - 1]`
+- **store_id**: `(int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[86 - 90]`
+- **store_name_scraped**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["Trulieve (North Shore)", "Trulieve (Squirrel Hill)"]`
+- **strain**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `[""]`
+- **strain_type**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["HIGH_CBD", "HYBRID", "INDICA", "INDICA_HYBRID", "NOT_APPLICABLE", "SATIVA", "THC"]`
+- **subcategory**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["BADDER", "BATTERIES", "BUDDER", "CAPSULES_TABLETS", "CARTRIDGES", "CRUMBLE", "DEFAULT", "DEVICES", "DISPOSABLES", "DISTILLATE", "DRINKS", "FLAVORED", "GRINDERS", "GUMMIES", "HASH", "INFUSED_BUD", "INFUSED_SHAKE", "ISOLATE", "KIEF", "LIVE_RESIN", "LOZENGES", "OIL", "PODS", "PRE_GROUND", "ROSIN", "RSO", "SAUCE", "SHAKE_TRIM", "SHATTER", "SMALL_BUDS", "SUBLINGUAL", "SUGAR", "TROCHES", "UNFLAVORED", "WAX", "WHOLE_FLOWER"]`
+- **tags**: `(list)`
+  - *Presence: 100.0%*
+- **terpenes**: `(list)`
+  - *Presence: 100.0%*
+  - **name**: `(str)`
+    - *Presence: 764.3%*
+    - *Unique Values:* `["BetaCaryophyllene", "BetaMyrcene", "BetaPinene", "Bisabolol", "CaryophylleneOxide", "Humulene", "Limonene", "Linalool", "Myrcene", "Ocimene", "Pinene", "Terpinolene"]`
+  - **unit**: `(str)`
+    - *Presence: 764.3%*
+    - *Unique Values:* `["PERCENTAGE"]`
+  - **unitSymbol**: `(str)`
+    - *Presence: 764.3%*
+    - *Unique Values:* `["%"]`
+  - **value**: `(float, int)`
+    - *Presence: 764.3%*
+    - *Numeric Range:* `[0 - 7.74]`
+- **thc_content**: `(float, int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[0 - 868.88]`
+- **thc_content_unit**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["%", "mg"]`
+- **unit_price**: `(float, int)`
+  - *Presence: 100.0%*
+  - *Numeric Range:* `[1 - 420]`
+- **updated_at**: `(str)`
+  - *Presence: 100.0%*
+  - *Unique Values:* `["2025-11-09T03:13:04.000000Z", "2025-11-09T03:13:05.000000Z", "2025-11-09T03:13:07.000000Z", "2025-11-09T03:13:08.000000Z", "2025-11-09T03:13:09.000000Z", "2025-11-09T03:13:10.000000Z", "2025-11-09T03:13:12.000000Z", "2025-11-09T03:13:13.000000Z", "2025-11-09T03:13:14.000000Z", "2025-11-09T03:13:15.000000Z", "2025-11-09T03:13:16.000000Z", "2025-11-09T03:13:18.000000Z", "2025-11-09T03:16:18.000000Z", "2025-11-09T03:16:19.000000Z", "2025-11-09T03:16:21.000000Z", "2025-11-09T03:16:22.000000Z", "2025-11-09T03:16:23.000000Z", "2025-11-09T03:16:24.000000Z", "2025-11-09T03:16:26.000000Z", "2025-11-09T03:16:27.000000Z", "2025-11-09T03:16:28.000000Z", "2025-11-09T03:16:29.000000Z", "2025-11-09T03:16:31.000000Z"]`
+- **variants**: `(list)`
+  - *Presence: 100.0%*
+  - **created_at**: `(str)`
+    - *Presence: 100.0%*
+    - *Unique Values (sample):* `["2025-10-08T12:45:06.000000Z", "2025-10-14T14:47:20.000000Z", "2025-10-14T14:47:22.000000Z", "2025-10-14T14:47:23.000000Z", "2025-10-14T14:47:24.000000Z", "2025-10-14T14:47:25.000000Z", "2025-10-14T14:47:26.000000Z", "2025-10-17T22:49:51.000000Z", "2025-10-17T22:49:52.000000Z", "2025-10-18T03:07:21.000000Z", "2025-10-19T17:50:03.000000Z", "2025-10-20T14:45:50.000000Z", "2025-10-22T18:46:41.000000Z", "2025-10-23T21:02:15.000000Z", "2025-10-23T21:02:17.000000Z", "2025-10-24T22:07:00.000000Z", "2025-10-24T22:07:02.000000Z", "2025-10-28T14:00:53.000000Z", "2025-10-28T14:00:58.000000Z", "2025-10-29T16:01:39.000000Z", "2025-10-29T16:01:40.000000Z", "2025-10-29T16:01:41.000000Z", "2025-10-29T16:01:42.000000Z", "2025-10-30T13:18:17.000000Z", "2025-10-30T13:18:18.000000Z", "2025-10-30T19:08:51.000000Z", "2025-10-31T01:19:27.000000Z", "2025-10-31T04:09:36.000000Z", "2025-10-31T04:09:37.000000Z", "2025-10-31T04:09:39.000000Z", "2025-10-31T19:59:21.000000Z", "2025-11-04T16:01:55.000000Z", "2025-11-05T16:17:37.000000Z", "2025-11-05T16:17:38.000000Z", "2025-11-05T16:17:39.000000Z", "2025-11-05T16:17:41.000000Z", "2025-11-06T22:14:55.000000Z", "2025-11-06T22:14:59.000000Z", "2025-11-06T22:15:01.000000Z", "2025-11-07T00:16:39.000000Z", "2025-11-07T00:16:42.000000Z", "2025-11-07T00:16:43.000000Z", "2025-11-07T00:16:44.000000Z", "2025-11-07T14:18:15.000000Z", "2025-11-08T02:16:08.000000Z", "2025-11-08T02:16:10.000000Z", "2025-11-08T02:16:11.000000Z", "2025-11-08T02:16:12.000000Z", "2025-11-08T02:16:13.000000Z", "2025-11-08T02:16:15.000000Z", ...]` (and more)
+  - **option**: `(str)`
+    - *Presence: 100.0%*
+    - *Unique Values:* `[".2g", ".3g", ".4g", ".5g", ".8g", "0.5g", "1.5g", "1/2oz", "1/4oz", "1/8oz", "14g", "1g", "1oz", "28g", "2g", "3.5g", "3g", "4.5g", "4g", "7g", "N/A"]`
+  - **product_id**: `(str)`
+    - *Presence: 100.0%*
+    - *Unique Values (sample):* `["62bf5d8bac365a0001425a8d", "634ac64e434191000cf46b9c", "638b6c18e3c48c000cb5d520", "6556a36eb8d54a00014fd734", "6581ea9e7fe5ee000160d225", "65df2fdf05d8110001e475a4", "65eb33a20d4c7c0001328aa4", "660dbecbfb74ea0001b75614", "661fc6493a04f30001f84ca2", "662a473d00b1fd0001fb0c77", "668f3e1b174e6a0001524f08", "66ab9ba5966c50000143515b", "66ab9ba5966c500001435166", "66cf8f9a6a54c3000186302e", "66ff5887ddb88b00017be7ec", "66ff5887ddb88b00017be7f6", "672d124c73cc9e9048e20d17", "6764932fe8915143354d3081", "6764932fe8915143354d3082", "676f6d7e1e79ab3ef27b555b", "677f3870cd8e4de2b9c90277", "67905b65ba8ff28698774679", "679847b223cfe184620e0b0b", "679ea9235b8d2b8553e862f0", "679ea9235b8d2b8553e86333", "67a416d9048c67bc68834f1b", "67a69124528e769b9dd44a96", "67b74e2944e89f6c0f72db52", "67c9b4ef3504dbcf207c75f9", "67f58fd03fd6c247145808aa", "67f6e74c3c936cee8d9154bc", "67f8575eca5148aa61d3a0b5", "680ff3d5b917e08cb3cfc57c", "681e59c6705fb377dea1f01a", "682f7b749f1d7e1b68c16290", "6836501ef664618a12395f7a", "685dfa3c8e68351e51bc5d18", "685dfa3c8e68351e51bc5d1b", "685dfa3c8e68351e51bc5d38", "686f22f65fe3a14e1edb3ba2", "68864cf32bec4dd784237769", "688ad548a5fa5b6d31577128", "688ad548a5fa5b6d3157712e", "6892bd0834925831864b97e1", "689cbc0b3f2d2902140113ea", "68a6620bb9bdf1ec07d04d4a", "68a7d63bd0ca3b29a5065874", "68b70986ccca280bc8cdc54e", "68b98f3306141ac4ef395e31", "68b98f3306141ac4ef395e47", ...]` (and more)
+  - **sale_unit_price**: `(NoneType, float, int)`
+    - *Presence: 100.0%*
+    - *Numeric Range:* `[6 - 132]`
+  - **unit_price**: `(float, int)`
+    - *Presence: 100.0%*
+    - *Numeric Range:* `[1 - 420]`
+  - **updated_at**: `(str)`
+    - *Presence: 100.0%*
+    - *Unique Values:* `["2025-11-09T03:13:04.000000Z", "2025-11-09T03:13:06.000000Z", "2025-11-09T03:13:07.000000Z", "2025-11-09T03:13:08.000000Z", "2025-11-09T03:13:09.000000Z", "2025-11-09T03:13:10.000000Z", "2025-11-09T03:13:12.000000Z", "2025-11-09T03:13:13.000000Z", "2025-11-09T03:13:14.000000Z", "2025-11-09T03:13:15.000000Z", "2025-11-09T03:13:16.000000Z", "2025-11-09T03:13:18.000000Z", "2025-11-09T03:16:18.000000Z", "2025-11-09T03:16:20.000000Z", "2025-11-09T03:16:21.000000Z", "2025-11-09T03:16:22.000000Z", "2025-11-09T03:16:23.000000Z", "2025-11-09T03:16:24.000000Z", "2025-11-09T03:16:26.000000Z", "2025-11-09T03:16:27.000000Z", "2025-11-09T03:16:28.000000Z", "2025-11-09T03:16:30.000000Z", "2025-11-09T03:16:31.000000Z"]`
+- **vendor**: `(NoneType)`
+  - *Presence: 100.0%*
