@@ -415,31 +415,23 @@ def plot_value_scatterplot(data, category_name, save_dir):
     else:
         ncol = 1
 
-    # Define the user-provided custom color lists
-    # 11 Custom Colors (Primary)
-    custom_colors = [
-        (0.2941, 0, 0.5725),
-        (0.3647, 0.2275, 0.6078),
-        (0, 0.3529, 0.7098),
-        (0.1020, 0.5216, 1.0000),
-        (0.2510, 0.6902, 0.6510),
-        (0.1020, 1.0000, 0.1020),
-        (1.0000, 0.7608, 0.0392),
-        (0.6000, 0.3098, 0),
-        (0.8627, 0.1961, 0.1255),
-        (0.9020, 0.3804, 0.3529),
-        (0.8275, 0.3725, 0.7176)
-    ]
+    # Generate 15 perceptually distinct hues by sampling the 'hsv' colormap
+    n_hues = 15
+    # We use np.linspace to get 15 evenly spaced values from 0 to 1
+    # and plt.cm.hsv() to convert those values to RGB colors.
+    # We add 1 to n_hues and slice [:-1] to avoid duplicating the red at 0 and 1.
+    custom_colors = plt.cm.hsv(np.linspace(0, 1, n_hues + 1))[:-1]
 
-    # 3 Grays (Secondary)
+    # 4 Grays (Secondary)
     grays = [
-        (0.2, 0.2, 0.2), # User "light gray"
-        (0.5, 0.5, 0.5), # User "mid gray"
-        (0.8, 0.8, 0.8)  # User "dark gray"
+        (0.0, 0.0, 0.0), # Dark
+        (0.25, 0.25, 0.25), # Mid-dark
+        (0.75, 0.75, 0.75), # Mid-light
+        (1, 1, 1)  # Light
     ]
 
-    # We will use 'left' and 'right' fillstyles
-    fillstyles = ['left', 'right']
+    # We will hard-code the fillstyle to 'left'
+    # 'left' = hue (color) on the left, gray (markerfacecoloralt) on the right
 
     # Create the map for each brand
     brand_style_map = {}
@@ -447,7 +439,7 @@ def plot_value_scatterplot(data, category_name, save_dir):
         brand_style_map[brand] = {
             'color': custom_colors[i % len(custom_colors)],
             'markerfacecoloralt': grays[i % len(grays)],
-            'fillstyle': fillstyles[i % len(fillstyles)]
+            'fillstyle': 'left'
         }
 
     # --- 4. Plotting (Loop once per Brand, vectorized call) ---
