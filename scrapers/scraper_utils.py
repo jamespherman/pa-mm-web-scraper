@@ -40,18 +40,31 @@ BRAND_MAP = {
 MASTER_CATEGORY_MAP = {
     # Concentrates
     'Concentrate': 'Concentrates', 'Concentrates': 'Concentrates', 'concentrates': 'Concentrates',
+    'extract': 'Concentrates', # <-- ADD THIS
+
     # Edibles
     'Edible': 'Edibles', 'Edibles': 'Edibles', 'edibles': 'Edibles',
+    'edible': 'Edibles',     # <-- ADD THIS
+
     # Flower
     'Flower': 'Flower', 'flower': 'Flower',
+    
     # Orals
     'ORALS': 'Orals', 'Oral': 'Orals', 'orals': 'Orals',
+    
     # Tinctures
     'TINCTURES': 'Tinctures', 'Tincture': 'Tinctures', 'tinctures': 'Tinctures',
+    'tincture': 'Tinctures',  # <-- ADD THIS
+
     # Topicals
     'Topicals': 'Topicals', 'TOPICALS': 'Topicals', 'topicals': 'Topicals',
+    'topical': 'Topicals',    # <-- ADD THIS
+
     # Vaporizers
     'Vaporizers': 'Vaporizers', 'vaporizers': 'Vaporizers', 'vapes': 'Vaporizers',
+    'vape': 'Vaporizers'      # <-- ADD THIS
+    
+    # We will ignore 'gear' as it's not a medication
 }
 
 MASTER_SUBCATEGORY_MAP = {

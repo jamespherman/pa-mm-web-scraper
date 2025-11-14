@@ -12,6 +12,7 @@ import warnings
 import re
 import os
 import datetime
+import pdb
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
@@ -30,7 +31,7 @@ TERPENE_COLUMNS = [
 ]
 
 # A predefined list of key cannabinoid columns.
-CANNABINOID_COLUMNS = ['THC', 'THCa', 'CBD']
+CANNABINOID_COLUMNS = ['THC', 'THCa', 'CBD', 'CBDa', 'CBG', 'CBGa', 'CBN', 'THCv']
 
 def _clean_product_names(df):
     """
@@ -62,7 +63,7 @@ def _clean_product_names(df):
         'live resin budder', 'live sauce', 'live resin badder', 'live budder',
         'live sauce', 'refresh', 'live badder', 'badder', 'crumble',
          'mixed buds', 'sugar leaf', 'pre-roll', 'pre ground', 'pre pack',
-         'all in one', 'all-in-one', 'Rise LLR', 'Rest LLR','aio'
+         'all in one', 'all-in-one', 'Rise LLR', 'Rest LLR', 'live resin', 'aio',
         'live', 'vape', 'pen', 'small', 'ground', 'cured', 'liquid',
         'indica', 'sativa', 'hybrid', 'thc', 'cbd', 'cbn', 'cbg',
         '10pk', 'pack', '10', 'x',
@@ -111,9 +112,53 @@ def _clean_product_names(df):
     # Clean up extra spaces created by the removals
     df['Name_Clean'] = df['Name_Clean'].str.replace(space_pattern, ' ', regex=True).str.strip()
     
+    print("Calculating Total_Terps by summing all final terpene columns...")
+
+    return df
+
     print("  - 'Name_Clean' column created successfully.")
     return df
+
+def _reclean_brands(df):
+    """
+    Performs a final, aggressive cleaning of the 'Brand' column
+    in the combined DataFrame to fix inconsistencies from different scrapers
+    before plotting.
+    """
+    print("  - Performing final re-cleaning of 'Brand' column...")
     
+    # 1. Define the standardization map based on PDB debugging
+    # This map handles Unicode (™), casing, and complex renaming.
+    RECLEAN_BRAND_MAP = {
+        'Cresco ': 'Cresco',
+        'FarmaceuticalRx': 'FarmaceuticalRX',
+        'FloraCal™': 'FloraCal Farms',
+        'KYND': 'Kynd',
+        'Seche': 'SeChe',
+        'Supply™': 'Supply',
+        'Remedi™': 'Remedi',
+        'The John Daly Collection by PHG': 'John Daly',
+        "Jim's Stash of Good Ugly Flower": "Belushi's Farm",
+        'FRX': 'FarmaceuticalRX',
+        'The Woods Reserve': 'Woods Reserve',
+        'Botanist': 'The Botanist'
+        # Any other 'dirty' names can be added here
+    }
+
+    # 2. Apply the map
+    # .replace() is the most efficient way to apply this map
+    df['Brand'] = df['Brand'].replace(RECLEAN_BRAND_MAP)
+    
+    # 3. Fix the 'None' crash
+    # Drop any rows that are *still* None/NaN after mapping
+    original_count = len(df)
+    df = df.dropna(subset=['Brand'])
+    removed_count = original_count - len(df)
+    if removed_count > 0:
+        print(f"    - Removed {removed_count} rows with None/NaN Brand.")
+        
+    return df
+
 def _convert_to_numeric(df):
     """
     Converts key columns to a numeric type for calculations and analysis.
@@ -170,6 +215,15 @@ def _convert_to_numeric(df):
     df['Total_Terps'] = df[terps_to_sum].sum(axis=1)
     # --- End Calculation ---
 
+    # --- TAC Calculation ---
+    # Fill NaNs with 0 for all cannabinoid columns
+    df[CANNABINOID_COLUMNS] = df[CANNABINOID_COLUMNS].fillna(0)
+    
+    # Calculate TAC by summing all individual cannabinoids
+    print("Calculating TAC by summing all CANNABINOID_COLUMNS...")
+    df['TAC'] = df[CANNABINOID_COLUMNS].sum(axis=1)
+    # --- End Calculation ---
+
     return df
 
 def run_analysis(dataframe):
@@ -202,6 +256,9 @@ def run_analysis(dataframe):
     # --- Product Name Cleaning ---
     # Create the 'Name_Clean' column for de-duplication
     cleaned_df = _clean_product_names(cleaned_df)
+
+    # --- Brand Re-Cleaning ---
+    cleaned_df = _reclean_brands(cleaned_df)
     
     print(f"Data cleaning complete.")
 
@@ -278,8 +335,14 @@ def plot_brand_violin(data, category_name, save_dir):
     """
     print(f"  > Plotting Brand Violin for {category_name}...")
 
+    # --- Exclude products with 0 terps ---
+    data = data[data['Total_Terps'] > 0].copy()
+    if data.empty:
+        print(f"    SKIPPING: No products found with Total_Terps > 0 for {category_name}.")
+        return
+
     # Define the minimum number of products a brand must have to be included
-    MIN_SAMPLES = 5
+    MIN_SAMPLES = 10
 
     # --- 1. Filter and Prepare Data ---
 
@@ -325,7 +388,7 @@ def plot_brand_violin(data, category_name, save_dir):
         x='Total_Terps', # Use Total_Terps on x-axis for horizontal plot
         y='Brand', # Use Brand on y-axis
         order=brand_order, # Apply the sorted brand order
-        palette='viridis',
+        palette='hsv',
         inner='box', # Show a boxplot inside the violins
         orient='h', # Specify horizontal orientation
         cut=0
@@ -338,9 +401,9 @@ def plot_brand_violin(data, category_name, save_dir):
 
     # Set titles and labels
     plt.title(f'Total Terpenes by Brand for {category_name.title()}', fontsize=16)
-    plt.xlabel('Total Terpenes (%)', fontsize=12)
-    plt.ylabel('Brand', fontsize=12)
-    plt.xticks(fontsize=10)
+    plt.xlabel('Total Terpenes (%)', fontsize=18)
+    plt.ylabel('Brand', fontsize=18)
+    plt.xticks(fontsize=14)
     plt.yticks(fontsize=10)
 
     # Ensure layout is tight
@@ -534,7 +597,7 @@ def plot_top_50_heatmap(data, category_name, save_dir):
         'Flower': (
             (data['Total_Terps'] > 2) &
             (data['Total_Terps'] < 6) &
-            (data['THC'] < 40) &
+            (data['TAC'] < 45) &
             (~data['Subtype'].str.contains('Infused', case=False, na=False))
         ),
         'Concentrates': (
@@ -572,12 +635,12 @@ def plot_top_50_heatmap(data, category_name, save_dir):
 
     # --- 4. Prepare Data for Plotting ---
 
-    # Create the Y-axis labels (e.g., "Strain | Brand | 3.5% terps | 22.1% THC")
+    # Create the Y-axis labels (e.g., "Strain | Brand | 3.5% terps | 22.1% TAC")
     y_labels = []
     for index, row in top_50_df.iterrows():
         # Create the raw label string
         label_str = (f"{row['Name_Clean']} | {row['Brand']} | "
-                     f"{row['Total_Terps']:.2f}% terps | {row['THC']:.1f}% THC")
+                     f"{row['Total_Terps']:.2f}% terps | {row['TAC']:.1f}% TAC")
         
         # Clean up any repeating "|" characters
         clean_label = re.sub(r'\|+', '|', label_str)
@@ -695,16 +758,16 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
     # Use the same category-specific filters as the heatmap
     filters = {
         'Flower': (
-            (data['Total_Terps'] > 2) &
+            (data['Total_Terps'] > 0.25) &
             (data['Total_Terps'] < 6) &
-            (data['THC'] < 40) &
+            (data['TAC'] < 45) &
             (~data['Subtype'].str.contains('Infused', case=False, na=False))
         ),
         'Concentrates': (
-            (data['Total_Terps'] > 5)
+            (data['Total_Terps'] > 0.25)
         ),
         'Vaporizers': (
-            (data['Total_Terps'] > 5)
+            (data['Total_Terps'] > 0.25)
         )
     }
 
@@ -730,9 +793,13 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
     pie_data = dominant_terpenes.value_counts()
 
     # Create a color map for consistent colors across plots
-    terp_palette = sns.color_palette('viridis', n_colors=len(TERPS_TO_PLOT))
-    color_map = {terp: color for terp, color in zip(TERPS_TO_PLOT, terp_palette)}
+    n_colors = len(TERPS_TO_PLOT)
 
+    # Use plt.cm.hsv (which needs np) to get n+1 colors,
+    # then slice off the last one [:-1] to avoid the wrap-around.
+    terp_palette = plt.cm.tab10(np.linspace(0, 1, n_colors))
+    color_map = {terp: color for terp, color in zip(TERPS_TO_PLOT, terp_palette)}
+    
     # Get colors in the correct order for the pie chart
     pie_colors = [color_map.get(terp, '#B0B0B0') for terp in pie_data.index]
 
@@ -756,7 +823,7 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
             name_short = row['Name_Clean'][:25] # Abbreviate strain name
 
             s = (f"{row[terp]:.2f}% | {brand_short} | "
-                 f"{name_short} | {row['THC']:.1f}% THC")
+                 f"{name_short} | {row['TAC']:.1f}% TAC")
             product_strings.append(s)
 
         top_10_lists[terp] = product_strings
@@ -764,42 +831,50 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
     # --- 4. Plotting ---
 
     sns.set_style("white")
-    fig = plt.figure(figsize=(20, 12))
+    fig = plt.figure(figsize=(21 , 16))
 
     # --- A. Pie Chart Axes (Left Side) ---
-    ax_pie = fig.add_axes([0.01, 0.1, 0.4, 0.8])
+    # Make axes visually square by accounting for figsize ratio (20:16)
+    FIG_W = 20
+    FIG_H = 16
+    AXES_W_NORM = 0.35 # Use 60% of the figure height
+    AXES_H_NORM = AXES_W_NORM * (FIG_W / FIG_H) # Calculate width to be square
+    
+    ax_pie = fig.add_axes([0.01, 0.5, AXES_W_NORM, AXES_H_NORM])
 
-    # Move pie chart up to make space for the legend
+    # Position pie chart
     patches, texts = ax_pie.pie(
         pie_data,
         colors=pie_colors,
         startangle=90,
-        center=(0.5, 0.5) # Center the pie in the axis
+        # center=(0.5, 0.5) # Center the pie in the axis
     )
 
     # Add descriptive text
-    ax_pie.set_title(f'Dominant Terpene for {category_name.title()}', fontsize=36, pad=30)
+    ax_pie.set_title(f'Dominant Terpene for {category_name.title()}', fontsize=28, pad=24)
     ax_pie.text(0.5, 1, 'Pie shows the % of products where a given terpene is dominant.',
                 ha='center', va='center', transform=ax_pie.transAxes,
-                fontsize=18, style='italic', color='#555555')
+                fontsize=16, style='italic', color='#555555')
 
 
     # Add the legend below the chart
     legend_labels = [f"{name} ({perc:.1f}%)" for name, perc in zip(pie_data.index, (pie_data / pie_data.sum() * 100))]
     ax_pie.legend(patches, legend_labels, 
                   loc="upper center", # Position legend at bottom
-                  bbox_to_anchor=(0.5, -0.1), # Place it below the axis
-                  fontsize=36,
-                  ncol=1, # Use 3 columns
+                  bbox_to_anchor=(0.5, 0), # Place it below the axis
+                  fontsize=26,
+                  ncol=1,
                   frameon=False) # No bounding box
 
     # --- B. Text List Axes (Right Side) ---
-    ax_text = fig.add_axes([0.42, 0.0, 0.58, 1.0])
+    ax_text = fig.add_axes([0.36, 0.0, 0.64, 1.0])
     ax_text.axis('off') # Hide axes
 
     # --- C. Draw the Text Lists ---
-    num_columns = 2 # We will lay out the 10 lists in 2 columns
-    terps_per_column = len(TERPS_TO_PLOT) // num_columns
+    num_columns = 2 # We will lay out the 9 lists in 2 columns
+    
+    # Use np.ceil to get 5 rows (ceil(9 / 2) = 5)
+    terps_per_column = int(np.ceil(len(TERPS_TO_PLOT) / num_columns))
 
     x_start_positions = [0.0, 0.5] # X-position for Column 1, Column 2
     y_pos = 0.95 # Start at the top
@@ -807,12 +882,14 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
     y_step_line = 0.02
 
     current_terp_index = 0
-
+    
     for col in range(num_columns):
         x_pos = x_start_positions[col]
         y_pos = 0.95 # Reset Y for each new column
 
         for i in range(terps_per_column):
+            if current_terp_index >= len(TERPS_TO_PLOT):
+                break
             terp_name = TERPS_TO_PLOT[current_terp_index]
 
             # Draw Header (e.g., "beta-Myrcene")
@@ -822,7 +899,7 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
 
             # Draw Top 10 List
             for line in top_10_lists[terp_name]:
-                ax_text.text(x_pos, y_pos, line, fontsize=12, family='monospace')
+                ax_text.text(x_pos, y_pos, line, fontsize=14, family='monospace')
                 y_pos -= y_step_line
 
             y_pos -= y_step_header # Extra space between lists

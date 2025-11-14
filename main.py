@@ -29,45 +29,6 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets',
           'https://www.googleapis.com/auth/drive.file']
 
 # --- Define Store Mappings ---
-# These dictionaries map a user-friendly store name to the specific ID
-# required by the respective scraper APIs.
-# A complete list of known iHeartJane stores in PA.
-IHEARTJANE_STORES = {
-    # Maitri
-    "Maitri (PGH)": 2913,
-    "Maitri (Uniontown)": 2914,
-    "Maitri (New Stanton)": 4467,
-    
-    # Vytal (from manual lookup)
-    "Vytal (Harrisburg)": 6078,
-    "Vytal (Fogelsville)": 6079,
-    "Vytal (Kennet Square)": 6080,
-    "Vytal (Lancaster)": 6081,
-    "Vytal (Lansdale)": 6082,
-    "Vytal (State College)": 6083,
-    
-    # RISE (from user-provided list)
-    "RISE (Carlisle)": 1547,
-    "RISE (Chambersburg)": 1867,
-    "RISE (Cranberry)": 1575,
-    "RISE (Duncansville)": 1961,
-    "RISE (Erie on Lake)": 392,
-    "RISE (Erie on Peach)": 2607,
-    "RISE (Grove City)": 5202,
-    "RISE (Hermitage)": 1551,
-    "RISE (King of Prussia)": 1552,
-    "RISE (Latrobe)": 1549,
-    "RISE (Lebanon)": 6520,
-    "RISE (Meadville)": 2863,
-    "RISE (Mechanicsburg)": 1550,
-    "RISE (Monroeville)": 2266,
-    "RISE (New Castle)": 1545,
-    "RISE (Philadelphia)": 5383,
-    "RISE (Steelton)": 1544,
-    "RISE (Warminster)": 3404,
-    "RISE (York)": 1548
-}
-
 TRULIEVE_STORES = {
     "Trulieve (Squirrel Hill)": "86",
     "Trulieve (North Shore)": "90"
@@ -115,6 +76,9 @@ def main():
     today_str = datetime.date.today().strftime('%Y-%m-%d')
     spreadsheet_title = f'PA_Scraped_Data_{today_str}'
 
+    iheartjane_df = fetch_iheartjane_data()
+    pdb.set_trace()
+
     try:
         # `gspread.oauth()` handles the OAuth 2.0 "Desktop App" flow.
         # - `credentials_filename`: Points to the `credentials.json` file downloaded from Google Cloud.
@@ -156,17 +120,16 @@ def main():
         # Each scraper function is called, and its resulting DataFrame is append
         # to the list.
         
-        pdb.set_trace()
+        # pdb.set_trace()
         print("\nStarting Sweed (Zen Leaf) Scraper...")
         sweed_df = fetch_sweed_data()
         if not sweed_df.empty:
             all_dataframes.append(sweed_df)
         
         print("\nStarting iHeartJane Scraper...")
-        for store_name, store_id in IHEARTJANE_STORES.items():
-            df = fetch_iheartjane_data(store_id, store_name)
-            if not df.empty:
-                all_dataframes.append(df)
+        iheartjane_df = fetch_iheartjane_data()
+        if not iheartjane_df.empty:
+            all_dataframes.append(iheartjane_df)
 
         print("\nStarting Cresco Scraper...")
         cresco_df = fetch_cresco_data(CRESCO_STORES)
