@@ -16,58 +16,289 @@ from .scraper_utils import (
 # --- Constants ---
 
 # The DUTCHIE_STORES dictionary is the core configuration for this scraper.
-# Each key is a user-friendly store name, and the value is a dictionary
-# containing the specific details needed to interact with that store's API.
-#
-# - `api_url`: The specific GraphQL endpoint for the dispensary.
-# - `store_id`: The unique identifier for the specific store location on the Dutchie platform.
-# - `headers`: A dictionary of HTTP headers. These are often crucial for mimicking
-#   a legitimate browser request to avoid being blocked. The `referer` and
-#   `x-dutchie-session` headers can be particularly important.
 DUTCHIE_STORES = {
-    "Ethos (Harmar)": {
-        "api_url": "https://harmarville.ethoscannabis.com/api-4/graphql",
+    # --- CURALEAF ---
+    "Curaleaf (Gettysburg)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "6074c37fcee012009f173ff2",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-gettysburg/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (Brookville)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "6074c3a031e11800c36bd129",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-brookville/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (Morton)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "6074c3c505f7ee00caefc167",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-morton/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (Altoona)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "6074c3e954b6a800d8c7ba0f",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-altoona/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (Lebanon)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "6074c411e5801600aea48226",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-lebanon/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (King of Prussia)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "6074c4351f698400aec35540",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-king-of-prussia/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (Bradford)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "6074c45373ad3500ad4ebdf3",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-bradford/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (Philadelphia)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "6074c46d7aab5200c9c1ce26",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-philadelphia/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (DuBois)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "6074c493f7d2f400c2e1e282",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-dubois/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (Harrisburg)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "6074c4b9b29d5d00ada48f5e",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-harrisburg/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (City Ave, Philadelphia)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "6074c4e35e456200ae8fd73c",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-city-ave-philadelphia/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (Horsham)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "6074c502db8237009eb9aac0",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-horsham/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (State College)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "61fa091869e083009ea12aef",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-state-college/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (Erie)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "64a59570c9103c0008b07248",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-erie/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (Greensburg)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "64a59600a0b3f800098f98a2",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-greensburg/products/vaporizers?sortby=relevance",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    "Curaleaf (Wayne)": {
+        "api_url": "https://curaleaf.com/api-2/graphql",
+        "store_id": "64a59689408e4e0009182379",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            'cookie': 'confirmed21OrOlder=1',
+            "referer": "https://curaleaf.com/stores/curaleaf-pa-wayne/products/flower",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjE5NTA1MGVmLTQ2MzMtNGRhYS05YjA5LTc4MzQ1ZDU0MTlhMSIsImV4cGlyZXMiOjE3NjM0ODcxMDExMTd9"
+        }
+    },
+    # --- ETHOS ---
+    # NOTE: Using the comprehensive store list and cName-based referers.
+    "Ethos (Harmarville)": {
+        "api_url": "https://nephilly.ethoscannabis.com/api-4/graphql",
         "store_id": "621900cebbc5580e15476deb",
         "headers": {
-            "accept": "*/*",
-            "apollographql-client-name": "Marketplace (production)",
-            "content-type": "application/json",
-            "referer": "https://harmarville.ethoscannabis.com/stores/ethos-harmarville",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
-            "x-dutchie-session": "eyJpZCI6ImM1MDc2NGI5LTAyZWUtNDU2ZS05ODc0LTZmNzkyOTQwYzc2NiIsImV4cGlyZXMiOjE3NjI0Mjc5MTU5NzR9"
+            'accept': '*/*',
+            'apollographql-client-name': 'Marketplace (production)',
+            'content-type': 'application/json',
+            'referer': 'https://nephilly.ethoscannabis.com/stores/ethos-harmarville',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0',
+            'x-dutchie-session': 'eyJpZCI6IjE5Y2MzYWIyLTc4NGEtNDVhZC05ZDVlLTVmOTM3YzdiYzdmMyIsImV4cGlyZXMiOjE3NjM3Mzk5OTMyMTF9'
+        }
+    },
+    "Ethos (Philadelphia)": {
+        "api_url": "https://nephilly.ethoscannabis.com/api-4/graphql",
+        "store_id": "607f5e79490cc600c0d588d1",
+        "headers": {
+            'accept': '*/*',
+            'apollographql-client-name': 'Marketplace (production)',
+            'content-type': 'application/json',
+            'referer': 'https://nephilly.ethoscannabis.com/stores/ethos-philadelphia',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0',
+            'x-dutchie-session': 'eyJpZCI6IjE5Y2MzYWIyLTc4NGEtNDVhZC05ZDVlLTVmOTM3YzdiYzdmMyIsImV4cGlyZXMiOjE3NjM3Mzk5OTMyMTF9'
+        }
+    },
+    "Ethos (Montgomeryville)": {
+        "api_url": "https://nephilly.ethoscannabis.com/api-4/graphql",
+        "store_id": "5f2de49198211000abef8b99",
+        "headers": {
+            'accept': '*/*',
+            'apollographql-client-name': 'Marketplace (production)',
+            'content-type': 'application/json',
+            'referer': 'https://nephilly.ethoscannabis.com/stores/ethos-montgomeryville',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0',
+            'x-dutchie-session': 'eyJpZCI6IjE5Y2MzYWIyLTc4NGEtNDVhZC05ZDVlLTVmOTM3YzdiYzdmMyIsImV4cGlyZXMiOjE3NjM3Mzk5OTMyMTF9'
+        }
+    },
+    "Ethos (Allentown)": {
+        "api_url": "https://nephilly.ethoscannabis.com/api-4/graphql",
+        "store_id": "4bZmK4MfjoypZ8MdN",
+        "headers": {
+            'accept': '*/*',
+            'apollographql-client-name': 'Marketplace (production)',
+            'content-type': 'application/json',
+            'referer': 'https://nephilly.ethoscannabis.com/stores/ethos-allentown',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0',
+            'x-dutchie-session': 'eyJpZCI6IjE5Y2MzYWIyLTc4NGEtNDVhZC05ZDVlLTVmOTM3YzdiYzdmMyIsImV4cGlyZXMiOjE3NjM3Mzk5OTMyMTF9'
+        }
+    },
+    "Ethos (Hazleton)": {
+        "api_url": "https://nephilly.ethoscannabis.com/api-4/graphql",
+        "store_id": "5fad9a6840352500ba68def0",
+        "headers": {
+            'accept': '*/*',
+            'apollographql-client-name': 'Marketplace (production)',
+            'content-type': 'application/json',
+            'referer': 'https://nephilly.ethoscannabis.com/stores/ethos-hazleton',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0',
+            'x-dutchie-session': 'eyJpZCI6IjE5Y2MzYWIyLTc4NGEtNDVhZC05ZDVlLTVmOTM3YzdiYzdmMyIsImV4cGlyZXMiOjE3NjM3Mzk5OTMyMTF9'
+        }
+    },
+    "Ethos (Wilkes-Barre)": {
+        "api_url": "https://nephilly.ethoscannabis.com/api-4/graphql",
+        "store_id": "5f4ef2d0b28822768a8a574c",
+        "headers": {
+            'accept': '*/*',
+            'apollographql-client-name': 'Marketplace (production)',
+            'content-type': 'application/json',
+            'referer': 'https://nephilly.ethoscannabis.com/stores/ethos-wilkes-barre',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0',
+            'x-dutchie-session': 'eyJpZCI6IjE5Y2MzYWIyLTc4NGEtNDVhZC05ZDVlLTVmOTM3YzdiYzdmMyIsImV4cGlyZXMiOjE3NjM3Mzk5OTMyMTF9'
+        }
+    },
+    "Ethos (Pittsburgh West)": {
+        "api_url": "https://nephilly.ethoscannabis.com/api-4/graphql",
+        "store_id": "5fa0829005bb2400cfc4b694",
+        "headers": {
+            'accept': '*/*',
+            'apollographql-client-name': 'Marketplace (production)',
+            'content-type': 'application/json',
+            'referer': 'https://nephilly.ethoscannabis.com/stores/ethos-pittsburgh-west',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/1L2.0.0.0',
+            'x-dutchie-session': 'eyJpZCI6IjE5Y2MzYWIyLTc4NGEtNDVhZC05ZDVlLTVmOTM3YzdiYzdmMyIsImV4cGlyZXMiOjE3NjM3Mzk5OTMyMTF9'
         }
     },
     "Ethos (Pleasant Hills)": {
-        "api_url": "https://pittsburgh.ethoscannabis.com/api-4/graphql",
+        "api_url": "https://nephilly.ethoscannabis.com/api-4/graphql",
         "store_id": "607dc27bfde18500b5e8dd52",
         "headers": {
-            "accept": "*/*",
-            "apollographql-client-name": "Marketplace (production)",
-            "content-type": "application/json",
-            "referer": "https://pleasanthills.ethoscannabis.com/stores/ethos-pleasant-hills",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
-            "x-dutchie-session": "eyJpZCI6ImM1MDc2NGI5LTAyZWUtNDU2ZS05ODc0LTZmNzkyOTQwYzc2NiIsImV4cGlyZXMiOjE3NjI0Mjc5MTU5NzR9"
+            'accept': '*/*',
+            'apollographql-client-name': 'Marketplace (production)',
+            'content-type': 'application/json',
+            'referer': 'https://nephilly.ethoscannabis.com/stores/ethos-pleasant-hills',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36 Edg/142.0.0.0',
+            'x-dutchie-session': 'eyJpZCI6IjE5Y2MzYWIyLTc4NGEtNDVhZC05ZDVlLTVmOTM3YzdiYzdmMyIsImV4cGlyZXMiOjE3NjM3Mzk5OTMyMTF9'
         }
     },
-    "Ethos (North Fayette)": {
-        "api_url": "https://pittsburgh.ethoscannabis.com/api-4/graphql",
-        "store_id": "5fa0829005bb2400cfc4b694",
-        "headers": {
-            "accept": "*/*",
-            "apollographql-client-name": "Marketplace (production)",
-            "content-type": "application/json",
-            "referer": "https://northfayette.ethoscannabis.com/stores/ethos-north-fayette",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0",
-            "x-dutchie-session": "eyJpZCI6ImM1MDc2NGI5LTAyZWUtNDU2ZS05ODc0LTZmNzkyOTQwYzc2NiIsImV4cGlyZXMiOjE3NjI0Mjc5MTU5NzR9"
-        }
-    },
+
+    # --- ASCEND ---
     "Ascend (Cranberry)": {
         "api_url": "https://letsascend.com/api-4/graphql",
         "store_id": "66fef50576b5d1b3703a1890",
         "headers": {
-            "accept": "*/*",
-            "apollographql-client-name": "Marketplace (production)",
-            "content-type": "application/json",
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
             "referer": "https://letsascend.com/stores/cranberry-pennsylvania",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
             "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
@@ -77,14 +308,184 @@ DUTCHIE_STORES = {
         "api_url": "https://letsascend.com/api-4/graphql",
         "store_id": "66fef58038ff55ae0d700b55",
         "headers": {
-            "accept": "*/*",
-            "apollographql-client-name": "Marketplace (production)",
-            "content-type": "application/json",
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
             "referer": "https://letsascend.com/stores/monaca-pennsylvania",
             "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
             "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
         }
-    }
+    },
+    "Ascend (Scranton)": {
+        "api_url": "https://letsascend.com/api-4/graphql",
+        "store_id": "66fef532110068aee1c6b99d",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://letsascend.com/stores/wayne-pennsylvania",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
+        }
+    },
+    "Ascend (Wayne)": {
+        "api_url": "https://letsascend.com/api-4/graphql",
+        "store_id": "66fef5589eb852714bc99c0c",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://letsascend.com/stores/wayne-pennsylvania",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
+        }
+    },
+    "Ascend (Whitehall)": {
+        "api_url": "https://letsascend.com/api-4/graphql",
+        "store_id": "66c371484a1610802761aa4c",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://letsascend.com/stores/wayne-pennsylvania",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
+        }
+    },
+
+    # --- AYR ---
+    "Ayr (Gibsonia)": {
+        "api_url": "https://dutchie.com/api-2/graphql",
+        "store_id": "5ff8ee358174a300e11a15cb", # This ID was correct
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://dutchie.com/embedded-menu/ayr-dispensary-gibsonia/carousels/a38fb001-0957-4287-9247-cff829021762?carouselId=a38fb001-0957-4287-9247-cff829021762&routeRoot=https%3A%2F%2Fayrdispensaries.com%2Fpennsylvania%2Fgibsonia%2Fshop%2F",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+        }
+    },
+    "Ayr (Bryn Mawr)": {
+        "api_url": "https://dutchie.com/api-2/graphql",
+        "store_id": "607474136e6c2700e1d03328",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://ayrdispensaries.com/pennsylvania/bryn-mawr/shop/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+        }
+    },
+    "Ayr (New Castle)": {
+        "api_url": "https://dutchie.com/api-2/graphql",
+        "store_id": "6074744476081400e1215169",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://ayrdispensaries.com/pennsylvania/new-castle/shop/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+        }
+    },
+    "Ayr (Indiana)": {
+        "api_url": "https://dutchie.com/api-2/graphql",
+        "store_id": "622e0e01700689000c0f73f5",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://ayrdispensaries.com/pennsylvania/indiana/shop/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+        }
+    },
+    "Ayr (Plymouth Meeting)": {
+        "api_url": "https://dutchie.com/api-2/graphql",
+        "store_id": "6074742a76081400e1215163",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://ayrdispensaries.com/pennsylvania/plymouth-meeting/shop/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+        }
+    },
+    "Ayr (Bloomsburg)": {
+        "api_url": "https://dutchie.com/api-2/graphql",
+        "store_id": "6074745d76081400e121516f",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://ayrdispensaries.com/pennsylvania/bloomsburg/shop/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+        }
+    },
+    "Ayr (Selinsgrove)": {
+        "api_url": "https://dutchie.com/api-2/graphql",
+        "store_id": "61b369c00ddd67000d14b437",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://ayrdispensaries.com/pennsylvania/selinsgrove/shop/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+        }
+    },
+    "Ayr (State College)": {
+        "api_url": "https://dutchie.com/api-2/graphql",
+        "store_id": "61e967a5b39912000c4161a0",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://ayrdispensaries.com/pennsylvania/state-college/shop/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+        }
+    },
+    "Ayr (Williamsport)": {
+        "api_url": "https://dutchie.com/api-2/graphql",
+        "store_id": "61f14ae1f23793000cc1b771",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://ayrdispensaries.com/pennsylvania/williamsport/shop/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+        }
+    },
+    "Ayr (Montgomeryville)": {
+        "api_url": "https://dutchie.com/api-2/graphql",
+        "store_id": "62d56a298533b3000c2a2333",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://ayrdispensaries.com/pennsylvania/montgomeryville/shop/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+        }
+    },
+    "Ayr (DuBois)": {
+        "api_url": "https://dutchie.com/api-2/graphql",
+        "store_id": "63039d99723351000c8f5f8b",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://ayrdispensaries.com/pennsylvania/dubois/shop/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+        }
+    },
+    "Ayr (Pottsville)": {
+        "api_url": "https://dutchie.com/api-2/graphql",
+        "store_id": "63483984d2b865000c7e2962",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://ayrdispensaries.com/pennsylvania/pottsville/shop/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+        }
+    },
+    "Ayr (Philadelphia)": {
+        "api_url": "https://dutchie.com/api-2/graphql",
+        "store_id": "6440232231267b0001bc954b",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://ayrdispensaries.com/pennsylvania/philadelphia/shop/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+        }
+    },
+    "Ayr (Olyphant)": {
+        "api_url": "https://dutchie.com/api-2/graphql",
+        "store_id": "644023a831267b0001bc954d",
+        "headers": {
+            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+            "referer": "https://ayrdispensaries.com/pennsylvania/olyphant/shop/",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+        }
+    },
 }
 
 def get_all_product_slugs(store_name, store_config):
@@ -295,6 +696,8 @@ def fetch_dutchie_data():
     all_store_slugs = []
     for store_name, store_config in DUTCHIE_STORES.items():
         all_store_slugs.extend(get_all_product_slugs(store_name, store_config))
+    
+    pdb.set_trace()
 
     if not all_store_slugs:
         print("No product slugs found for any Dutchie store. Exiting Dutchie scraper.")

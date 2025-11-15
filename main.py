@@ -13,6 +13,7 @@ import datetime
 import gspread
 import pandas as pd
 import pdb
+import json
 from scrapers.iheartjane_scraper import fetch_iheartjane_data
 from scrapers.dutchie_scraper import fetch_dutchie_data
 from scrapers.trulieve_scraper import fetch_trulieve_data
@@ -76,7 +77,6 @@ def main():
     today_str = datetime.date.today().strftime('%Y-%m-%d')
     spreadsheet_title = f'PA_Scraped_Data_{today_str}'
 
-    iheartjane_df = fetch_iheartjane_data()
     pdb.set_trace()
 
     try:
@@ -121,6 +121,11 @@ def main():
         # to the list.
         
         # pdb.set_trace()
+        print("\nStarting Dutchie Scraper...")
+        dutchie_df = fetch_dutchie_data()
+        if not dutchie_df.empty:
+            all_dataframes.append(dutchie_df)
+            
         print("\nStarting Sweed (Zen Leaf) Scraper...")
         sweed_df = fetch_sweed_data()
         if not sweed_df.empty:
@@ -140,11 +145,6 @@ def main():
         trulieve_df = fetch_trulieve_data(TRULIEVE_STORES)
         if not trulieve_df.empty:
             all_dataframes.append(trulieve_df)
-
-        print("\nStarting Dutchie Scraper...")
-        dutchie_df = fetch_dutchie_data()
-        if not dutchie_df.empty:
-            all_dataframes.append(dutchie_df)
         
         # If no scrapers return data, exit gracefully.
         if not all_dataframes:

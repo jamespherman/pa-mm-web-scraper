@@ -171,12 +171,22 @@ def parse_jane_product(product_hit, store_name):
     available_weights = product_hit.get('available_weights', [])
     
     if not available_weights:
-        if product_hit.get('price_each'):
+        price_each = product_hit.get('price_each')
+        if price_each:
             variant_data = common_data.copy()
-            variant_data['Price'] = float(product_hit.get('special_price_each', {}).get('discount_price') or product_hit.get('price_each'))
+            
+            # Safely check for a special price.
+            # (product_hit.get('special_price_each') or {}) will handle the case where
+            # the 'special_price_each' key is present but its value is None.
+            special_price_data = product_hit.get('special_price_each') or {}
+            discount_price = special_price_data.get('discount_price')
+            # --- END FIX ---
+
+            variant_data['Price'] = float(discount_price or price_each)
             variant_data['Weight_Str'] = "Each"
             variant_data['Weight'] = np.nan
             product_variants.append(variant_data)
+            
         return product_variants
 
     for weight_str in available_weights:
@@ -241,6 +251,7 @@ def _fetch_store_menu(store_id, store_name, headers):
             print(f"  ...retrieved {len(hits)} products from page {page}.")
 
             for hit in hits:
+                
                 # The "hit" is the raw product, which is what our parser expects
                 product_variants = parse_jane_product(hit, store_name)
                 all_product_variants.extend(product_variants)
@@ -256,6 +267,14 @@ def _fetch_store_menu(store_id, store_name, headers):
             break # Stop scraping this store on an error
         except Exception as e:
             print(f"Error parsing data for store {store_id} on page {page}: {e}")
+            
+            # --- PDB TRACE ---
+            print("\n*** ERROR CAUGHT! Interrogating problematic 'hit'... ***")
+            # 'hit' is the variable from the for-loop that caused the error.
+            # We are now paused inside the exception handler.
+            pdb.set_trace()
+            # --- END TRACE ---
+                
             break
             
     print(f"Successfully fetched {len(all_product_variants)} product variants for {store_name}.")
