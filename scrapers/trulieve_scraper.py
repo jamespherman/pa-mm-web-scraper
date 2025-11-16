@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 from .scraper_utils import (
     convert_to_grams, BRAND_MAP, MASTER_CATEGORY_MAP,
-    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
+    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP, save_raw_json
 )
 import re
 import pdb
@@ -109,8 +109,11 @@ def fetch_trulieve_data(stores):
                     url = f"{BASE_URL.format(store_id=store_id, category=category)}?page={page}"
                     response = requests.get(url, headers=HEADERS, timeout=10)
                     response.raise_for_status()
-                    
                     json_response = response.json()
+
+                    # Save the raw JSON data
+                    filename_parts = ['trulieve', store_name, category, f'p{page}']
+                    save_raw_json(json_response, filename_parts)
                     products = json_response.get('data')
                     
                     if not products:

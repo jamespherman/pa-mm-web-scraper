@@ -11,7 +11,7 @@ import json
 import time
 from .scraper_utils import (
     convert_to_grams, BRAND_MAP, MASTER_CATEGORY_MAP,
-    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
+    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP, save_raw_json
 )
 
 # --- API Constants ---
@@ -240,8 +240,11 @@ def _fetch_store_menu(store_id, store_name, headers):
                 timeout=20
             )
             response.raise_for_status()
-            
             data = response.json()
+
+            # Save the raw JSON data
+            filename_parts = ['iheartjane', store_name, f'p{page}']
+            save_raw_json(data, filename_parts)
             hits = data.get('hits', [])
             
             if not hits:

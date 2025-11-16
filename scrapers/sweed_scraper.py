@@ -12,7 +12,7 @@ import json
 import time
 from .scraper_utils import (
     convert_to_grams, BRAND_MAP, MASTER_CATEGORY_MAP,
-    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
+    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP, save_raw_json
 )
 
 # --- Constants ---
@@ -130,6 +130,10 @@ def _get_all_variant_info():
                     response = requests.post(URL_PRODUCT_LIST, headers=headers, json=payload, timeout=10)
                     response.raise_for_status()
                     data = response.json()
+
+                    # Save the raw JSON data
+                    filename_parts = ['sweed', store_name, category_name, f'p{page}']
+                    save_raw_json(data, filename_parts)
                     
                     products = data.get('list')
                     if not products:
@@ -199,6 +203,10 @@ def _get_unique_details(unique_variant_ids):
             resp_variant = requests.post(URL_VARIANT_DETAIL, headers=headers, json=payload_variant, timeout=10)
             resp_variant.raise_for_status()
             variant_data = resp_variant.json()
+
+            # Save the raw JSON data for variant details
+            filename_parts_variant = ['sweed', 'variant_details', variant_id]
+            save_raw_json(variant_data, filename_parts_variant)
             
             variant_detail = variant_data.get('variants', [{}])[0]
             
@@ -221,6 +229,10 @@ def _get_unique_details(unique_variant_ids):
             resp_lab = requests.post(URL_LAB_DATA, headers=headers, json=payload_lab, timeout=10)
             resp_lab.raise_for_status()
             lab_data = resp_lab.json()
+
+            # Save the raw JSON data for lab data
+            filename_parts_lab = ['sweed', 'lab_data', variant_id]
+            save_raw_json(lab_data, filename_parts_lab)
 
             # Parse Cannabinoids
             for block in [lab_data.get('thc'), lab_data.get('cbd')]:
