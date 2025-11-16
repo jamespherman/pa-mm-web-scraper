@@ -33,6 +33,85 @@ TERPENE_COLUMNS = [
 # A predefined list of key cannabinoid columns.
 CANNABINOID_COLUMNS = ['THC', 'THCa', 'CBD', 'CBDa', 'CBG', 'CBGa', 'CBN', 'THCv']
 
+def _fix_weights_from_name(df):
+    """
+    Retroactively fixes weights by parsing the product 'Name' field.
+    This corrects errors from scrapers (like iHeartJane) that provide
+    unreliable weight_str data.
+    """
+    print("  - Retroactively fixing weights from product 'Name' field...")
+    
+    # Regex to find weights in brackets (e.g., [4000mg], [7g], [0.5g])
+    # Group 1: The number (e.g., "4000")
+    # Group 2: The unit (e.g., "mg" or "g")
+    pattern = re.compile(r'\[([\d\.]+)\s*(mg|g)\]', re.IGNORECASE)
+
+    def parse_weight_from_name(name):
+        match = pattern.search(str(name))
+        if not match:
+            return None  # No weight found in name
+
+        try:
+            value = float(match.group(1))
+            unit = match.group(2).lower()
+            
+            if unit == 'mg':
+                return value / 1000.0  # Convert mg to g
+            elif unit == 'g':
+                return value
+        except:
+            return None # Failed to parse
+        return None
+
+    # Apply this function to every row to get the "correct" weight
+    # This creates a new Series of corrected weights
+    corrected_weights = df['Name'].apply(parse_weight_from_name)
+
+    # Overwrite the old 'Weight' only where we found a new, valid weight
+    # 'corrected_weights.notna()' creates a boolean mask
+    # 'df.loc[mask, 'Weight']' selects the 'Weight' column only for those rows
+    mask = corrected_weights.notna()
+    df.loc[mask, 'Weight'] = corrected_weights[mask]
+    
+    count = mask.sum()
+    if count > 0:
+        print(f"    - Corrected {count} product weights based on 'Name'.")
+        
+    return df
+
+def parse_weight_from_name(name):
+    match = pattern.search(str(name))
+    if not match:
+        return None  # No weight found in name
+
+    try:
+        value = float(match.group(1))
+        unit = match.group(2).lower()
+        
+        if unit == 'mg':
+            return value / 1000.0  # Convert mg to g
+        elif unit == 'g':
+            return value
+    except:
+        return None # Failed to parse
+    return None
+
+    # Apply this function to every row to get the "correct" weight
+    # This creates a new Series of corrected weights
+    corrected_weights = df['Name'].apply(parse_weight_from_name)
+
+    # Overwrite the old 'Weight' only where we found a new, valid weight
+    # 'corrected_weights.notna()' creates a boolean mask
+    # 'df.loc[mask, 'Weight']' selects the 'Weight' column only for those rows
+    mask = corrected_weights.notna()
+    df.loc[mask, 'Weight'] = corrected_weights[mask]
+    
+    count = mask.sum()
+    if count > 0:
+        print(f"    - Corrected {count} product weights based on 'Name'.")
+        
+    return df
+    
 def _clean_product_names(df):
     """
     Creates a 'Name_Clean' column by stripping clutter from the 'Name' column.
@@ -141,7 +220,11 @@ def _reclean_brands(df):
         "Jim's Stash of Good Ugly Flower": "Belushi's Farm",
         'FRX': 'FarmaceuticalRX',
         'The Woods Reserve': 'Woods Reserve',
-        'Botanist': 'The Botanist'
+        'Botanist': 'The Botanist',
+        "Moxie - PA": "Moxie",
+        'RYTHM': 'Rythm',
+        'Flower by Edie Parker': 'Edie Parker',
+        'Black Buddha Cannabis': 'Black Buddha'
         # Any other 'dirty' names can be added here
     }
 
@@ -250,6 +333,9 @@ def run_analysis(dataframe):
     # Create a new, cleaned dataframe to avoid modifying the original
     cleaned_df = dataframe.copy()
     
+    # --- START WEIGHT FIX ---
+    cleaned_df = _fix_weights_from_name(cleaned_df)
+    
     # Convert types first (critical for all other operations)
     cleaned_df = _convert_to_numeric(cleaned_df)
     
@@ -259,6 +345,61 @@ def run_analysis(dataframe):
 
     # --- Brand Re-Cleaning ---
     cleaned_df = _reclean_brands(cleaned_df)
+    
+    # --- START DEBUG: PRINT DPG OUTLIERS ---
+    print("\n--- Checking for DPG Outliers ---")
+    
+    # Filter for Vapes with DPG > 95
+    vape_outliers = cleaned_df[
+        (cleaned_df['Type'] == 'Vaporizers') &
+        (cleaned_df['dpg'] > 95)
+    ]
+    if not vape_outliers.empty:
+        print(f"\nFound {len(vape_outliers)} VAPE outliers (DPG > 95):")
+        # Print the relevant columns for debugging
+        print(vape_outliers[['Name', 'Brand', 'Store', 'Price', 'Weight_Str', 'Weight', 'dpg']].to_string())
+    
+    # Filter for Concentrates with DPG > 75
+    conc_outliers = cleaned_df[
+        (cleaned_df['Type'] == 'Concentrates') &
+        (cleaned_df['dpg'] > 75)
+    ]
+    if not conc_outliers.empty:
+        print(f"\nFound {len(conc_outliers)} CONCENTRATE outliers (DPG > 75):")
+        # Print the relevant columns for debugging
+        print(conc_outliers[['Name', 'Brand', 'Store', 'Price', 'Weight_Str', 'Weight', 'dpg']].to_string())
+        
+    print("\n--- DPG Outlier Check Complete ---")
+    # --- END DEBUG ---
+    
+    # --- START DEBUG: FIND NJ BRAND SOURCE ---
+    print("\n--- Checking for NJ/Out-of-State Brands ---")
+    
+    nj_brands = [
+        "AYR Wellness NJ LLC",
+        "GTI New Jersey, LLC",
+        "Jetty Extracts",
+        "Superflux"
+    ]
+    
+    # Create a regex pattern to find any of these brands
+    nj_pattern = '|'.join(nj_brands)
+    
+    # Filter the DataFrame for any rows where the Brand contains one of these strings
+    # na=False ensures that rows with no Brand don't cause an error
+    nj_outliers = cleaned_df[
+        cleaned_df['Brand'].str.contains(nj_pattern, case=False, na=False)
+    ]
+    
+    if not nj_outliers.empty:
+        print(f"Found {len(nj_outliers)} products from out-of-state brands:")
+        # Print the 'Store' and 'Brand' for the first 50 outliers
+        print(nj_outliers[['Store', 'Brand', 'Name']].head(50).to_string())
+    else:
+        print("...No NJ-specific brands found in this dataset.")
+        
+    print("--- NJ Brand Check Complete ---")
+    # --- END DEBUG ---
     
     print(f"Data cleaning complete.")
 
@@ -287,12 +428,22 @@ def run_analysis(dataframe):
         # Filter the DataFrame for the specific category
         category_df = cleaned_df[cleaned_df['Type'] == category].copy()
         
-        # --- GLOBAL FLOWER FILTER ---
-        # If the category is Flower, globally remove all Infused products
-        # so no plotting function has to do this individually.
-        if category == 'Flower':
-            category_df = category_df[~category_df['Subtype'].str.contains('Infused', case=False, na=False)]
-        # --- END GLOBAL FILTER ---
+        # --- START USER FILTER: Remove subtypes we don't want to plot ---
+        # (e.g., "Infused Ground Flower", "Ground", "Infused")
+        
+        # Define the keywords to exclude
+        exclude_keywords = ['infused', 'ground', 'flower']
+        
+        # Create a case-insensitive regex pattern (e.g., 'infused|ground|flower')
+        pattern = '|'.join(exclude_keywords)
+        
+        # Filter the category_df to *remove* rows where Subtype matches the pattern
+        # `na=False` skips rows where Subtype is blank (NaN)
+        # `~` is the "NOT" operator, so it inverts the selection
+        category_df = category_df[
+            ~category_df['Subtype'].str.contains(pattern, case=False, na=False)
+        ]
+        # --- END USER FILTER ---
 
         if category_df.empty:
             print(f"No data found for category '{category}'. Skipping plots.")

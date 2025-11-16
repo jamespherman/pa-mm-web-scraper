@@ -77,8 +77,6 @@ def main():
     today_str = datetime.date.today().strftime('%Y-%m-%d')
     spreadsheet_title = f'PA_Scraped_Data_{today_str}'
 
-    pdb.set_trace()
-
     try:
         # `gspread.oauth()` handles the OAuth 2.0 "Desktop App" flow.
         # - `credentials_filename`: Points to the `credentials.json` file downloaded from Google Cloud.

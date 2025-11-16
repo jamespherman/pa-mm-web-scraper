@@ -163,7 +163,7 @@ DUTCHIE_STORES = {
     },
     "Curaleaf (Erie)": {
         "api_url": "https://curaleaf.com/api-2/graphql",
-        "store_id": "64a59570c9103c0008b07248",
+        "store_id": "61fa09385eb1f200a6329407",
         "headers": {
             "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
             'cookie': 'confirmed21OrOlder=1',
@@ -174,7 +174,7 @@ DUTCHIE_STORES = {
     },
     "Curaleaf (Greensburg)": {
         "api_url": "https://curaleaf.com/api-2/graphql",
-        "store_id": "64a59600a0b3f800098f98a2",
+        "store_id": "61fa0958efd7100091033f5d",
         "headers": {
             "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
             'cookie': 'confirmed21OrOlder=1',
@@ -185,7 +185,7 @@ DUTCHIE_STORES = {
     },
     "Curaleaf (Wayne)": {
         "api_url": "https://curaleaf.com/api-2/graphql",
-        "store_id": "64a59689408e4e0009182379",
+        "store_id": "61fa08f96cd65800891fad7c",
         "headers": {
             "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
             'cookie': 'confirmed21OrOlder=1',
@@ -345,147 +345,147 @@ DUTCHIE_STORES = {
         }
     },
 
-    # --- AYR ---
-    "Ayr (Gibsonia)": {
-        "api_url": "https://dutchie.com/api-2/graphql",
-        "store_id": "5ff8ee358174a300e11a15cb", # This ID was correct
-        "headers": {
-            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-            "referer": "https://dutchie.com/embedded-menu/ayr-dispensary-gibsonia/carousels/a38fb001-0957-4287-9247-cff829021762?carouselId=a38fb001-0957-4287-9247-cff829021762&routeRoot=https%3A%2F%2Fayrdispensaries.com%2Fpennsylvania%2Fgibsonia%2Fshop%2F",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-        }
-    },
-    "Ayr (Bryn Mawr)": {
-        "api_url": "https://dutchie.com/api-2/graphql",
-        "store_id": "607474136e6c2700e1d03328",
-        "headers": {
-            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-            "referer": "https://ayrdispensaries.com/pennsylvania/bryn-mawr/shop/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-        }
-    },
-    "Ayr (New Castle)": {
-        "api_url": "https://dutchie.com/api-2/graphql",
-        "store_id": "6074744476081400e1215169",
-        "headers": {
-            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-            "referer": "https://ayrdispensaries.com/pennsylvania/new-castle/shop/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-        }
-    },
-    "Ayr (Indiana)": {
-        "api_url": "https://dutchie.com/api-2/graphql",
-        "store_id": "622e0e01700689000c0f73f5",
-        "headers": {
-            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-            "referer": "https://ayrdispensaries.com/pennsylvania/indiana/shop/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-        }
-    },
-    "Ayr (Plymouth Meeting)": {
-        "api_url": "https://dutchie.com/api-2/graphql",
-        "store_id": "6074742a76081400e1215163",
-        "headers": {
-            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-            "referer": "https://ayrdispensaries.com/pennsylvania/plymouth-meeting/shop/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-        }
-    },
-    "Ayr (Bloomsburg)": {
-        "api_url": "https://dutchie.com/api-2/graphql",
-        "store_id": "6074745d76081400e121516f",
-        "headers": {
-            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-            "referer": "https://ayrdispensaries.com/pennsylvania/bloomsburg/shop/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-        }
-    },
-    "Ayr (Selinsgrove)": {
-        "api_url": "https://dutchie.com/api-2/graphql",
-        "store_id": "61b369c00ddd67000d14b437",
-        "headers": {
-            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-            "referer": "https://ayrdispensaries.com/pennsylvania/selinsgrove/shop/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-        }
-    },
-    "Ayr (State College)": {
-        "api_url": "https://dutchie.com/api-2/graphql",
-        "store_id": "61e967a5b39912000c4161a0",
-        "headers": {
-            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-            "referer": "https://ayrdispensaries.com/pennsylvania/state-college/shop/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-        }
-    },
-    "Ayr (Williamsport)": {
-        "api_url": "https://dutchie.com/api-2/graphql",
-        "store_id": "61f14ae1f23793000cc1b771",
-        "headers": {
-            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-            "referer": "https://ayrdispensaries.com/pennsylvania/williamsport/shop/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-        }
-    },
-    "Ayr (Montgomeryville)": {
-        "api_url": "https://dutchie.com/api-2/graphql",
-        "store_id": "62d56a298533b3000c2a2333",
-        "headers": {
-            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-            "referer": "https://ayrdispensaries.com/pennsylvania/montgomeryville/shop/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-        }
-    },
-    "Ayr (DuBois)": {
-        "api_url": "https://dutchie.com/api-2/graphql",
-        "store_id": "63039d99723351000c8f5f8b",
-        "headers": {
-            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-            "referer": "https://ayrdispensaries.com/pennsylvania/dubois/shop/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-        }
-    },
-    "Ayr (Pottsville)": {
-        "api_url": "https://dutchie.com/api-2/graphql",
-        "store_id": "63483984d2b865000c7e2962",
-        "headers": {
-            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-            "referer": "https://ayrdispensaries.com/pennsylvania/pottsville/shop/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-        }
-    },
-    "Ayr (Philadelphia)": {
-        "api_url": "https://dutchie.com/api-2/graphql",
-        "store_id": "6440232231267b0001bc954b",
-        "headers": {
-            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-            "referer": "https://ayrdispensaries.com/pennsylvania/philadelphia/shop/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-        }
-    },
-    "Ayr (Olyphant)": {
-        "api_url": "https://dutchie.com/api-2/graphql",
-        "store_id": "644023a831267b0001bc954d",
-        "headers": {
-            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-            "referer": "https://ayrdispensaries.com/pennsylvania/olyphant/shop/",
-            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-        }
-    },
+#    # --- AYR ---
+#    "Ayr (Gibsonia)": {
+#        "api_url": "https://dutchie.com/api-2/graphql",
+#        "store_id": "5ff8ee358174a300e11a15cb", # This ID was correct
+#        "headers": {
+#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+#            "referer": "https://dutchie.com/embedded-menu/ayr-dispensary-gibsonia/carousels/a38fb001-0957-4287-9247-cff829021762?carouselId=a38fb001-0957-4287-9247-cff829021762&routeRoot=https%3A%2F%2Fayrdispensaries.com%2Fpennsylvania%2Fgibsonia%2Fshop%2F",
+#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+#        }
+#    },
+#    "Ayr (Bryn Mawr)": {
+#        "api_url": "https://dutchie.com/api-2/graphql",
+#        "store_id": "607474136e6c2700e1d03328",
+#        "headers": {
+#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+#            "referer": "https://ayrdispensaries.com/pennsylvania/bryn-mawr/shop/",
+#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+#        }
+#    },
+#    "Ayr (New Castle)": {
+#        "api_url": "https://dutchie.com/api-2/graphql",
+#        "store_id": "6074744476081400e1215169",
+#        "headers": {
+#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+#            "referer": "https://ayrdispensaries.com/pennsylvania/new-castle/shop/",
+#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+#        }
+#    },
+#    "Ayr (Indiana)": {
+#        "api_url": "https://dutchie.com/api-2/graphql",
+#        "store_id": "622e0e01700689000c0f73f5",
+#        "headers": {
+#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+#            "referer": "https://ayrdispensaries.com/pennsylvania/indiana/shop/",
+#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+#        }
+#    },
+#    "Ayr (Plymouth Meeting)": {
+#        "api_url": "https://dutchie.com/api-2/graphql",
+#        "store_id": "6074742a76081400e1215163",
+#        "headers": {
+#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+#            "referer": "https://ayrdispensaries.com/pennsylvania/plymouth-meeting/shop/",
+#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+#        }
+#    },
+#    "Ayr (Bloomsburg)": {
+#        "api_url": "https://dutchie.com/api-2/graphql",
+#        "store_id": "6074745d76081400e121516f",
+#        "headers": {
+#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+#            "referer": "https://ayrdispensaries.com/pennsylvania/bloomsburg/shop/",
+#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+#        }
+#    },
+#    "Ayr (Selinsgrove)": {
+#        "api_url": "https://dutchie.com/api-2/graphql",
+#        "store_id": "61b369c00ddd67000d14b437",
+#        "headers": {
+#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+#            "referer": "https://ayrdispensaries.com/pennsylvania/selinsgrove/shop/",
+#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+#        }
+#    },
+#    "Ayr (State College)": {
+#        "api_url": "https://dutchie.com/api-2/graphql",
+#        "store_id": "61e967a5b39912000c4161a0",
+#        "headers": {
+#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+#            "referer": "https://ayrdispensaries.com/pennsylvania/state-college/shop/",
+#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+#        }
+#    },
+#    "Ayr (Williamsport)": {
+#        "api_url": "https://dutchie.com/api-2/graphql",
+#        "store_id": "61f14ae1f23793000cc1b771",
+#        "headers": {
+#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+#            "referer": "https://ayrdispensaries.com/pennsylvania/williamsport/shop/",
+#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+#        }
+#    },
+#    "Ayr (Montgomeryville)": {
+#        "api_url": "https://dutchie.com/api-2/graphql",
+#        "store_id": "62d56a298533b3000c2a2333",
+#        "headers": {
+#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+#            "referer": "https://ayrdispensaries.com/pennsylvania/montgomeryville/shop/",
+#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+#        }
+#    },
+#    "Ayr (DuBois)": {
+#        "api_url": "https://dutchie.com/api-2/graphql",
+#        "store_id": "63039d99723351000c8f5f8b",
+#        "headers": {
+#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+#            "referer": "https://ayrdispensaries.com/pennsylvania/dubois/shop/",
+#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+#        }
+#    },
+#    "Ayr (Pottsville)": {
+#        "api_url": "https://dutchie.com/api-2/graphql",
+#        "store_id": "63483984d2b865000c7e2962",
+#        "headers": {
+#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+#            "referer": "https://ayrdispensaries.com/pennsylvania/pottsville/shop/",
+#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+#        }
+#    },
+#    "Ayr (Philadelphia)": {
+#        "api_url": "https://dutchie.com/api-2/graphql",
+#        "store_id": "6440232231267b0001bc954b",
+#        "headers": {
+#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+#            "referer": "https://ayrdispensaries.com/pennsylvania/philadelphia/shop/",
+#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+#        }
+#    },
+#    "Ayr (Olyphant)": {
+#        "api_url": "https://dutchie.com/api-2/graphql",
+#        "store_id": "644023a831267b0001bc954d",
+#        "headers": {
+#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
+#            "referer": "https://ayrdispensaries.com/pennsylvania/olyphant/shop/",
+#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
+#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
+#        }
+#    },
 }
 
 def get_all_product_slugs(store_name, store_config):
@@ -541,6 +541,7 @@ def get_all_product_slugs(store_name, store_config):
 
             for product in products:
                 all_products.append({
+                    "id": product['id'],  # <-- ADD THIS KEY
                     "cName": product['cName'], "DispensaryID": store_id,
                     "StoreName": store_name, "StoreConfig": store_config
                 })
@@ -635,7 +636,7 @@ def parse_product_details(product, store_name):
         return None
 
     # Standardize brand and subcategory
-    brand_name = product.get('brandName', 'N/A').strip()
+    brand_name = (product.get('brandName') or 'N/A').strip()
     subcategory_name = product.get('subcategory')
 
     data = {
@@ -696,12 +697,12 @@ def fetch_dutchie_data():
     all_store_slugs = []
     for store_name, store_config in DUTCHIE_STORES.items():
         all_store_slugs.extend(get_all_product_slugs(store_name, store_config))
-    
-    pdb.set_trace()
 
     if not all_store_slugs:
         print("No product slugs found for any Dutchie store. Exiting Dutchie scraper.")
         return pd.DataFrame()
+    
+    pdb.set_trace()
 
     product_details = get_detailed_product_info(all_store_slugs)
     if not product_details:

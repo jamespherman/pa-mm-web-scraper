@@ -40,8 +40,8 @@ ALGOLIA_PLATFORMS = [
         },
         "stores": {
             "Maitri (PGH)": 2913,
-            "Maitri (Greensburg)": 3013,
-            "Maitri (Uniontown)": 3014,
+            "Maitri (New Stanton)": 4467,
+            "Maitri (Uniontown)": 2914,
             "Vytal (Harrisburg)": 6078,
             "Vytal (Fogelsville)": 6079,
             "Vytal (Kennet Square)": 6080,

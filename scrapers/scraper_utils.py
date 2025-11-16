@@ -35,6 +35,10 @@ BRAND_MAP = {
     "Redemption Shake": "Redemption",
     "The Essence": "(the) Essence",
     "Verano Essence": "(the) Essence",
+    "Moxie - PA": "Moxie",
+    "RYTHM": "Rythm",
+    "Flower by Edie Parker": "Edie Parker",
+    "Black Buddha Cannabis": "Black Buddha",
 }
 
 MASTER_CATEGORY_MAP = {
