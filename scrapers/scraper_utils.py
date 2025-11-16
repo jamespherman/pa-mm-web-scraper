@@ -247,3 +247,33 @@ def convert_to_grams(weight_str):
         return float(match_oz.group(1)) * 28.0
 
     return None
+
+import os
+import json
+import re
+from datetime import datetime
+
+def save_raw_json(data, filename_parts):
+    """
+    Saves raw JSON data to a date-stamped file.
+
+    Args:
+        data (dict or list): The JSON data to save.
+        filename_parts (list): A list of strings to build the filename
+                               (e.g., ['scraper_name', 'store', 'category', 'page']).
+    """
+    try:
+        today_str = datetime.now().strftime('%Y-%m-%d')
+        dir_path = os.path.join('raw_data', today_str)
+        os.makedirs(dir_path, exist_ok=True)
+
+        sanitized_parts = [re.sub(r'[\\s/]', '_', str(part)).lower() for part in filename_parts]
+        filename = f"{'_'.join(sanitized_parts)}.json"
+
+        filepath = os.path.join(dir_path, filename)
+
+        with open(filepath, 'w') as f:
+            json.dump(data, f, indent=4)
+
+    except Exception as e:
+        print(f"Error saving raw data: {e}")

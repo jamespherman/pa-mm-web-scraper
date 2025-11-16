@@ -10,7 +10,7 @@ import json
 import pdb
 from .scraper_utils import (
     convert_to_grams, BRAND_MAP, MASTER_CATEGORY_MAP,
-    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
+    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP, save_raw_json
 )
 
 # --- Constants ---
@@ -530,8 +530,11 @@ def get_all_product_slugs(store_name, store_config):
         try:
             response = requests.get(api_url, headers=headers, params=params)
             response.raise_for_status()
-            
             json_response = response.json()
+
+            # Save the raw JSON data
+            filename_parts = ['dutchie', store_name, 'products', f'p{page}']
+            save_raw_json(json_response, filename_parts)
             if 'errors' in json_response:
                 print(f"GraphQL Error in product slugs for {store_name}: {json_response['errors']}")
                 break
@@ -592,8 +595,11 @@ def get_detailed_product_info(product_slugs):
         try:
             response = requests.get(store_config['api_url'], headers=store_config['headers'], params=params)
             response.raise_for_status()
-            
             json_response = response.json()
+
+            # Save the raw JSON data
+            filename_parts = ['dutchie', store_name, 'product_details', cName]
+            save_raw_json(json_response, filename_parts)
             if 'errors' in json_response:
                 print(f"GraphQL Error in product details for {cName}: {json_response['errors']}")
                 continue
