@@ -1,15 +1,24 @@
 # scrapers/sweed_scraper.py
-# This scraper fetches data from the Sweed platform (used by Zen Leaf).
-# This version is refactored to be efficient:
-# 1. Gathers all variant IDs from all stores.
-# 2. De-duplicates the list of variant IDs.
-# 3. Fetches detailed lab/price data only ONCE for each unique variant.
+# -----------------------------------------------------------------------------
+# This scraper handles the Sweed platform (used by Zen Leaf dispensaries).
+#
+# The Sweed API is unique because it separates "Product Lists" from "Product Details".
+# If we fetched details for every single item in every single store, it would take
+# forever because many items are duplicates (e.g., "Blue Dream" is the same item
+# across all Zen Leaf stores).
+#
+# Optimization Strategy:
+# 1. Scan all stores to get a list of all "Variant IDs" (unique product codes).
+# 2. Create a set of UNIQUE IDs (remove duplicates).
+# 3. Fetch the detailed lab data (Price, Terpenes) only ONCE per unique ID.
+# 4. Re-combine the data at the end.
+# -----------------------------------------------------------------------------
 
-import requests
-import pandas as pd
-import numpy as np
-import json
-import time
+import requests # Internet requests.
+import pandas as pd # Data tables.
+import numpy as np # Math/NaN.
+import json # JSON handling.
+import time # Time functions (for sleeping/waiting).
 from .scraper_utils import (
     convert_to_grams, BRAND_MAP, MASTER_CATEGORY_MAP,
     MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP, save_raw_json
@@ -17,10 +26,12 @@ from .scraper_utils import (
 
 # --- Constants ---
 
+# Sweed uses different URLs for different tasks.
 URL_PRODUCT_LIST = "https://web-ui-production.sweedpos.com/_api/proxy/Products/GetProductList"
 URL_LAB_DATA = "https://web-ui-production.sweedpos.com/_api/proxy/Products/GetExtendedLabdata"
 URL_VARIANT_DETAIL = "https://web-ui-production.sweedpos.com/_api/proxy/Products/GetProductByVariantId"
 
+# Headers to mimic a browser.
 BASE_HEADERS = {
     "Accept": "*/*",
     "Content-Type": "application/json",
@@ -29,6 +40,7 @@ BASE_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
 }
 
+# Map their category IDs to our names.
 CATEGORY_MAP = {
     "Flower": 140929,
     "Vaporizers": 140932,
@@ -37,6 +49,7 @@ CATEGORY_MAP = {
     "Tinctures": 140930
 }
 
+# List of stores to scrape.
 SWED_STORES_TO_SCRAPE = {
     "Zen Leaf (West York - York)": 106,
     "Zen Leaf (Cranberry Twp - Cranberry)": 145,
@@ -63,12 +76,17 @@ SWED_STORES_TO_SCRAPE = {
 def fetch_sweed_data():
     """
     Main orchestration function for scraping Sweed (Zen Leaf) stores.
+
+    Returns:
+        pd.DataFrame: A table of all products found.
     """
     print("Starting Sweed (Zen Leaf) Scraper (web-ui-production.sweedpos.com)...")
 
     # --- Step 1: Get the "master list" of all product variants ---
     print("Step 1/3: Fetching all product variants from all stores...")
+    # This gets the basic info (Name, ID, Store) but not the price or terpenes.
     master_variant_list = _get_all_variant_info()
+
     if not master_variant_list:
         print("No product data was fetched from Sweed. Returning an empty DataFrame.")
         return pd.DataFrame()
@@ -76,21 +94,26 @@ def fetch_sweed_data():
 
     # --- Step 2: Get unique variant IDs and fetch their details ---
     print("Step 2/3: De-duplicating and fetching unique product details...")
+    # Using a 'set' automatically removes duplicates.
     unique_variant_ids = set(v['variant_id'] for v in master_variant_list)
     print(f"  ...found {len(unique_variant_ids)} unique variants to fetch.")
     
-    # This returns a dictionary: {variant_id: {details}}
+    # Fetch the details for each unique ID.
+    # This returns a dictionary: {variant_id: {Price: 50, THC: 20...}}
     detailed_data_map = _get_unique_details(unique_variant_ids)
     print(f"  ...successfully fetched details for {len(detailed_data_map)} variants.")
 
     # --- Step 3: Combine the master list with the detailed data ---
     print("Step 3/3: Combining and standardizing all data...")
     final_product_list = []
+
     for variant in master_variant_list:
         variant_id = variant['variant_id']
-        # Check if we have lab/price data for this variant
+
+        # Check if we successfully fetched details for this ID
         if variant_id in detailed_data_map:
-            # Combine the base info (Store, Name, Brand) with the detailed info
+            # Merge the dictionaries!
+            # {Name: Blue Dream} + {Price: 50} = {Name: Blue Dream, Price: 50}
             combined_data = {**variant, **detailed_data_map[variant_id]}
             final_product_list.append(combined_data)
 
@@ -98,6 +121,7 @@ def fetch_sweed_data():
         print("No final product data could be combined. Returning an empty DataFrame.")
         return pd.DataFrame()
 
+    # Create DataFrame and calculate Dollars Per Gram
     df = pd.DataFrame(final_product_list)
     df['dpg'] = df['Price'] / df['Weight']
 
@@ -107,7 +131,7 @@ def fetch_sweed_data():
 
 def _get_all_variant_info():
     """
-    Step 1: Loops through all stores and categories just to get the
+    Step 1 Helper: Loops through all stores and categories just to get the
     basic variant info (variant_id, Name, Brand, Store, etc.).
     """
     product_variants = []
@@ -120,10 +144,15 @@ def _get_all_variant_info():
         for category_name, category_id in CATEGORY_MAP.items():
             page = 1
             while True:
+                # Payload for "GetProductList"
                 payload = {
                     "filters": {"category": [category_id]},
-                    "page": page, "pageSize": 100, "sortingMethodId": 7,
-                    "searchTerm": "", "platformOs": "web", "sourcePage": 0
+                    "page": page,
+                    "pageSize": 100,
+                    "sortingMethodId": 7,
+                    "searchTerm": "",
+                    "platformOs": "web",
+                    "sourcePage": 0
                 }
                 
                 try:
@@ -141,20 +170,21 @@ def _get_all_variant_info():
 
                     # Parse the product list
                     for product in products:
-                        # FIX: Check for None items in the product list (for 'Edibles' bug)
+                        # Safety check: Ensure product object is not None
                         if not product:
                             continue
 
-                        # FIX: Check for None on .get('brand') and .get('subcategory')
+                        # Safety check: Handle missing brand/subcategory objects
                         brand_obj = product.get('brand')
                         brand_name = brand_obj.get('name', 'N/A').strip() if brand_obj else 'N/A'
                         
                         subcategory_obj = product.get('subcategory')
                         subcategory_name = subcategory_obj.get('name') if subcategory_obj else None
 
+                        # Loop through variants (e.g., 3.5g, 7g)
                         for variant in product.get('variants', []):
                             data_dict = {
-                                "variant_id": variant.get('id'),
+                                "variant_id": variant.get('id'), # Crucial for Step 2
                                 "Name": product.get('name', 'N/A'),
                                 "Brand": BRAND_MAP.get(brand_name, brand_name),
                                 "Type": category_name,
@@ -164,7 +194,7 @@ def _get_all_variant_info():
                             product_variants.append(data_dict)
                             
                     page += 1
-                    time.sleep(0.2)
+                    time.sleep(0.2) # Be polite to the server
                     
                 except requests.exceptions.RequestException as e:
                     print(f"    Error fetching {category_name} (Page {page}): {e}")
@@ -178,12 +208,13 @@ def _get_all_variant_info():
 
 def _get_unique_details(unique_variant_ids):
     """
-    Step 2: Loops *only* over the unique variant IDs and fetches
+    Step 2 Helper: Loops *only* over the unique variant IDs and fetches
     their price, weight, and lab data.
     """
-    # We use a dummy StoreId in the header. As you proved, it doesn't matter.
+    # We use a dummy StoreId in the header because the variant ID is globally unique.
+    # The API just needs *some* store ID to accept the request.
     headers = BASE_HEADERS.copy()
-    headers["StoreId"] = "155" # Use McKnight as our default
+    headers["StoreId"] = "155"
     
     detailed_data_map = {}
     
@@ -195,10 +226,11 @@ def _get_unique_details(unique_variant_ids):
             continue
             
         try:
-            # This will hold all the details for this one variant
+            # This dictionary will hold all the details for this one variant
             details = {}
 
             # --- Call 1: Get Price and Weight ---
+            # URL: GetProductByVariantId
             payload_variant = {"variantId": variant_id, "platformOs": "web", "stockType": "Default"}
             resp_variant = requests.post(URL_VARIANT_DETAIL, headers=headers, json=payload_variant, timeout=10)
             resp_variant.raise_for_status()
@@ -210,6 +242,7 @@ def _get_unique_details(unique_variant_ids):
             
             variant_detail = variant_data.get('variants', [{}])[0]
             
+            # Get Price (use promo price if available)
             details['Price'] = variant_detail.get('promoPrice') or variant_detail.get('price')
             details['Weight_Str'] = variant_detail.get('name', 'N/A')
             
@@ -224,7 +257,8 @@ def _get_unique_details(unique_variant_ids):
             else:
                 details['Weight'] = np.nan
 
-            # --- Call 2: Get Lab Data ---
+            # --- Call 2: Get Lab Data (Terpenes/Cannabinoids) ---
+            # URL: GetExtendedLabdata
             payload_lab = {"variantId": variant_id}
             resp_lab = requests.post(URL_LAB_DATA, headers=headers, json=payload_lab, timeout=10)
             resp_lab.raise_for_status()
@@ -234,7 +268,7 @@ def _get_unique_details(unique_variant_ids):
             filename_parts_lab = ['sweed', 'lab_data', variant_id]
             save_raw_json(lab_data, filename_parts_lab)
 
-            # Parse Cannabinoids
+            # Parse Cannabinoids (THC, CBD)
             for block in [lab_data.get('thc'), lab_data.get('cbd')]:
                 if block and isinstance(block.get('values'), list):
                     for item in block.get('values'):

@@ -1,18 +1,31 @@
 # scrapers/trulieve_scraper.py
-# This scraper fetches data from the new Trulieve v2 API.
+# -----------------------------------------------------------------------------
+# This scraper handles the Trulieve dispensary website.
+#
+# It interacts with Trulieve's "v2" API.
+#
+# Key features of this API:
+# 1. It organizes products by "variants". For example, one "product" might be
+#    "Blue Dream Flower", and its variants could be "3.5g", "7g", etc.
+#    We need to "flatten" this so each variant is its own row in our data.
+# 2. It uses pagination to show results across multiple pages.
+# -----------------------------------------------------------------------------
 
-import requests
-import pandas as pd
-import numpy as np
+import requests # Used to send internet requests.
+import pandas as pd # Used for data tables.
+import numpy as np # Used for math.
 from .scraper_utils import (
     convert_to_grams, BRAND_MAP, MASTER_CATEGORY_MAP,
     MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP, save_raw_json
 )
-import re
-import pdb
+import re # Regex for text patterns.
 
 # --- Constants ---
+# The API URL contains placeholders `{store_id}` and `{category}` that we
+# fill in dynamically.
 BASE_URL = "https://api.trulieve.com/api/v2/menu/{store_id}/{category}/MEDICAL"
+
+# Headers to make us look like a real browser.
 HEADERS = {
     "accept": "*/*",
     "accept-language": "en-US,en;q=0.9",
@@ -31,24 +44,37 @@ CATEGORIES = ["flower", "vapes", "concentrates", "tinctures", "edibles"]
 
 def parse_trulieve_products(products, store_name):
     """
-    Parses the 'data' array from the Trulieve API response.
-    Each variant of a product becomes a separate row.
+    Parses the list of products from the Trulieve API.
+
+    Special Logic:
+    Trulieve nests different sizes/prices under a 'variants' list for each product.
+    We iterate through these variants to create a separate entry for each one.
+
+    Args:
+        products (list): Raw product data from API.
+        store_name (str): Name of the store.
+
+    Returns:
+        list: A flat list of product variants.
     """
     parsed_variants = []
     
     for product in products:
         
-        # Standardize category and skip if not in map
+        # --- 1. Category Standardization ---
         category_name = product.get('category')
         standardized_category = MASTER_CATEGORY_MAP.get(category_name)
+
+        # Skip if we don't recognize the category.
         if not standardized_category:
             continue
 
-        # Standardize brand and subcategory
+        # --- 2. Brand and Subcategory ---
         brand_name = product.get('brand', 'N/A')
         subcategory_name = product.get('subcategory')
 
-        # Base data for all variants of this product
+        # --- 3. Build Common Data ---
+        # This information applies to ALL variants of this product (e.g. the Name and Brand).
         common_data = {
             'Name': product.get('name', 'N/A'),
             'Brand': BRAND_MAP.get(brand_name, brand_name),
@@ -59,35 +85,45 @@ def parse_trulieve_products(products, store_name):
             'CBD': product.get('cbd_content'),
         }
 
-        # Parse terpenes
+        # --- 4. Parse Terpenes ---
+        # Trulieve lists terpenes in a 'terpenes' list, where each item has 'name' and 'value'.
         for terpene in product.get('terpenes', []):
             terpene_name = terpene.get('name')
             terpene_value = terpene.get('value')
+
+            # If we have both a name and a value...
             if terpene_name and terpene_value is not None:
+                # ...check if it's in our master map.
                 standard_name = MASTER_COMPOUND_MAP.get(terpene_name)
                 if standard_name:
                     common_data[standard_name] = terpene_value
 
-        # Variants represent different weights/prices
+        # --- 5. Handle Variants ---
+        # This is where we split one "product" into multiple rows based on weight/price.
         variants = product.get('variants', [])
         if not variants:
             continue
             
         for variant in variants:
-            weight_str = variant.get('option')
+            weight_str = variant.get('option') # e.g., "3.5g"
             if not weight_str:
                 continue
 
+            # Get the price (sale price or regular price).
             price = variant.get('sale_unit_price') or variant.get('unit_price')
             if not price:
                 continue
 
+            # Create a copy of the common data so we don't mess up other variants.
             product_row = common_data.copy()
+
+            # Update the copy with specific info for this variant.
             product_row.update({
-                'Weight': convert_to_grams(weight_str),
+                'Weight': convert_to_grams(weight_str), # Use our helper to get grams
                 'Weight_Str': weight_str,
                 'Price': float(price),
             })
+
             parsed_variants.append(product_row)
 
     return parsed_variants
@@ -95,34 +131,45 @@ def parse_trulieve_products(products, store_name):
 
 def fetch_trulieve_data(stores):
     """
-    Main function to orchestrate the Trulieve scraping process.
+    Main function to scrape Trulieve data.
     """
     all_products_list = []
     print("Starting Trulieve Scraper (api.trulieve.com)...")
 
     for store_name, store_id in stores.items():
         print(f"Fetching data for Trulieve store: {store_name} (ID: {store_id})...")
+
         for category in CATEGORIES:
             page = 1
             while True:
                 try:
+                    # Build the URL for this specific page and category.
                     url = f"{BASE_URL.format(store_id=store_id, category=category)}?page={page}"
+
+                    # Send request
                     response = requests.get(url, headers=HEADERS, timeout=10)
                     response.raise_for_status()
                     json_response = response.json()
 
-                    # Save the raw JSON data
+                    # --- Save Raw Data ---
                     filename_parts = ['trulieve', store_name, category, f'p{page}']
                     save_raw_json(json_response, filename_parts)
+
+                    # Get products
                     products = json_response.get('data')
                     
+                    # Stop if no products found.
                     if not products:
                         print(f"  ...completed category: {category}")
                         break
                         
+                    # Parse and add to list
                     all_products_list.extend(parse_trulieve_products(products, store_name))
                     
-                    last_page, current_page = json_response.get('last_page'), json_response.get('current_page')
+                    # Check pagination info to see if we are on the last page.
+                    last_page = json_response.get('last_page')
+                    current_page = json_response.get('current_page')
+
                     if last_page is not None and current_page is not None and current_page >= last_page:
                         print(f"  ...completed category: {category}")
                         break
@@ -141,6 +188,8 @@ def fetch_trulieve_data(stores):
         return pd.DataFrame()
 
     df = pd.DataFrame(all_products_list)
+
+    # Calculate Dollars Per Gram
     df['dpg'] = df['Price'] / df['Weight']
 
     print(f"\nScraping complete for Trulieve. DataFrame created with {len(df)} rows.")

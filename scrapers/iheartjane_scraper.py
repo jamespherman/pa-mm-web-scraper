@@ -1,31 +1,40 @@
 # scrapers/iheartjane_scraper.py
-# This scraper is responsible for fetching data from the iHeartJane Algolia API.
-# It has been refactored to replace the old, non-functional 'dmerch' endpoint.
+# -----------------------------------------------------------------------------
+# This scraper handles the iHeartJane platform (used by Rise and Maitri/Vytal).
+#
+# It uses the "Algolia" search API, which is the engine that powers the search
+# bar on their websites.
+#
+# Key Logic:
+# 1. It mimics the browser's request to Algolia.
+# 2. It handles "pagination" (fetching pages 1, 2, 3...) to get all products.
+# 3. It has complex logic to find the "weight" of a product, checking multiple
+#    fields (net_weight, quantity_value, product name) in order of reliability.
+# -----------------------------------------------------------------------------
 
-import requests
-import re
-import pdb
-import pandas as pd
-import numpy as np
-import json
-import time
+import requests # Internet requests.
+import re # Regex for text parsing.
+import pandas as pd # Data tables.
+import numpy as np # Math/NaN.
+import json # JSON handling.
+import time # Time functions.
 from .scraper_utils import (
     convert_to_grams, BRAND_MAP, MASTER_CATEGORY_MAP,
     MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP, save_raw_json
 )
 
 # --- API Constants ---
-# This is the Algolia search endpoint
+# The main endpoint for the Algolia search engine.
 ALGOLIA_URL = "https://search.iheartjane.com/1/indexes/menu-products-production/query"
 
-# This is the base query param string
+# Standard parameters for the Algolia query.
 ALGOLIA_QUERY_PARAMS = {
     'x-algolia-agent': 'Algolia for JavaScript (4.20.0); Browser'
 }
 
-# This is the new "brain" of the scraper.
-# It stores the unique headers (API key, Origin) for each platform
-# and the list of stores associated with that platform.
+# --- Platform Configuration ---
+# Different dispensary chains (Rise vs Maitri) use different API Keys for Algolia.
+# We group them here so we can loop through them easily.
 ALGOLIA_PLATFORMS = [
     {
         "platform_name": "Vytal/Maitri",
@@ -83,28 +92,35 @@ ALGOLIA_PLATFORMS = [
             "RISE (York)": 1548
         }
     }
-    # We can add Curaleaf, Ayr, etc. here as new platforms
 ]
 
 
 # --- Parsing Functions ---
 
-# --- WEIGHT FROM NAME HELPER FUNCTION ---
 def _parse_weight_from_name_field(name_str):
     """
-    Parses a weight string (e.g., [7g], [500mg]) from a product name.
-    Returns the weight in grams if found, otherwise None.
+    Helper function to extract weight from the product name string.
+    Looks for patterns like "[3.5g]" or "[500mg]".
+
+    Args:
+        name_str (str): The product name.
+
+    Returns:
+        float: Weight in grams, or None.
     """
     if not isinstance(name_str, str):
         return None
 
-    # Regex to find weights in brackets (e.g., [4000mg], [7g], [0.5g])
-    # Group 1: The number (e.g., "4000")
-    # Group 2: The unit (e.g., "mg" or "g")
+    # Regex explanation:
+    # \[       : Match a literal opening bracket
+    # ([\d\.]+) : Group 1 - Match numbers (digits or dots)
+    # \s*      : Match optional whitespace
+    # (mg|g)   : Group 2 - Match "mg" or "g"
+    # \]       : Match a literal closing bracket
     match = re.search(r'\[([\d\.]+)\s*(mg|g)\]', name_str, re.IGNORECASE)
     
     if not match:
-        return None  # No weight found in name
+        return None  # No weight found
 
     try:
         value = float(match.group(1))
@@ -115,20 +131,26 @@ def _parse_weight_from_name_field(name_str):
         elif unit == 'g':
             return value
     except Exception:
-        return None # Failed to parse
+        return None
     
     return None
 
 def parse_terpenes_from_text(text):
     """
-    Parses compound data from a raw text block using regular expressions.
-    This is a fallback for when structured lab data is not available.
+    Parses chemical data from a plain text block (e.g., "Notes" section).
+    This is a backup if the structured data is missing.
+
+    Args:
+        text (str): The text description to search.
+
+    Returns:
+        dict: Found compounds and their values.
     """
     compounds_dict = {}
     if not text:
         return compounds_dict
 
-    # Regex to find patterns like "Terpene Name: 1.23%"
+    # Regex to find "Terpene Name: 1.23%" patterns
     pattern = r"([a-zA-Z\s_-]+)[\s:]*([\d\.]+)%"
     matches = re.findall(pattern, text, re.IGNORECASE)
 
@@ -141,20 +163,34 @@ def parse_terpenes_from_text(text):
 
 def parse_jane_product(product_hit, store_name):
     """
-    Parses a single product 'hit' from the iHeartJane Algolia API JSON response.
+    Parses a single product 'hit' from the JSON response.
+
+    This function is the core logic for interpreting iHeartJane data.
+    It handles:
+    1. Categorization
+    2. Compound extraction (checking multiple sources)
+    3. Weight extraction (checking multiple sources with a hierarchy of trust)
+
+    Args:
+        product_hit (dict): The raw JSON object for one product.
+        store_name (str): The name of the store.
+
+    Returns:
+        list: A list of parsed product dictionaries (usually just one, sometimes more).
     """
     
-    # 1. Standardize category and skip if not in map
+    # 1. Standardize category
     category_name = product_hit.get('kind')
     standardized_category = MASTER_CATEGORY_MAP.get(category_name)
     if not standardized_category:
-        return []
+        return [] # Skip if unknown category
 
     # 2. Standardize brand and subcategory
     brand_name = (product_hit.get('brand') or 'N/A').strip()
     subcategory_name = product_hit.get('kind_subtype')
 
-    # 3. DEFINE COMMON_DATA FIRST (Crucial Fix)
+    # 3. Define Common Data
+    # This data applies to the product regardless of its weight variant.
     common_data = {
         'Name': product_hit.get('name'),
         'Brand': BRAND_MAP.get(brand_name, brand_name),
@@ -164,8 +200,10 @@ def parse_jane_product(product_hit, store_name):
     }
 
     # 4. Tiered Compound Parsing
+    # We look for chemical data in 3 places, in order of preference.
     compounds_found = False
-    # ... Attempt to parse structured lab_results
+
+    # A. Try structured lab results (Best)
     lab_results = product_hit.get('lab_results', [])
     if lab_results:
         for result_group in lab_results:
@@ -178,27 +216,29 @@ def parse_jane_product(product_hit, store_name):
                         common_data[standard_name] = result.get('value')
                         compounds_found = True
 
-    # ... Fallback to unstructured text parsing
+    # B. Try parsing the "Store Notes" text (Backup)
     if not compounds_found:
         store_notes = product_hit.get('store_notes', '')
         if store_notes:
             common_data.update(parse_terpenes_from_text(store_notes))
+            # Check if we actually found any valid compounds
             compounds_found = any(key in MASTER_COMPOUND_MAP.values() for key in common_data)
 
-    # ... Second fallback to compound_names list
+    # C. Try "compound_names" list (Last Resort - usually just names without values)
     if not compounds_found:
         for name in product_hit.get('compound_names', []):
             standard_name = MASTER_COMPOUND_MAP.get(name)
             if standard_name:
-                common_data[standard_name] = np.nan
+                common_data[standard_name] = np.nan # We know it exists, but not the amount
 
-    # 5. START NEW WEIGHT PARSING LOGIC (Now safe to run)
+    # 5. Weight Parsing Logic
+    # We try 3 strategies to find the weight, from most to least reliable.
     product_variants = []
     
-    # Strategy 1: Trust the API's explicit weight fields (Gold Standard)
     valid_weight = None
     weight_source = None
     
+    # Strategy 1: Trust the API's explicit weight fields (Gold Standard)
     net_weight = product_hit.get('net_weight_grams')
     if net_weight and isinstance(net_weight, (int, float)) and net_weight > 0:
         valid_weight = float(net_weight)
@@ -212,19 +252,19 @@ def parse_jane_product(product_hit, store_name):
              weight_source = "quantity_value"
 
     # Strategy 2: Regex on Name (Silver Standard)
+    # Look for "[3.5g]" in the title.
     if valid_weight is None:
-        # Now this works because common_data is defined above!
         weight_from_name = _parse_weight_from_name_field(common_data['Name'])
         if weight_from_name:
             valid_weight = weight_from_name
             weight_source = "regex_name"
 
-    # Construct Variant from Valid Weight
-    # Extra comment line
+    # If we found a valid weight, create the product entry.
     if valid_weight:
         price_each = product_hit.get('price_each')
         if price_each:
             price = float(price_each)
+            # Check for discounted price
             special_price_data = product_hit.get('special_price_each') or {}
             if special_price_data.get('discount_price'):
                 price = float(special_price_data['discount_price'])
@@ -237,6 +277,7 @@ def parse_jane_product(product_hit, store_name):
             return product_variants
 
     # Strategy 3: Legacy Fallback (Bronze Standard)
+    # Check 'available_weights' list or assume "Each" if nothing else works.
     available_weights = product_hit.get('available_weights', [])
     
     if not available_weights:
@@ -254,8 +295,10 @@ def parse_jane_product(product_hit, store_name):
         return product_variants
 
     for weight_str in available_weights:
+        # Construct field names dynamically (e.g., "price_3.5g")
         price_field = f"price_{weight_str.replace(' ', '_')}"
         special_price_field = f"special_price_{weight_str.replace(' ', '_')}"
+
         price = product_hit.get(price_field)
         
         special_price_data = product_hit.get(special_price_field, {})
@@ -277,8 +320,8 @@ def parse_jane_product(product_hit, store_name):
 
 def _fetch_store_menu(store_id, store_name, headers):
     """
-    Fetches all product variants for a single iHeartJane store
-    using the correct platform-specific headers.
+    Fetches all products for a single store.
+    Handles pagination (looping through pages).
     """
     print(f"Fetching data for iHeartJane store: {store_name} (ID: {store_id})...")
     all_product_variants = []
@@ -286,62 +329,54 @@ def _fetch_store_menu(store_id, store_name, headers):
     
     while True:
         try:
-            # Build the simple payload. This is a single request, not a batch.
-            # We send this as a raw JSON string.
+            # Build the request payload.
+            # We ask for everything ("*") filtered by store_id.
             payload = {
                 "query": "",
                 "filters": f"store_id : {store_id}",
                 "facets": ["*"],
                 "page": page,
-                "hitsPerPage": 1000 # Fetch 1000 per page
+                "hitsPerPage": 1000 # Ask for 1000 items per page to minimize requests
             }
             
+            # Send POST request with raw JSON data
             response = requests.post(
                 ALGOLIA_URL,
                 params=ALGOLIA_QUERY_PARAMS,
                 headers=headers,
-                data=json.dumps(payload), # Send as raw JSON string
+                data=json.dumps(payload),
                 timeout=20
             )
             response.raise_for_status()
             data = response.json()
 
-            # Save the raw JSON data
+            # Save raw data for debugging
             filename_parts = ['iheartjane', store_name, f'p{page}']
             save_raw_json(data, filename_parts)
-            hits = data.get('hits', [])
             
+            hits = data.get('hits', [])
             if not hits:
-                # No more products, we are done paginating
-                break
+                break # No more products
             
             print(f"  ...retrieved {len(hits)} products from page {page}.")
 
             for hit in hits:
-                
-                # The "hit" is the raw product, which is what our parser expects
+                # Parse each product
                 product_variants = parse_jane_product(hit, store_name)
                 all_product_variants.extend(product_variants)
             
             page += 1
             
-            # Check if we are on the last page
+            # Check if we reached the last page
             if page >= data.get('nbPages', 1):
                 break
 
         except requests.exceptions.RequestException as e:
             print(f"Error fetching data for store {store_id} on page {page}: {e}")
-            break # Stop scraping this store on an error
+            break
         except Exception as e:
             print(f"Error parsing data for store {store_id} on page {page}: {e}")
-            
-            # --- PDB TRACE ---
             print("\n*** ERROR CAUGHT! Interrogating problematic 'hit'... ***")
-            # 'hit' is the variable from the for-loop that caused the error.
-            # We are now paused inside the exception handler.
-            pdb.set_trace()
-            # --- END TRACE ---
-                
             break
             
     print(f"Successfully fetched {len(all_product_variants)} product variants for {store_name}.")
@@ -350,18 +385,16 @@ def _fetch_store_menu(store_id, store_name, headers):
 
 def fetch_iheartjane_data():
     """
-    Fetches all product data by looping through each platform (Rise, Vytal)
-    and scraping all stores associated with it.
+    Main function to run the iHeartJane scraper.
+    Loops through all platforms and stores.
     """
     print("Starting iHeartJane (Algolia) Scraper...")
     all_products_list = []
     
-    # Loop through each platform (e.g., Rise, Vytal)
     for platform in ALGOLIA_PLATFORMS:
         print(f"\n--- Scraping Platform: {platform['platform_name']} ---")
         platform_headers = platform['headers']
         
-        # Loop through all stores for that platform
         for store_name, store_id in platform['stores'].items():
             store_variants = _fetch_store_menu(store_id, store_name, platform_headers)
             if store_variants:

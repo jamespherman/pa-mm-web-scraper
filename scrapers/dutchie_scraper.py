@@ -1,14 +1,26 @@
 # scrapers/dutchie_scraper.py
-# This scraper is designed to fetch data from the Dutchie GraphQL API.
-# Dutchie is a common platform for cannabis dispensaries, but each dispensary
-# often has its own unique API endpoint and configuration. This scraper is
+# -----------------------------------------------------------------------------
+# This scraper handles the Dutchie e-commerce platform.
+#
+# Dutchie is complex because it uses "GraphQL". Instead of asking for a specific
+# "page" like a normal website, we have to send a query describing exactly what
+# data we want (e.g., "give me the name, price, and terpenes for product X").
+#
+# This scraper works in two steps:
+# 1. "Slugs": Get a list of all product IDs and basic info (Name, Price).
+# 2. "Details": For each unique product, send a second query to get the
+#    detailed scientific data (Terpenes, Cannabinoids).
+#
+# We group products by "Batch Signature" to avoid asking for the same details
+# twice (e.g., if a store has "Blue Dream 3.5g" and "Blue Dream 7g" from the
+# same batch, the scientific data is likely the same).
+# -----------------------------------------------------------------------------
 
-import requests
-import pandas as pd
-import numpy as np
-import json
-import re
-import pdb
+import requests # For sending internet requests.
+import pandas as pd # For data tables.
+import numpy as np # For math/NaN.
+import json # For handling JSON data (used heavily in GraphQL).
+import re # For text pattern matching.
 from .scraper_utils import (
     convert_to_grams, save_raw_json, BRAND_MAP, MASTER_CATEGORY_MAP,
     MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
@@ -16,7 +28,10 @@ from .scraper_utils import (
 
 # --- Constants ---
 
-# The DUTCHIE_STORES dictionary is the core configuration for this scraper.
+# The DUTCHIE_STORES dictionary contains the configuration for each store.
+# Because Dutchie hosts many different dispensaries, each one might have a
+# slightly different URL or "Store ID".
+# We also need specific "headers" (like the x-dutchie-session) to be allowed in.
 DUTCHIE_STORES = {
     # --- CURALEAF ---
     "Curaleaf (Gettysburg)": {
@@ -196,7 +211,6 @@ DUTCHIE_STORES = {
         }
     },
     # --- ETHOS ---
-    # NOTE: Using the comprehensive store list and cName-based referers.
     "Ethos (Harmarville)": {
         "api_url": "https://nephilly.ethoscannabis.com/api-4/graphql",
         "store_id": "621900cebbc5580e15476deb",
@@ -345,161 +359,26 @@ DUTCHIE_STORES = {
             "x-dutchie-session": "eyJpZCI6IjNhMTFmZGZhLTU5MGQtNDk5ZC1hYzE4LTRjNjhlZjRjNjZkNiIsImV4cGlyZXMiOjE3NjI0ODA3NzY0ODF9"
         }
     },
-
-#    # --- AYR ---
-#    "Ayr (Gibsonia)": {
-#        "api_url": "https://dutchie.com/api-2/graphql",
-#        "store_id": "5ff8ee358174a300e11a15cb", # This ID was correct
-#        "headers": {
-#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-#            "referer": "https://dutchie.com/embedded-menu/ayr-dispensary-gibsonia/carousels/a38fb001-0957-4287-9247-cff829021762?carouselId=a38fb001-0957-4287-9247-cff829021762&routeRoot=https%3A%2F%2Fayrdispensaries.com%2Fpennsylvania%2Fgibsonia%2Fshop%2F",
-#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-#        }
-#    },
-#    "Ayr (Bryn Mawr)": {
-#        "api_url": "https://dutchie.com/api-2/graphql",
-#        "store_id": "607474136e6c2700e1d03328",
-#        "headers": {
-#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-#            "referer": "https://ayrdispensaries.com/pennsylvania/bryn-mawr/shop/",
-#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-#        }
-#    },
-#    "Ayr (New Castle)": {
-#        "api_url": "https://dutchie.com/api-2/graphql",
-#        "store_id": "6074744476081400e1215169",
-#        "headers": {
-#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-#            "referer": "https://ayrdispensaries.com/pennsylvania/new-castle/shop/",
-#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-#        }
-#    },
-#    "Ayr (Indiana)": {
-#        "api_url": "https://dutchie.com/api-2/graphql",
-#        "store_id": "622e0e01700689000c0f73f5",
-#        "headers": {
-#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-#            "referer": "https://ayrdispensaries.com/pennsylvania/indiana/shop/",
-#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-#        }
-#    },
-#    "Ayr (Plymouth Meeting)": {
-#        "api_url": "https://dutchie.com/api-2/graphql",
-#        "store_id": "6074742a76081400e1215163",
-#        "headers": {
-#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-#            "referer": "https://ayrdispensaries.com/pennsylvania/plymouth-meeting/shop/",
-#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-#        }
-#    },
-#    "Ayr (Bloomsburg)": {
-#        "api_url": "https://dutchie.com/api-2/graphql",
-#        "store_id": "6074745d76081400e121516f",
-#        "headers": {
-#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-#            "referer": "https://ayrdispensaries.com/pennsylvania/bloomsburg/shop/",
-#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-#        }
-#    },
-#    "Ayr (Selinsgrove)": {
-#        "api_url": "https://dutchie.com/api-2/graphql",
-#        "store_id": "61b369c00ddd67000d14b437",
-#        "headers": {
-#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-#            "referer": "https://ayrdispensaries.com/pennsylvania/selinsgrove/shop/",
-#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-#        }
-#    },
-#    "Ayr (State College)": {
-#        "api_url": "https://dutchie.com/api-2/graphql",
-#        "store_id": "61e967a5b39912000c4161a0",
-#        "headers": {
-#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-#            "referer": "https://ayrdispensaries.com/pennsylvania/state-college/shop/",
-#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-#        }
-#    },
-#    "Ayr (Williamsport)": {
-#        "api_url": "https://dutchie.com/api-2/graphql",
-#        "store_id": "61f14ae1f23793000cc1b771",
-#        "headers": {
-#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-#            "referer": "https://ayrdispensaries.com/pennsylvania/williamsport/shop/",
-#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-#        }
-#    },
-#    "Ayr (Montgomeryville)": {
-#        "api_url": "https://dutchie.com/api-2/graphql",
-#        "store_id": "62d56a298533b3000c2a2333",
-#        "headers": {
-#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-#            "referer": "https://ayrdispensaries.com/pennsylvania/montgomeryville/shop/",
-#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-#        }
-#    },
-#    "Ayr (DuBois)": {
-#        "api_url": "https://dutchie.com/api-2/graphql",
-#        "store_id": "63039d99723351000c8f5f8b",
-#        "headers": {
-#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-#            "referer": "https://ayrdispensaries.com/pennsylvania/dubois/shop/",
-#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-#        }
-#    },
-#    "Ayr (Pottsville)": {
-#        "api_url": "https://dutchie.com/api-2/graphql",
-#        "store_id": "63483984d2b865000c7e2962",
-#        "headers": {
-#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-#            "referer": "https://ayrdispensaries.com/pennsylvania/pottsville/shop/",
-#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-#        }
-#    },
-#    "Ayr (Philadelphia)": {
-#        "api_url": "https://dutchie.com/api-2/graphql",
-#        "store_id": "6440232231267b0001bc954b",
-#        "headers": {
-#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-#            "referer": "https://ayrdispensaries.com/pennsylvania/philadelphia/shop/",
-#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-#        }
-#    },
-#    "Ayr (Olyphant)": {
-#        "api_url": "https://dutchie.com/api-2/graphql",
-#        "store_id": "644023a831267b0001bc954d",
-#        "headers": {
-#            "accept": "*/*", "apollographql-client-name": "Marketplace (production)", "content-type": "application/json",
-#            "referer": "https://ayrdispensaries.com/pennsylvania/olyphant/shop/",
-#            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15",
-#            "x-dutchie-session": "eyJpZCI6Ijg3NDI3YWE0LWQyMjUtNDZkYi1hY2M2LTk2NjU3YmQyMTRjMCIsImV4cGlyZXMiOjE3NjM2MDgwMTE3NzB9"
-#        }
-#    },
 }
 
 def _normalize_name_for_grouping(name):
     """
     Creates a simplified 'fingerprint' of a product name for fuzzy matching.
-    Removes casing, punctuation, and common category words.
+
+    Why? Some stores list "Blue Dream Flower" and "Blue Dream Premium Flower".
+    We want to treat these as the same "Batch" to avoid double-fetching data.
+
+    What it does:
+    1. Converts to lowercase.
+    2. Removes punctuation.
+    3. Removes "noise words" like 'flower', 'premium', 'hybrid', '1g', '3.5g'.
     """
     if not name: return ""
     
-    # 1. Lowercase and remove non-alphanumeric characters
+    # 1. Lowercase and remove non-alphanumeric characters (keep only a-z and 0-9)
     clean = re.sub(r'[^a-z0-9]', '', name.lower())
     
-    # 2. Remove common 'menu noise' words
+    # 2. Remove common 'menu noise' words that don't change the chemical profile
     noise_words = [
         'flower', 'premium', 'whole', 'smalls', 'small', 'buds', 'bud',
         'grind', 'ground', 'shake', 'trim', 'popcorn', 'fine',
@@ -517,7 +396,17 @@ def _normalize_name_for_grouping(name):
     
 def get_all_product_slugs(store_name, store_config):
     """
-    Fetches product slugs AND metadata (Price, THC, CBD) to enable grouping.
+    Step 1: Fetch basic product info (Slugs) for a store.
+
+    This asks the API for a list of ALL products, but only asks for basic fields
+    (Name, Brand, THC, Price, Weight). It does NOT ask for terpenes yet.
+
+    Args:
+        store_name (str): Human-readable name of the store.
+        store_config (dict): Configuration dictionary (URL, ID, headers).
+
+    Returns:
+        list: A list of simplified product dictionaries.
     """
     all_products = []
     print(f"Step 1: Fetching product slugs for {store_name}...")
@@ -526,6 +415,7 @@ def get_all_product_slugs(store_name, store_config):
     page = 0
     
     while True:
+        # The GraphQL Query Variables
         variables = {
             "includeEnterpriseSpecials": False,
             "productsFilter": {
@@ -536,7 +426,10 @@ def get_all_product_slugs(store_name, store_config):
             },
             "page": page, "perPage": 100
         }
+        # The "Query Hash" identifies which query we want to run on the server.
         extensions = {"persistedQuery": {"version": 1, "sha256Hash": "ee29c060826dc41c527e470e9ae502c9b2c169720faa0a9f5d25e1b9a530a4a0"}}
+
+        # Combine into parameters for the request
         params = {'operationName': 'FilteredProducts', 'variables': json.dumps(variables), 'extensions': json.dumps(extensions)}
 
         try:
@@ -552,32 +445,32 @@ def get_all_product_slugs(store_name, store_config):
                 print(f"GraphQL Error in product slugs for {store_name}: {json_response['errors']}")
                 break
                 
+            # Navigate deep into the JSON to find the list of products
             products = json_response.get('data', {}).get('filteredProducts', {}).get('products', [])
-            if not products: break
+            if not products: break # If no products, we are done.
 
             for product in products:
-                # Extract grouping keys and individual data
-                # Fix: Use (val or {}) to handle cases where the key exists but value is None
+                # Safely extract data, handling cases where values might be None (null)
                 thc_data = product.get('THCContent') or {}
                 thc_content = thc_data.get('range', [0])
 
                 cbd_data = product.get('CBDContent') or {}
                 cbd_content = cbd_data.get('range', [0])
                 
-                # Get Price (Medical preferred)
+                # Get Price (Medical preferred, fallback to Rec)
                 prices = product.get('medicalPrices') or product.get('recPrices') or []
                 price = min(prices) if prices else 0
                 
-                # Get Weight
+                # Get Weight (usually the first option)
                 options = product.get('Options', [])
                 weight = options[0] if options else "N/A"
 
                 all_products.append({
-                    "cName": product['cName'],
+                    "cName": product['cName'], # The "canonical name" used for the next query
                     "DispensaryID": store_id,
                     "StoreName": store_name,
                     "StoreConfig": store_config,
-                    # New Metadata for Grouping & Final Data
+                    # Metadata for Grouping & Final Data
                     "Name": product.get('Name'),
                     "Brand": product.get('brandName'),
                     "THC": thc_content[0] if thc_content else 0,
@@ -600,8 +493,12 @@ def get_all_product_slugs(store_name, store_config):
 
 def get_detailed_product_info(product_list):
     """
-    Groups products by Batch Signature (Brand + Potency + Weight + Fuzzy Name)
-    and fetches details once per group.
+    Step 2: Group products and fetch detailed info (Terpenes).
+
+    Instead of making 1000 API calls for 1000 products, we group them.
+    If we see 5 products that look like "Cresco Bio Jesus" with the same THC/CBD,
+    we assume they are from the same batch. We fetch the details for ONE of them,
+    and apply those details (like Terpenes) to all 5.
     """
     all_product_data = []
     print("\nStep 2: Optimizing and fetching details...")
@@ -613,7 +510,7 @@ def get_detailed_product_info(product_list):
         # Create the Fuzzy Name Fingerprint
         norm_name = _normalize_name_for_grouping(p['Name'])
         
-        # Create the Unique Batch Key
+        # Create the Unique Batch Key: Brand + Weight + Potency + Name
         key = (
             p['Brand'],
             p['Weight_Str'],
@@ -637,7 +534,7 @@ def get_detailed_product_info(product_list):
         if (i + 1) % 50 == 0:
             print(f"  ...processing batch {i + 1}/{unique_batches}")
 
-        # Use the first item as the Representative to fetch data
+        # Use the first item as the "Representative" to fetch data
         representative = group_items[0]
         
         # Make the API call (Once per group)
@@ -694,8 +591,7 @@ def get_detailed_product_info(product_list):
             }
             
             # 2. Enrich with the fetched details (Terpenes!)
-            # We trust the 'detail_data' for terpenes/cannabinoids, but we PREFER the 'item' data
-            # for Price/Store/Weight because those are specific to the individual list listing.
+            # We merge the 'detail_data' into 'final_item'.
             for k, v in detail_data.items():
                 if k not in final_item: # Only add missing keys (like Terpenes)
                     final_item[k] = v
@@ -709,24 +605,16 @@ def parse_product_details(product, store_name):
     """
     Parses the complex, nested JSON of a single product into a flat dictionary.
 
-    This function handles the extraction of key information and standardizes it.
-    It uses `.get()` extensively to avoid errors if a key is missing in the response.
-
-    Args:
-        product (dict): The JSON dictionary for a single product from the API.
-        store_name (str): The name of the store.
-
-    Returns:
-        dict: A flattened dictionary containing the key product information.
+    This is where we extract the specific chemical values (Terpenes, Cannabinoids).
     """
     
-    # Standardize category and skip if not in map
+    # Standardize category
     category_name = product.get('type')
     standardized_category = MASTER_CATEGORY_MAP.get(category_name)
     if not standardized_category:
         return None
 
-    # Standardize brand and subcategory
+    # Standardize brand
     brand_name = (product.get('brandName') or 'N/A').strip()
     subcategory_name = product.get('subcategory')
 
@@ -741,6 +629,7 @@ def parse_product_details(product, store_name):
     # Pricing and weight
     prices = product.get('medicalPrices', [])
     special_prices = product.get('medicalSpecialPrices', [])
+    # Use special price if available, else regular price.
     data['Price'] = min(special_prices) if special_prices else (min(prices) if prices else np.nan)
 
     options = product.get('Options', [])
@@ -751,17 +640,18 @@ def parse_product_details(product, store_name):
     # Process compounds (cannabinoids and terpenes)
     compounds_dict = {}
 
-    # Handle terpenes
+    # --- Handle Terpenes ---
     terpenes_list = product.get('terpenes')
     if terpenes_list is not None:
         for item in terpenes_list:
+            # Some terpenes are nested under 'libraryTerpene', some might be direct.
             name = item.get('libraryTerpene', {}).get('name')
             if name:
                 standard_name = MASTER_COMPOUND_MAP.get(name)
                 if standard_name:
                     compounds_dict[standard_name] = item.get('value')
 
-    # Handle cannabinoids
+    # --- Handle Cannabinoids ---
     cannabinoids_list = product.get('cannabinoidsV2')
     if cannabinoids_list is not None:
         for item in cannabinoids_list:
@@ -779,11 +669,8 @@ def fetch_dutchie_data():
     """
     The main orchestration function for the Dutchie scraper.
 
-    It calls the other functions in this module to get all product data from
-    all configured Dutchie stores and returns it as a single DataFrame.
-
-    Returns:
-        pd.DataFrame: A DataFrame containing all scraped product data from Dutchie stores.
+    It loops through every store, gets the slugs, groups them, fetches details,
+    and combines everything into a DataFrame.
     """
     all_store_slugs = []
     for store_name, store_config in DUTCHIE_STORES.items():
@@ -793,14 +680,17 @@ def fetch_dutchie_data():
         print("No product slugs found for any Dutchie store. Exiting Dutchie scraper.")
         return pd.DataFrame()
     
-    pdb.set_trace()
-
+    # Get detailed info for all products
     product_details = get_detailed_product_info(all_store_slugs)
+
     if not product_details:
         print("No product data was fetched. Returning an empty DataFrame.")
         return pd.DataFrame()
 
+    # Create DataFrame
     df = pd.DataFrame(product_details)
+
+    # Calculate Dollars Per Gram
     df['dpg'] = df['Price'] / df['Weight']
 
     print("\nScraping complete for Dutchie stores. DataFrame created.")

@@ -1,35 +1,51 @@
 # main.py
-# This script serves as the main entry point for the PA Dispensary Scraper.
-# It orchestrates the entire process, including:
-# 1. Authenticating with the Google Sheets API.
-# 2. Implementing a "load-or-scrape" logic:
-#    - It first checks if a Google Sheet for the current date already exists.
-#    - If yes, it loads the data from that sheet.
-#    - If no, it runs the individual scrapers, combines the data, and writes
-#      it to a newly created Google Sheet for the day.
-# 3. Handoff to the analysis module (`analysis.py`) for data cleaning and visualization.
+# -----------------------------------------------------------------------------
+# This script serves as the main entry point for the PA Dispensary Scraper application.
+#
+# Think of this file as the "conductor" of an orchestra. It doesn't play the
+# instruments itself (the individual scrapers do that), but it tells them when
+# to start, collects their output, and makes sure everything works together.
+#
+# Its main responsibilities are:
+# 1. Authentication: Logging in to Google services so we can save our data.
+# 2. Orchestration: Deciding whether to load existing data or run new scrapers.
+# 3. Aggregation: Collecting data from all different sources into one big list.
+# 4. Saving: Writing the results to a Google Sheet.
+# 5. Handoff: Passing the data to the analysis module for charts and graphs.
+# -----------------------------------------------------------------------------
 
-import datetime
-import gspread
-import pandas as pd
-import pdb
-import json
+import datetime  # Used to get the current date (e.g., for file naming).
+import gspread   # A library to interact with Google Sheets.
+import pandas as pd # A powerful library for data manipulation (like Excel for Python).
+import json      # Used for working with JSON data formats.
+
+# Import the specific functions that run the scrapers for each dispensary.
+# These functions are defined in other files in the `scrapers/` directory.
 from scrapers.iheartjane_scraper import fetch_iheartjane_data
 from scrapers.dutchie_scraper import fetch_dutchie_data
 from scrapers.trulieve_scraper import fetch_trulieve_data
 from scrapers.cresco_scraper import fetch_cresco_data
 from scrapers.sweed_scraper import fetch_sweed_data
+
+# Import the helper function to write our data to Google Sheets.
 from google_sheets_writer import write_to_google_sheet
+
+# Import the function that performs data analysis and creates charts.
 from analysis import run_analysis
 
 # --- Define Scopes for Google API ---
-# These scopes define the permissions the script will request from the user.
-# - `spreadsheets`: Allows reading and writing spreadsheet data.
-# - `drive.file`: Allows creating new spreadsheet files in the user's Drive.
+# "Scopes" are like permissions. They tell Google exactly what this program
+# is allowed to do with your account.
+# - `spreadsheets`: Allows the program to read and write Google Sheets.
+# - `drive.file`: Allows the program to create new files in your Google Drive.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets',
           'https://www.googleapis.com/auth/drive.file']
 
 # --- Define Store Mappings ---
+# These dictionaries map a human-readable store name (e.g., "Trulieve (Camp Hill)")
+# to the specific ID number that the website's API uses to identify that store.
+# This allows us to ask the API for data from specific locations.
+
 TRULIEVE_STORES = {
     "Trulieve (Camp Hill)": "322",
     "Trulieve (Coatesville)": "323",
@@ -77,72 +93,79 @@ CRESCO_STORES = {
 
 def main():
     """
-    The main function to orchestrate the scraping, data loading, and analysis process.
+    The main function is the 'brain' of the operation.
 
-    This function handles the primary logic of the application. It attempts to load
-    pre-scraped data from a Google Sheet corresponding to the current date. If the
-    sheet is not found, it proceeds to run the individual scrapers, aggregate their
-    data, and write the combined results to a new Google Sheet.
+    It performs the following steps:
+    1. Authenticate with Google.
+    2. Check if we have already scraped data for today.
+       - If YES: Load that data instead of scraping again (saves time).
+       - If NO: Run all the scrapers to get fresh data.
+    3. Combine all the data into one big table.
+    4. Write that table to a new Google Sheet.
 
     Returns:
-        pd.DataFrame: A DataFrame containing the scraped or loaded data. Returns
-                      None if no data could be scraped or loaded.
+        pd.DataFrame: A pandas DataFrame (a table of data) containing all the
+                      product information. Returns None if something goes wrong.
     """
-    combined_df = None
+    combined_df = None # Initialize a variable to hold our final data
 
     # --- Google Sheets Authentication and Setup ---
     print("Authenticating with Google Sheets...")
-    # The spreadsheet title is generated dynamically to be unique for each day.
-    # This forms the basis of our "load-or-scrape" logic.
+
+    # Generate a title for our spreadsheet based on today's date.
+    # Example: "PA_Scraped_Data_2023-10-27"
+    # This allows us to keep a daily history of data.
     today_str = datetime.date.today().strftime('%Y-%m-%d')
     spreadsheet_title = f'PA_Scraped_Data_{today_str}'
 
     try:
-        # `gspread.oauth()` handles the OAuth 2.0 "Desktop App" flow.
-        # - `credentials_filename`: Points to the `credentials.json` file downloaded from Google Cloud.
-        # - `authorized_user_filename`: Points to `token.json`, which stores the user's
-        #   access and refresh tokens. This file is created automatically on the
-        #   first successful authentication and reused on subsequent runs.
+        # `gspread.oauth()` handles the login process.
+        # - `credentials_filename`: The 'key' we downloaded from Google Cloud.
+        # - `authorized_user_filename`: A file that stores our login 'session' so
+        #   we don't have to type our password every time.
         gc = gspread.oauth(
             credentials_filename='credentials.json',
             authorized_user_filename='token.json',
             scopes=SCOPES
         )
 
-        # --- "LOAD" Part of the "Load-or-Scrape" Logic ---
-        # The script attempts to open a spreadsheet with today's date in the title.
-        # If it succeeds, it means the data has already been scraped today.
+        # --- "LOAD" Logic ---
+        # Try to open a spreadsheet with today's name.
+        # If this line works, it means we already ran the scraper today!
         spreadsheet = gc.open(spreadsheet_title)
         print(f"Found existing sheet: '{spreadsheet_title}'. Loading data.")
 
-        # Load data from the first worksheet.
+        # Access the first tab (worksheet) of the spreadsheet.
         worksheet = spreadsheet.worksheet("Sheet1")
+
+        # Download all the data from that sheet.
         data = worksheet.get_all_records()
+
+        # Convert the data into a pandas DataFrame (our standard table format).
         combined_df = pd.DataFrame(data)
         print(f"Data loaded successfully from Google Sheet ({len(combined_df)} rows).")
 
     except gspread.exceptions.SpreadsheetNotFound:
-        # --- "SCRAPE" Part of the "Load-or-Scrape" Logic ---
-        # If the spreadsheet is not found, it triggers the full scraping process.
+        # --- "SCRAPE" Logic ---
+        # If the spreadsheet was NOT found (SpreadsheetNotFound error),
+        # it means we need to scrape fresh data.
         print(f"Spreadsheet '{spreadsheet_title}' not found. Starting scraper.")
 
-        # A new spreadsheet is created with the dynamic title.
-        # The `gspread` object (`gc`) is already authenticated from the `try` block.
+        # Create a new, empty spreadsheet for today's data.
         spreadsheet = gc.create(spreadsheet_title)
         print(f"Sheet created: {spreadsheet.url}")
 
         print("Starting the PA Dispensary Scraper...")
-        all_dataframes = []  # A list to hold all our DataFrames
+        all_dataframes = []  # This list will collect the results from each scraper.
 
-        # --- 1. Run Individual Scrapers ---
-        # Each scraper function is called, and its resulting DataFrame is append
-        # to the list.
+        # --- Run Individual Scrapers ---
+        # We call each scraper function one by one.
+        # Each function goes to a website, gets the data, and returns it as a DataFrame.
         
-        # pdb.set_trace()
         print("\nStarting Dutchie Scraper...")
         dutchie_df = fetch_dutchie_data()
         if not dutchie_df.empty:
-            all_dataframes.append(dutchie_df)
+            all_dataframes.append(dutchie_df) # Add the result to our list
             
         print("\nStarting Sweed (Zen Leaf) Scraper...")
         sweed_df = fetch_sweed_data()
@@ -164,27 +187,28 @@ def main():
         if not trulieve_df.empty:
             all_dataframes.append(trulieve_df)
         
-        # If no scrapers return data, exit gracefully.
+        # If we tried everything and got no data, stop here.
         if not all_dataframes:
             print("\nNo data was scraped from any source. Exiting.")
             return
 
-        # --- 2. Combine Data ---
+        # --- Combine Data ---
+        # Stack all the individual DataFrames on top of each other to make one big table.
         print("\nCombining all data...")
         combined_df = pd.concat(all_dataframes, ignore_index=True)
 
-        # --- 3. Define Final Column Structure ---
-        # A predefined list of columns ensures a consistent structure for the final DataFrame.
-        # This is important for both the Google Sheet and the analysis module.
+        # --- Define Final Column Structure ---
+        # We want our final table to have a specific order of columns.
+        # This makes the data easier to read and analyze.
         final_columns = [
-            # Product Info
+            # Basic Product Info
             'Name', 'Brand', 'Store', 'Price', 'Weight', 'Weight_Str', 'dpg',
             'Type', 'Subtype',
             
-            # Cannabinoids
+            # Cannabinoids (Chemicals that get you high or give medical relief)
             'THC', 'THCa', 'CBD', 'CBDa', 'CBG', 'CBGa', 'CBN', 'THCv', 'Delta-8 THC', 'TAC',
 
-            # Terpenes (from STANDARDIZATION_MAPS.md)
+            # Terpenes (Aromatic oils that affect the flavor and effect)
             'Total_Terps',
             'alpha-Terpinene',
             'alpha-Bisabolol',
@@ -207,49 +231,54 @@ def main():
             'trans-Nerolidol',
             'gamma-Terpinene',
             
-            # Pinene sources (for aggregation in analysis.py)
+            # Specific Pinene types (grouped together later in analysis)
             'alpha-Pinene',
             'beta-Pinene'
         ]
         
-        # `reindex` ensures all columns from `final_columns` are present, filling
-        # any missing ones with NaN (which will become empty cells in the sheet).
+        # Reorganize the DataFrame to match our `final_columns` list.
+        # If a column is missing (e.g., no products had 'Carene'), it will be created and filled with empty values.
         combined_df = combined_df.reindex(columns=final_columns)
 
-        # --- 4. Show Summary ---
+        # --- Show Summary ---
         print("\n--- Scraping Summary ---")
         print(f"Total products found: {len(combined_df)}")
+
+        # Print the first 10 rows so the user can verify it looks correct.
         print("\nFirst 10 rows of data:")
         print(combined_df.head(10).to_string())
+
+        # Print technical info about the data types (e.g., numbers vs text).
         print("\nData columns and types:")
         combined_df.info()
 
-        # --- 5. Write to Google Sheets ---
+        # --- Write to Google Sheets ---
         print("\nWriting to Google Sheets...")
-        # The authenticated spreadsheet object and the combined data are passed
-        # to the dedicated writer module.
-        # This line can be commented out to run the scraper locally without cloud storage.
+        # Call our helper function to upload the data to the cloud.
         write_to_google_sheet(spreadsheet, combined_df)
 
     except FileNotFoundError:
+        # This error happens if `credentials.json` is missing.
         print("\nERROR: 'credentials.json' not found.")
         print("Please follow the setup instructions in README.md to create this file.")
-        return # Exit if credentials are not found
+        return
     except Exception as e:
+        # Catch-all for any other unexpected errors (like internet issues).
         print(f"\nAn unexpected error occurred: {e}")
         print("Please ensure your Google Cloud project is configured correctly and you have granted the necessary permissions.")
-        return # Exit on other errors
+        return
     
     return combined_df
 
-# This standard Python snippet ensures that the code inside this block only runs
-# when the script is executed directly (e.g., `python main.py`).
+# --- Entry Point ---
+# This block checks if the script is being run directly (not imported as a module).
+# If it is run directly, it calls the `main()` function to start the program.
 if __name__ == "__main__":
     combined_df = main()
 
     # --- Analysis Handoff ---
-    # After the main() function completes (either by loading or scraping),
-    # the resulting DataFrame is passed to the analysis module.
+    # Once we have the data (either loaded or scraped), we pass it to the
+    # analysis module to generate our plots and graphs.
     if combined_df is not None and not combined_df.empty:
         print("\n--- Handing off to Analysis Module ---")
         cleaned_df = run_analysis(combined_df)
