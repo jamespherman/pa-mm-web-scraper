@@ -31,9 +31,29 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets',
 
 # --- Define Store Mappings ---
 TRULIEVE_STORES = {
-    "Trulieve (Squirrel Hill)": "86",
-    "Trulieve (North Shore)": "90"
+    "Trulieve (Camp Hill)": "322",
+    "Trulieve (Coatesville)": "323",
+    "Trulieve (Cranberry Township)": "324",
+    "Trulieve (Harrisburg)": "325",
+    "Trulieve (Johnstown)": "326",
+    "Trulieve (King of Prussia (Henderson))": "327",
+    "Trulieve (Philadelphia)": "330",
+    "Trulieve (Philadelphia (Center City))": "331",
+    "Trulieve (Philadelphia (Washington Square))": "332",
+    "Trulieve (Pittsburgh (Squirrel Hill))": "333",
+    "Trulieve (Pittsburgh (North Shore))": "334",
+    "Trulieve (Reading (5th Street))": "335",
+    "Trulieve (Reading (Lancaster Ave))": "336",
+    "Trulieve (Scranton)": "337",
+    "Trulieve (Washington)": "338",
+    "Trulieve (Whitehall)": "339",
+    "Trulieve (York)": "340",
+    "Trulieve (Zelienople)": "341",
+    "Trulieve (Limerick)": "403",
+    "Trulieve (Wilkes-Barre)": "446",
+    "Trulieve (Lancaster)": "468",
 }
+
 CRESCO_STORES = {
     "Sunnyside (Butler)": "202",
     "Sunnyside (PGH - Penn Ave)": "203",

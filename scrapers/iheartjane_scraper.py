@@ -89,6 +89,36 @@ ALGOLIA_PLATFORMS = [
 
 # --- Parsing Functions ---
 
+# --- WEIGHT FROM NAME HELPER FUNCTION ---
+def _parse_weight_from_name_field(name_str):
+    """
+    Parses a weight string (e.g., [7g], [500mg]) from a product name.
+    Returns the weight in grams if found, otherwise None.
+    """
+    if not isinstance(name_str, str):
+        return None
+
+    # Regex to find weights in brackets (e.g., [4000mg], [7g], [0.5g])
+    # Group 1: The number (e.g., "4000")
+    # Group 2: The unit (e.g., "mg" or "g")
+    match = re.search(r'\[([\d\.]+)\s*(mg|g)\]', name_str, re.IGNORECASE)
+    
+    if not match:
+        return None  # No weight found in name
+
+    try:
+        value = float(match.group(1))
+        unit = match.group(2).lower()
+        
+        if unit == 'mg':
+            return value / 1000.0  # Convert mg to g
+        elif unit == 'g':
+            return value
+    except Exception:
+        return None # Failed to parse
+    
+    return None
+
 def parse_terpenes_from_text(text):
     """
     Parses compound data from a raw text block using regular expressions.
@@ -112,19 +142,19 @@ def parse_terpenes_from_text(text):
 def parse_jane_product(product_hit, store_name):
     """
     Parses a single product 'hit' from the iHeartJane Algolia API JSON response.
-    Note: The 'hit' is the raw product object, NOT the 'search_attributes' wrapper.
     """
     
-    # Standardize category and skip if not in map
+    # 1. Standardize category and skip if not in map
     category_name = product_hit.get('kind')
     standardized_category = MASTER_CATEGORY_MAP.get(category_name)
     if not standardized_category:
         return []
 
-    # Standardize brand and subcategory
-    brand_name = product_hit.get('brand', 'N/A').strip()
+    # 2. Standardize brand and subcategory
+    brand_name = (product_hit.get('brand') or 'N/A').strip()
     subcategory_name = product_hit.get('kind_subtype')
 
+    # 3. DEFINE COMMON_DATA FIRST (Crucial Fix)
     common_data = {
         'Name': product_hit.get('name'),
         'Brand': BRAND_MAP.get(brand_name, brand_name),
@@ -133,54 +163,88 @@ def parse_jane_product(product_hit, store_name):
         'Store': store_name,
     }
 
-    # --- Tiered Compound Parsing ---
+    # 4. Tiered Compound Parsing
     compounds_found = False
-
-    # 1. Attempt to parse structured lab_results
+    # ... Attempt to parse structured lab_results
     lab_results = product_hit.get('lab_results', [])
     if lab_results:
         for result_group in lab_results:
-            # Handle nested lab_results structures
             results_list = result_group.get('lab_results', [])
-            if not isinstance(results_list, list):
-                continue
-                
-            for result in results_list:
-                compound_name = result.get('compound_name')
-                standard_name = MASTER_COMPOUND_MAP.get(compound_name)
-                if standard_name:
-                    common_data[standard_name] = result.get('value')
-                    compounds_found = True
+            if isinstance(results_list, list):
+                for result in results_list:
+                    compound_name = result.get('compound_name')
+                    standard_name = MASTER_COMPOUND_MAP.get(compound_name)
+                    if standard_name:
+                        common_data[standard_name] = result.get('value')
+                        compounds_found = True
 
-    # 2. Fallback to unstructured text parsing
+    # ... Fallback to unstructured text parsing
     if not compounds_found:
         store_notes = product_hit.get('store_notes', '')
         if store_notes:
             common_data.update(parse_terpenes_from_text(store_notes))
             compounds_found = any(key in MASTER_COMPOUND_MAP.values() for key in common_data)
 
-    # 3. Second fallback to compound_names list
+    # ... Second fallback to compound_names list
     if not compounds_found:
         for name in product_hit.get('compound_names', []):
             standard_name = MASTER_COMPOUND_MAP.get(name)
             if standard_name:
                 common_data[standard_name] = np.nan
 
-    # Process all available price/weight variants
+    # 5. START NEW WEIGHT PARSING LOGIC (Now safe to run)
     product_variants = []
+    
+    # Strategy 1: Trust the API's explicit weight fields (Gold Standard)
+    valid_weight = None
+    weight_source = None
+    
+    net_weight = product_hit.get('net_weight_grams')
+    if net_weight and isinstance(net_weight, (int, float)) and net_weight > 0:
+        valid_weight = float(net_weight)
+        weight_source = "net_weight_grams"
+        
+    if valid_weight is None:
+        q_val = product_hit.get('quantity_value')
+        q_unit = product_hit.get('quantity_units')
+        if q_val and q_unit == 'g' and isinstance(q_val, (int, float)):
+             valid_weight = float(q_val)
+             weight_source = "quantity_value"
+
+    # Strategy 2: Regex on Name (Silver Standard)
+    if valid_weight is None:
+        # Now this works because common_data is defined above!
+        weight_from_name = _parse_weight_from_name_field(common_data['Name'])
+        if weight_from_name:
+            valid_weight = weight_from_name
+            weight_source = "regex_name"
+
+    # Construct Variant from Valid Weight
+    # Extra comment line
+    if valid_weight:
+        price_each = product_hit.get('price_each')
+        if price_each:
+            price = float(price_each)
+            special_price_data = product_hit.get('special_price_each') or {}
+            if special_price_data.get('discount_price'):
+                price = float(special_price_data['discount_price'])
+
+            variant_data = common_data.copy()
+            variant_data['Price'] = price
+            variant_data['Weight'] = valid_weight
+            variant_data['Weight_Str'] = f"{valid_weight}g ({weight_source})"
+            product_variants.append(variant_data)
+            return product_variants
+
+    # Strategy 3: Legacy Fallback (Bronze Standard)
     available_weights = product_hit.get('available_weights', [])
     
     if not available_weights:
         price_each = product_hit.get('price_each')
         if price_each:
             variant_data = common_data.copy()
-            
-            # Safely check for a special price.
-            # (product_hit.get('special_price_each') or {}) will handle the case where
-            # the 'special_price_each' key is present but its value is None.
             special_price_data = product_hit.get('special_price_each') or {}
             discount_price = special_price_data.get('discount_price')
-            # --- END FIX ---
 
             variant_data['Price'] = float(discount_price or price_each)
             variant_data['Weight_Str'] = "Each"

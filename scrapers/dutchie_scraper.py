@@ -7,10 +7,11 @@ import requests
 import pandas as pd
 import numpy as np
 import json
+import re
 import pdb
 from .scraper_utils import (
-    convert_to_grams, BRAND_MAP, MASTER_CATEGORY_MAP,
-    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP, save_raw_json
+    convert_to_grams, save_raw_json, BRAND_MAP, MASTER_CATEGORY_MAP,
+    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
 )
 
 # --- Constants ---
@@ -488,32 +489,43 @@ DUTCHIE_STORES = {
 #    },
 }
 
+def _normalize_name_for_grouping(name):
+    """
+    Creates a simplified 'fingerprint' of a product name for fuzzy matching.
+    Removes casing, punctuation, and common category words.
+    """
+    if not name: return ""
+    
+    # 1. Lowercase and remove non-alphanumeric characters
+    clean = re.sub(r'[^a-z0-9]', '', name.lower())
+    
+    # 2. Remove common 'menu noise' words
+    noise_words = [
+        'flower', 'premium', 'whole', 'smalls', 'small', 'buds', 'bud',
+        'grind', 'ground', 'shake', 'trim', 'popcorn', 'fine',
+        'hybrid', 'indica', 'sativa', 'thc', 'cbd',
+        'cartridge', 'vape', 'cart', 'disposable', 'pen', 'pod',
+        'live', 'resin', 'rosin', 'sauce', 'badder', 'budder', 'sugar', 'crumble',
+        'syringe', 'capsules', 'rso', 'pack', 'briq', 'elite',
+        'g', 'mg', 'oz', 'gram', '1g', '35g', '7g', '14g', '28g', '05g', '2g', '1000mg', '100mg', '10', 'ea'
+    ]
+    
+    for word in noise_words:
+        clean = clean.replace(word, '')
+        
+    return clean
+    
 def get_all_product_slugs(store_name, store_config):
     """
-    Fetches the unique identifiers (`cName` or slugs) for all products in a store.
-
-    This function paginates through the dispensary's menu, collecting the `cName`
-    for every product. This is the first step, as these slugs are required to
-    fetch the detailed information for each product.
-
-    Args:
-        store_name (str): The name of the store being scraped.
-        store_config (dict): The configuration dictionary for the store.
-
-    Returns:
-        list: A list of dictionaries, each containing a product's `cName` and store info.
+    Fetches product slugs AND metadata (Price, THC, CBD) to enable grouping.
     """
     all_products = []
     print(f"Step 1: Fetching product slugs for {store_name}...")
     
     api_url, store_id, headers = store_config['api_url'], store_config['store_id'], store_config['headers']
-
     page = 0
+    
     while True:
-        # This is the GraphQL payload, sent as URL parameters.
-        # `extensions.persistedQuery.sha256Hash` is a key part of Dutchie's API.
-        # Instead of sending the full query text, the client sends a hash of the query.
-        # If this hash ever changes on their backend, this scraper will break.
         variables = {
             "includeEnterpriseSpecials": False,
             "productsFilter": {
@@ -531,93 +543,166 @@ def get_all_product_slugs(store_name, store_config):
             response = requests.get(api_url, headers=headers, params=params)
             response.raise_for_status()
             json_response = response.json()
-
-            # Save the raw JSON data
+            
+            # Save raw list for debugging
             filename_parts = ['dutchie', store_name, 'products', f'p{page}']
             save_raw_json(json_response, filename_parts)
+            
             if 'errors' in json_response:
                 print(f"GraphQL Error in product slugs for {store_name}: {json_response['errors']}")
                 break
                 
-            products = json_response['data']['filteredProducts']['products']
+            products = json_response.get('data', {}).get('filteredProducts', {}).get('products', [])
             if not products: break
 
             for product in products:
+                # Extract grouping keys and individual data
+                # Fix: Use (val or {}) to handle cases where the key exists but value is None
+                thc_data = product.get('THCContent') or {}
+                thc_content = thc_data.get('range', [0])
+
+                cbd_data = product.get('CBDContent') or {}
+                cbd_content = cbd_data.get('range', [0])
+                
+                # Get Price (Medical preferred)
+                prices = product.get('medicalPrices') or product.get('recPrices') or []
+                price = min(prices) if prices else 0
+                
+                # Get Weight
+                options = product.get('Options', [])
+                weight = options[0] if options else "N/A"
+
                 all_products.append({
-                    "id": product['id'],  # <-- ADD THIS KEY
-                    "cName": product['cName'], "DispensaryID": store_id,
-                    "StoreName": store_name, "StoreConfig": store_config
+                    "cName": product['cName'],
+                    "DispensaryID": store_id,
+                    "StoreName": store_name,
+                    "StoreConfig": store_config,
+                    # New Metadata for Grouping & Final Data
+                    "Name": product.get('Name'),
+                    "Brand": product.get('brandName'),
+                    "THC": thc_content[0] if thc_content else 0,
+                    "CBD": cbd_content[0] if cbd_content else 0,
+                    "Price": price,
+                    "Weight_Str": weight,
+                    "Type": product.get('type'),
+                    "Subtype": product.get('subcategory')
                 })
             page += 1
         except requests.exceptions.RequestException as e:
             print(f"Error fetching product slugs for {store_name}: {e}")
             break
         except KeyError:
-            print(f"Unexpected JSON structure for {store_name}. Skipping. Response: {response.text}")
+            print(f"Unexpected JSON structure for {store_name}.")
             break
 
-    print(f"  ...found {len(all_products)} total product slugs for {store_name}.")
+    print(f"  ...found {len(all_products)} total products for {store_name}.")
     return all_products
 
-def get_detailed_product_info(product_slugs):
+def get_detailed_product_info(product_list):
     """
-    Fetches and parses detailed information for a list of product slugs.
-
-    This function iterates through the collected slugs, makes a new API call for
-    each one to get detailed data (terpenes, cannabinoids, price), and then
-    parses the complex JSON response into a simple, flat dictionary.
-
-    Args:
-        product_slugs (list): A list of product slug dictionaries from `get_all_product_slugs`.
-
-    Returns:
-        list: A list of dictionaries, where each dictionary represents a parsed product.
+    Groups products by Batch Signature (Brand + Potency + Weight + Fuzzy Name)
+    and fetches details once per group.
     """
     all_product_data = []
-    print("\nStep 2: Fetching detailed product information from Dutchie...")
+    print("\nStep 2: Optimizing and fetching details...")
 
-    for i, slug_info in enumerate(product_slugs):
-        cName, dispensaryId, store_name, store_config = slug_info['cName'], slug_info['DispensaryID'], slug_info['StoreName'], slug_info['StoreConfig']
+    # --- 1. Group products by "Batch Signature" ---
+    product_groups = {}
+    
+    for p in product_list:
+        # Create the Fuzzy Name Fingerprint
+        norm_name = _normalize_name_for_grouping(p['Name'])
+        
+        # Create the Unique Batch Key
+        key = (
+            p['Brand'],
+            p['Weight_Str'],
+            f"{p['THC']:.2f}",
+            f"{p['CBD']:.2f}",
+            norm_name
+        )
+        
+        if key not in product_groups:
+            product_groups[key] = []
+        product_groups[key].append(p)
+    
+    total_products = len(product_list)
+    unique_batches = len(product_groups)
+    
+    print(f"  ...Optimized: {total_products} listings condensed into {unique_batches} unique batches.")
+    print(f"  ...Efficiency gain: {((total_products - unique_batches) / total_products) * 100:.1f}% reduction in calls.")
 
+    # --- 2. Iterate through unique batches ---
+    for i, (key, group_items) in enumerate(product_groups.items()):
         if (i + 1) % 50 == 0:
-            print(f"  ...processing product {i + 1}/{len(product_slugs)}")
+            print(f"  ...processing batch {i + 1}/{unique_batches}")
 
+        # Use the first item as the Representative to fetch data
+        representative = group_items[0]
+        
+        # Make the API call (Once per group)
+        cName = representative['cName']
+        store_config = representative['StoreConfig']
+        
         variables = {
             "includeTerpenes": True, "includeCannabinoids": True, "includeEnterpriseSpecials": False,
             "productsFilter": {
-                "cName": cName, "dispensaryId": dispensaryId, "removeProductsBelowOptionThresholds": False,
-                "isKioskMenu": False, "bypassKioskThresholds": False, "bypassOnlineThresholds": True, "Status": "All"
+                "cName": cName, "dispensaryId": representative['DispensaryID'],
+                "removeProductsBelowOptionThresholds": False, "isKioskMenu": False,
+                "bypassKioskThresholds": False, "bypassOnlineThresholds": True, "Status": "All"
             }
         }
         extensions = {"persistedQuery": {"version": 1, "sha256Hash": "47369a02fc8256aaf1ed70d0c958c88514acdf55c5810a5be8e0ee1a19617cda"}}
         params = {'operationName': 'IndividualFilteredProduct', 'variables': json.dumps(variables), 'extensions': json.dumps(extensions)}
-        
+
         try:
             response = requests.get(store_config['api_url'], headers=store_config['headers'], params=params)
             response.raise_for_status()
             json_response = response.json()
 
-            # Save the raw JSON data
-            filename_parts = ['dutchie', store_name, 'product_details', cName]
+            # Save the raw JSON data for this batch
+            filename_parts = ['dutchie', representative['StoreName'], 'product_details', cName]
             save_raw_json(json_response, filename_parts)
-            if 'errors' in json_response:
-                print(f"GraphQL Error in product details for {cName}: {json_response['errors']}")
-                continue
-                
-            products = json_response['data']['filteredProducts']['products']
-            if not products: continue
+            
+            products_resp = json_response.get('data', {}).get('filteredProducts', {}).get('products', [])
+            
+            if products_resp:
+                # Parse the rich data (Terpenes!) from the representative
+                detail_data = parse_product_details(products_resp[0], representative['StoreName'])
+                if not detail_data: detail_data = {}
+            else:
+                detail_data = {}
 
-            product = products[0]
-            parsed_data = parse_product_details(product, store_name)
-            if parsed_data: all_product_data.append(parsed_data)
-
-        except requests.exceptions.RequestException as e:
+        except Exception as e:
             print(f"Error fetching details for {cName}: {e}")
-        except KeyError:
-            print(f"Unexpected JSON structure for details {cName}. Skipping. Response: {response.text}")
-            continue
+            detail_data = {}
 
-    print(f"  ...successfully parsed {len(all_product_data)} products.")
+        # --- 3. Distribute data to ALL group members ---
+        for item in group_items:
+            # 1. Start with the basic data we already scraped (Price, Store, etc.)
+            final_item = {
+                'Name': item['Name'],
+                'Brand': BRAND_MAP.get(item['Brand'], item['Brand']),
+                'Store': item['StoreName'],
+                'Type': MASTER_CATEGORY_MAP.get(item['Type'], item['Type']),
+                'Subtype': MASTER_SUBCATEGORY_MAP.get(item['Subtype'], item['Subtype']),
+                'Price': item['Price'],
+                'Weight_Str': item['Weight_Str'],
+                'Weight': convert_to_grams(item['Weight_Str']),
+                'THC': item['THC'],
+                'CBD': item['CBD']
+            }
+            
+            # 2. Enrich with the fetched details (Terpenes!)
+            # We trust the 'detail_data' for terpenes/cannabinoids, but we PREFER the 'item' data
+            # for Price/Store/Weight because those are specific to the individual list listing.
+            for k, v in detail_data.items():
+                if k not in final_item: # Only add missing keys (like Terpenes)
+                    final_item[k] = v
+
+            all_product_data.append(final_item)
+
+    print(f"  ...successfully processed {len(all_product_data)} products.")
     return all_product_data
 
 def parse_product_details(product, store_name):

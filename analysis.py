@@ -346,7 +346,16 @@ def run_analysis(dataframe):
     # --- Brand Re-Cleaning ---
     cleaned_df = _reclean_brands(cleaned_df)
     
-    # --- START DEBUG: PRINT DPG OUTLIERS ---
+    # --- Remove Products with 0% TAC ---
+    # These are usually products where the lab data was missing in the source.
+    # Keeping them skews the averages and creates "0.0%" clusters in plots.
+    initial_count = len(cleaned_df)
+    cleaned_df = cleaned_df[cleaned_df['TAC'] > 0].copy()
+    dropped_count = initial_count - len(cleaned_df)
+    if dropped_count > 0:
+        print(f"  - Dropped {dropped_count} products with 0% TAC (missing lab data).")
+    
+    # --- PRINT DPG OUTLIERS ---
     print("\n--- Checking for DPG Outliers ---")
     
     # Filter for Vapes with DPG > 95

@@ -107,6 +107,14 @@ MASTER_COMPOUND_MAP = {
     'THC': 'THC', 'THC-D9 (Delta 9–tetrahydrocannabinol)': 'THC', 'Total_THC': 'THC',
     'THCA': 'THCa', 'THCA (Δ9-tetrahydrocannabinolic acid)': 'THCa',
     'THCV': 'THCv', 'thcv': 'THCv',
+    'cbd': 'CBD',
+    'cbda': 'CBDa',
+    'cbg': 'CBG',
+    'cbga': 'CBGa',
+    'cbn': 'CBN',
+    'thc': 'THC',
+    'thca': 'THCa',
+    'thcv': 'THCv',
 
     # --- Terpenes (Comprehensive list from all scraper debugging) ---
     
@@ -267,7 +275,7 @@ def save_raw_json(data, filename_parts):
         dir_path = os.path.join('raw_data', today_str)
         os.makedirs(dir_path, exist_ok=True)
 
-        sanitized_parts = [re.sub(r'[\\s/]', '_', str(part)).lower() for part in filename_parts]
+        sanitized_parts = [re.sub(r'[^a-zA-Z0-9_-]+', '_', str(part)).lower() for part in filename_parts]
         filename = f"{'_'.join(sanitized_parts)}.json"
 
         filepath = os.path.join(dir_path, filename)
