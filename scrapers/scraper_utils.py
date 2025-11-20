@@ -1,12 +1,24 @@
 # scrapers/scraper_utils.py
+# -----------------------------------------------------------------------------
+# This file acts as a "toolbox" for all the different scrapers.
 #
-# This file holds helper functions that are used by
-# multiple scrapers, like standardizing weights, cleaning text,
-# or parsing lab data.
+# Instead of rewriting the same logic in every scraper file (e.g., how to
+# convert "1/8 oz" to "3.5 grams"), we write it once here and import it.
+#
+# It also contains "Maps" (dictionaries) that help us standardize data.
+# For example, one store might call a brand "GHP" and another "Garcia Hand Picked".
+# We use these maps to ensure they both end up as "Garcia Hand Picked" in our database.
+# -----------------------------------------------------------------------------
 
-import re
+import re  # "Regex" or Regular Expressions (used for finding patterns in text)
+import os  # Used for interacting with the operating system (creating folders, files)
+import json # Used for saving data in JSON format
+from datetime import datetime # Used for getting the current date
 
 # --- Master Standardization Maps ---
+# These dictionaries are the "Rosetta Stones" of the project.
+# The KEYS (left side) are the various ways a term might appear in raw data.
+# The VALUES (right side) are the standardized term we want to use.
 
 BRAND_MAP = {
     # Confirmed Brands
@@ -42,13 +54,16 @@ BRAND_MAP = {
 }
 
 MASTER_CATEGORY_MAP = {
+    # This map groups diverse category names into broad buckets.
+    # Example: 'vapes', 'cartridges', and 'disposables' all become 'Vaporizers'.
+
     # Concentrates
     'Concentrate': 'Concentrates', 'Concentrates': 'Concentrates', 'concentrates': 'Concentrates',
-    'extract': 'Concentrates', # <-- ADD THIS
+    'extract': 'Concentrates',
 
     # Edibles
     'Edible': 'Edibles', 'Edibles': 'Edibles', 'edibles': 'Edibles',
-    'edible': 'Edibles',     # <-- ADD THIS
+    'edible': 'Edibles',
 
     # Flower
     'Flower': 'Flower', 'flower': 'Flower',
@@ -58,30 +73,34 @@ MASTER_CATEGORY_MAP = {
     
     # Tinctures
     'TINCTURES': 'Tinctures', 'Tincture': 'Tinctures', 'tinctures': 'Tinctures',
-    'tincture': 'Tinctures',  # <-- ADD THIS
+    'tincture': 'Tinctures',
 
     # Topicals
     'Topicals': 'Topicals', 'TOPICALS': 'Topicals', 'topicals': 'Topicals',
-    'topical': 'Topicals',    # <-- ADD THIS
+    'topical': 'Topicals',
 
     # Vaporizers
     'Vaporizers': 'Vaporizers', 'vaporizers': 'Vaporizers', 'vapes': 'Vaporizers',
-    'vape': 'Vaporizers'      # <-- ADD THIS
+    'vape': 'Vaporizers'
     
-    # We will ignore 'gear' as it's not a medication
+    # Note: We ignore categories like 'gear' or 'apparel' as they are not medication.
 }
 
 MASTER_SUBCATEGORY_MAP = {
+    # This map handles more specific product types within categories.
+
     # Flower Subtypes
     'WHOLE_FLOWER': 'Flower', 'Flower': 'Flower', 'Premium Flower': 'Flower',
     'premium': 'Flower', 'Bud': 'Flower', 'smalls': 'Small Buds',
     'SMALL_BUDS': 'Small Buds', 'Popcorn': 'Small Buds', 'Mini Buds': 'Small Buds',
     'SHAKE_TRIM': 'Ground/Shake', 'shake': 'Ground/Shake', 'Ground Flower': 'Ground/Shake',
     'PRE_GROUND': 'Ground/Shake',
+
     # Vaporizer Subtypes
     'CARTRIDGES': 'Cartridge', 'cartridge': 'Cartridge',
     'cured-resin-cartridge': 'Cartridge', 'live-resin-cartridge': 'Cartridge',
     'disposable_pen': 'Cartridge', 'disposables': 'Cartridge',
+
     # Concentrate Subtypes
     'LIVE_RESIN': 'Live Resin', 'Live Resin': 'Live Resin', 'live_resin': 'Live Resin',
     'ROSIN': 'Rosin', 'Rosin': 'Rosin', 'rosin': 'Rosin', 'RSO': 'RSO', 'rso': 'RSO',
@@ -91,12 +110,11 @@ MASTER_SUBCATEGORY_MAP = {
     'KIEF': 'Kief', 'kief': 'Kief',
 }
 
-# scrapers/scraper_utils.py
-
-# ... (keep all the other maps above this) ...
-
 MASTER_COMPOUND_MAP = {
-    # --- Cannabinoids (from all scrapers) ---
+    # This map standardizes the names of chemical compounds (Cannabinoids and Terpenes).
+    # API data is very messy here, with many typos and variations.
+
+    # --- Cannabinoids ---
     '"TAC\\" - Total Active Cannabinoids"': "TAC",
     'CBD': 'CBD',
     'CBDA': 'CBDa', 'CBDA (Cannabidiolic acid)': 'CBDa',
@@ -116,9 +134,9 @@ MASTER_COMPOUND_MAP = {
     'thca': 'THCa',
     'thcv': 'THCv',
 
-    # --- Terpenes (Comprehensive list from all scraper debugging) ---
+    # --- Terpenes ---
     
-    # Total Terps (Sweed/Cresco)
+    # Total Terps
     'Total_Terpenes': 'Total_Terps', 'total_terps': 'Total_Terps',
 
     # a-Terpinene
@@ -196,7 +214,7 @@ MASTER_COMPOUND_MAP = {
     'Terpinolene': 'Terpinolene', 'terpinolene': 'Terpinolene',
     
     # trans-Nerolidol
-    'trans_neridal': 'trans-Nerolidol', # Cresco typo
+    'trans_neridal': 'trans-Nerolidol', # Fixes a known typo from Cresco's API
     'trans_nerolidol': 'trans-Nerolidol', 'trans-Nerolidol': 'trans-Nerolidol',
     'Nerolidol': 'trans-Nerolidol',
     
@@ -211,23 +229,29 @@ MASTER_COMPOUND_MAP = {
 
 def convert_to_grams(weight_str):
     """
-    Converts a weight string (e.g., '1g', '1/8oz', '3.5g')
-    to a float representing the weight in grams. It handles a variety of
-    common formats, including fractions, ounces, and grams.
+    Converts a weight string into a standard float number representing grams.
+
+    Examples:
+        "1g" -> 1.0
+        "1/8 oz" -> 3.5
+        "500mg" -> 0.5
 
     Args:
-        weight_str (str): The string representation of the weight.
+        weight_str (str): The raw string from the website (e.g., '3.5g').
 
     Returns:
-        float: The weight in grams, or None if the format is not recognized.
+        float: The weight in grams. Returns None if it can't figure it out.
     """
+    # Safety check: if the input isn't text (e.g., it's None), we can't convert it.
     if not isinstance(weight_str, str):
         return None
 
+    # Clean up the string: make it lowercase and remove extra spaces.
     weight_str = weight_str.lower().strip()
 
-    # Dictionary for direct string-to-gram conversions
-    # We are standardizing on 3.5g per eighth.
+    # --- 1. Direct Dictionary Lookup ---
+    # Many common weights are standard. We check these first for speed and accuracy.
+    # We normalize an "eighth" to 3.5g.
     weight_map = {
         'gram': 1.0, '1g': 1.0, '1 g': 1.0, '1gc': 1.0, 'two gram': 2.0, '2g': 2.0,
         '2 g': 2.0, '2gc': 2.0, '3gc': 3.0, 'half gram': 0.5, '0.5g': 0.5, '0.5 g': 0.5,
@@ -241,47 +265,71 @@ def convert_to_grams(weight_str):
     if weight_str in weight_map:
         return weight_map[weight_str]
 
-    # Fallback to regex for patterns like '5g' or '500mg'
+    # --- 2. Regex Pattern Matching ---
+    # If it wasn't in the dictionary, we use "Regex" to look for patterns.
+    # re.match looks for numbers followed by units.
+
+    # Pattern: Any number (integer or decimal) followed by 'g', 'gram', or 'grams'.
+    # Example: "5.0g" or "10 grams"
     match_g = re.match(r'([\d\.]+)\s*(g|gram|grams)', weight_str)
     if match_g:
-        return float(match_g.group(1))
+        return float(match_g.group(1)) # Extract the number part and return it
 
+    # Pattern: Any number followed by 'mg'.
+    # We divide by 1000 because 1000mg = 1g.
+    # Example: "500mg" -> 0.5g
     match_mg = re.match(r'([\d\.]+)\s*mg', weight_str)
     if match_mg:
         return float(match_mg.group(1)) / 1000.0
     
+    # Pattern: Any number followed by 'oz' or 'ounce'.
+    # We multiply by 28 because 1oz is approx 28g in this context.
     match_oz = re.match(r'([\d\.]+)\s*(oz|ounce|ounces)', weight_str)
     if match_oz:
         return float(match_oz.group(1)) * 28.0
 
+    # If nothing matched, we don't know what it is. Return None.
     return None
 
-import os
-import json
-import re
-from datetime import datetime
 
 def save_raw_json(data, filename_parts):
     """
-    Saves raw JSON data to a date-stamped file.
+    Saves raw data (the exact response we got from the website) to a file.
+
+    This is important for debugging. If our scraper breaks later, we can check
+    these files to see exactly what the website sent us.
+
+    It saves files in a folder structure: `raw_data/YYYY-MM-DD/filename.json`
 
     Args:
-        data (dict or list): The JSON data to save.
-        filename_parts (list): A list of strings to build the filename
-                               (e.g., ['scraper_name', 'store', 'category', 'page']).
+        data (dict or list): The data to save.
+        filename_parts (list): A list of words to make up the filename.
+                               e.g. ['trulieve', 'philadelphia', 'flower']
     """
     try:
+        # Get today's date to create a folder (e.g., 'raw_data/2023-10-27')
         today_str = datetime.now().strftime('%Y-%m-%d')
         dir_path = os.path.join('raw_data', today_str)
+
+        # Create the directory if it doesn't exist.
         os.makedirs(dir_path, exist_ok=True)
 
+        # Clean up the filename parts to ensure they are safe for the file system.
+        # We remove special characters and replace spaces with underscores.
         sanitized_parts = [re.sub(r'[^a-zA-Z0-9_-]+', '_', str(part)).lower() for part in filename_parts]
+
+        # Join the parts to make the filename.
+        # e.g. "trulieve_philadelphia_flower.json"
         filename = f"{'_'.join(sanitized_parts)}.json"
 
+        # Create the full path to the file.
         filepath = os.path.join(dir_path, filename)
 
+        # Write the data to the file in a human-readable JSON format.
         with open(filepath, 'w') as f:
             json.dump(data, f, indent=4)
 
     except Exception as e:
+        # If saving fails (e.g., disk full), just print an error and continue.
+        # We don't want to crash the whole program just because we couldn't save a log file.
         print(f"Error saving raw data: {e}")
