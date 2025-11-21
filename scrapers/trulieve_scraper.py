@@ -21,9 +21,8 @@ from .scraper_utils import (
 import re # Regex for text patterns.
 
 # --- Constants ---
-# The API URL contains placeholders `{store_id}` and `{category}` that we
-# fill in dynamically.
-BASE_URL = "https://api.trulieve.com/api/v2/menu/{store_id}/{category}/MEDICAL"
+# Updated BASE_URL as per instructions.
+BASE_URL = "https://api.trulieve.com/api/v2/menu/{store_id}/all/RECREATIONAL"
 
 # Headers to make us look like a real browser.
 HEADERS = {
@@ -31,16 +30,14 @@ HEADERS = {
     "accept-language": "en-US,en;q=0.9",
     "origin": "https://www.trulieve.com",
     "referer": "https://www.trulieve.com/",
-    "sec-ch-ua": "\"Microsoft Edge\";v=\"141\", \"Not?A_Brand\";v=\"8\", \"Chromium\";v=\"141\"",
+    "sec-ch-ua": "\"Microsoft Edge\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\"",
     "sec-ch-ua-mobile": "?0",
     "sec-ch-ua-platform": "\"Windows\"",
     "sec-fetch-dest": "empty",
     "sec-fetch-mode": "cors",
     "sec-fetch-site": "same-site",
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0"
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
 }
-
-CATEGORIES = ["flower", "vapes", "concentrates", "tinctures", "edibles"]
 
 def parse_trulieve_products(products, store_name):
     """
@@ -86,17 +83,20 @@ def parse_trulieve_products(products, store_name):
         }
 
         # --- 4. Parse Terpenes ---
-        # Trulieve lists terpenes in a 'terpenes' list, where each item has 'name' and 'value'.
-        for terpene in product.get('terpenes', []):
-            terpene_name = terpene.get('name')
-            terpene_value = terpene.get('value')
+        # Updated logic to handle terpenes located at 'product.get("terpenes")' directly.
+        # We assume it is a list of objects with 'name' and 'value'.
+        terpenes = product.get('terpenes')
+        if terpenes and isinstance(terpenes, list):
+            for terpene in terpenes:
+                terpene_name = terpene.get('name')
+                terpene_value = terpene.get('value')
 
-            # If we have both a name and a value...
-            if terpene_name and terpene_value is not None:
-                # ...check if it's in our master map.
-                standard_name = MASTER_COMPOUND_MAP.get(terpene_name)
-                if standard_name:
-                    common_data[standard_name] = terpene_value
+                # If we have both a name and a value...
+                if terpene_name and terpene_value is not None:
+                    # ...check if it's in our master map.
+                    standard_name = MASTER_COMPOUND_MAP.get(terpene_name)
+                    if standard_name:
+                        common_data[standard_name] = terpene_value
 
         # --- 5. Handle Variants ---
         # This is where we split one "product" into multiple rows based on weight/price.
@@ -139,49 +139,54 @@ def fetch_trulieve_data(stores):
     for store_name, store_id in stores.items():
         print(f"Fetching data for Trulieve store: {store_name} (ID: {store_id})...")
 
-        for category in CATEGORIES:
-            page = 1
-            while True:
-                try:
-                    # Build the URL for this specific page and category.
-                    url = f"{BASE_URL.format(store_id=store_id, category=category)}?page={page}"
+        page = 1
+        while True:
+            try:
+                # Build the URL for this specific page.
+                url = f"{BASE_URL.format(store_id=store_id)}?page={page}"
 
-                    # Send request
-                    response = requests.get(url, headers=HEADERS, timeout=10)
-                    response.raise_for_status()
-                    json_response = response.json()
+                # Send request
+                response = requests.get(url, headers=HEADERS, timeout=10)
+                response.raise_for_status()
+                json_response = response.json()
 
-                    # --- Save Raw Data ---
-                    filename_parts = ['trulieve', store_name, category, f'p{page}']
-                    save_raw_json(json_response, filename_parts)
+                # --- Save Raw Data ---
+                filename_parts = ['trulieve', store_name, 'all', f'p{page}']
+                save_raw_json(json_response, filename_parts)
 
-                    # Get products
-                    products = json_response.get('data')
-                    
-                    # Stop if no products found.
-                    if not products:
-                        print(f"  ...completed category: {category}")
-                        break
-                        
-                    # Parse and add to list
-                    all_products_list.extend(parse_trulieve_products(products, store_name))
-                    
-                    # Check pagination info to see if we are on the last page.
-                    last_page = json_response.get('last_page')
-                    current_page = json_response.get('current_page')
+                # Get products
+                products = json_response.get('data')
 
-                    if last_page is not None and current_page is not None and current_page >= last_page:
-                        print(f"  ...completed category: {category}")
-                        break
-                        
-                    page += 1
-                    
-                except requests.exceptions.RequestException as e:
-                    print(f"Error fetching page {page} for {category} at {store_name}: {e}")
+                # Stop if no products found.
+                if not products:
+                    print(f"  ...no products found on page {page}. Stopping.")
                     break
-                except Exception as e:
-                    print(f"An error occurred processing page {page} for {category}: {e}")
+                    
+                # Parse and add to list
+                all_products_list.extend(parse_trulieve_products(products, store_name))
+
+                # Check pagination info to see if we are on the last page.
+                last_page = json_response.get('last_page')
+                current_page = json_response.get('current_page')
+
+                # Check meta if not at root
+                if last_page is None:
+                    meta = json_response.get('meta', {})
+                    last_page = meta.get('last_page')
+                    current_page = meta.get('current_page')
+
+                if last_page is not None and current_page is not None and current_page >= last_page:
+                    print(f"  ...reached last page ({last_page}).")
                     break
+
+                page += 1
+
+            except requests.exceptions.RequestException as e:
+                print(f"Error fetching page {page} for {store_name}: {e}")
+                break
+            except Exception as e:
+                print(f"An error occurred processing page {page}: {e}")
+                break
 
     if not all_products_list:
         print("No product data was fetched from Trulieve. Returning an empty DataFrame.")
@@ -190,7 +195,8 @@ def fetch_trulieve_data(stores):
     df = pd.DataFrame(all_products_list)
 
     # Calculate Dollars Per Gram
-    df['dpg'] = df['Price'] / df['Weight']
+    if not df.empty and 'Price' in df.columns and 'Weight' in df.columns:
+        df['dpg'] = df['Price'] / df['Weight']
 
     print(f"\nScraping complete for Trulieve. DataFrame created with {len(df)} rows.")
     return df
