@@ -22,8 +22,8 @@ import numpy as np # For math/NaN.
 import json # For handling JSON data (used heavily in GraphQL).
 import re # For text pattern matching.
 from .scraper_utils import (
-    convert_to_grams, save_raw_json, BRAND_MAP, MASTER_CATEGORY_MAP,
-    MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
+    convert_to_grams, save_raw_json, normalize_name_for_grouping,
+    BRAND_MAP, MASTER_CATEGORY_MAP, MASTER_SUBCATEGORY_MAP, MASTER_COMPOUND_MAP
 )
 
 # --- Constants ---
@@ -361,39 +361,6 @@ DUTCHIE_STORES = {
     },
 }
 
-def _normalize_name_for_grouping(name):
-    """
-    Creates a simplified 'fingerprint' of a product name for fuzzy matching.
-
-    Why? Some stores list "Blue Dream Flower" and "Blue Dream Premium Flower".
-    We want to treat these as the same "Batch" to avoid double-fetching data.
-
-    What it does:
-    1. Converts to lowercase.
-    2. Removes punctuation.
-    3. Removes "noise words" like 'flower', 'premium', 'hybrid', '1g', '3.5g'.
-    """
-    if not name: return ""
-    
-    # 1. Lowercase and remove non-alphanumeric characters (keep only a-z and 0-9)
-    clean = re.sub(r'[^a-z0-9]', '', name.lower())
-    
-    # 2. Remove common 'menu noise' words that don't change the chemical profile
-    noise_words = [
-        'flower', 'premium', 'whole', 'smalls', 'small', 'buds', 'bud',
-        'grind', 'ground', 'shake', 'trim', 'popcorn', 'fine',
-        'hybrid', 'indica', 'sativa', 'thc', 'cbd',
-        'cartridge', 'vape', 'cart', 'disposable', 'pen', 'pod',
-        'live', 'resin', 'rosin', 'sauce', 'badder', 'budder', 'sugar', 'crumble',
-        'syringe', 'capsules', 'rso', 'pack', 'briq', 'elite',
-        'g', 'mg', 'oz', 'gram', '1g', '35g', '7g', '14g', '28g', '05g', '2g', '1000mg', '100mg', '10', 'ea'
-    ]
-    
-    for word in noise_words:
-        clean = clean.replace(word, '')
-        
-    return clean
-    
 def get_all_product_slugs(store_name, store_config):
     """
     Step 1: Fetch basic product info (Slugs) for a store.
@@ -508,7 +475,7 @@ def get_detailed_product_info(product_list):
     
     for p in product_list:
         # Create the Fuzzy Name Fingerprint
-        norm_name = _normalize_name_for_grouping(p['Name'])
+        norm_name = normalize_name_for_grouping(p['Name'])
         
         # Create the Unique Batch Key: Brand + Weight + Potency + Name
         key = (
