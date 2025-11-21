@@ -333,3 +333,36 @@ def save_raw_json(data, filename_parts):
         # If saving fails (e.g., disk full), just print an error and continue.
         # We don't want to crash the whole program just because we couldn't save a log file.
         print(f"Error saving raw data: {e}")
+
+def normalize_name_for_grouping(name):
+    """
+    Creates a simplified 'fingerprint' of a product name for fuzzy matching.
+
+    Why? Some stores list "Blue Dream Flower" and "Blue Dream Premium Flower".
+    We want to treat these as the same "Batch" to avoid double-fetching data.
+
+    What it does:
+    1. Converts to lowercase.
+    2. Removes punctuation.
+    3. Removes "noise words" like 'flower', 'premium', 'hybrid', '1g', '3.5g'.
+    """
+    if not name: return ""
+
+    # 1. Lowercase and remove non-alphanumeric characters (keep only a-z and 0-9)
+    clean = re.sub(r'[^a-z0-9]', '', name.lower())
+
+    # 2. Remove common 'menu noise' words that don't change the chemical profile
+    noise_words = [
+        'flower', 'premium', 'whole', 'smalls', 'small', 'buds', 'bud',
+        'grind', 'ground', 'shake', 'trim', 'popcorn', 'fine',
+        'hybrid', 'indica', 'sativa', 'thc', 'cbd',
+        'cartridge', 'vape', 'cart', 'disposable', 'pen', 'pod',
+        'live', 'resin', 'rosin', 'sauce', 'badder', 'budder', 'sugar', 'crumble',
+        'syringe', 'capsules', 'rso', 'pack', 'briq', 'elite',
+        'g', 'mg', 'oz', 'gram', '1g', '35g', '7g', '14g', '28g', '05g', '2g', '1000mg', '100mg', '10', 'ea'
+    ]
+
+    for word in noise_words:
+        clean = clean.replace(word, '')
+
+    return clean
