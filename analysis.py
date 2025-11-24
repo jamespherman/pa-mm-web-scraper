@@ -12,7 +12,6 @@ import warnings
 import re
 import os
 import datetime
-import pdb
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
@@ -308,6 +307,15 @@ def _convert_to_numeric(df):
     # --- End Calculation ---
 
     return df
+
+def _deduplicate_for_charts(df):
+    """
+    Helper function to deduplicate products for charts.
+    Groups by ['Name_Clean', 'Brand'] and keeps the row with the highest 'Total_Terps'.
+    """
+    # Sort by Total_Terps descending so that drop_duplicates keeps the highest
+    return df.sort_values('Total_Terps', ascending=False) \
+             .drop_duplicates(subset=['Name_Clean', 'Brand'])
 
 def run_analysis(dataframe):
     """
@@ -773,9 +781,8 @@ def plot_top_50_heatmap(data, category_name, save_dir):
 
     # --- 3. Find Top 50 Unique Products ---
 
-    # First, get unique products by 'Name_Clean', keeping the one with the highest terps
-    df_unique = df_filtered.sort_values('Total_Terps', ascending=False) \
-        .drop_duplicates('Name_Clean')
+    # First, get unique products using the helper function (Highest Total Terps)
+    df_unique = _deduplicate_for_charts(df_filtered)
 
     # Now, get the top 50 from that unique list
     top_50_df = df_unique.nlargest(50, 'Total_Terps').sort_values('Total_Terps', ascending=False)
@@ -956,16 +963,13 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
 
     # --- 3. Calculate "Top 10" Lists ---
 
+    # Deduplicate first using the standard logic (Highest Total Terps)
+    df_deduped = _deduplicate_for_charts(df_filtered)
+
     top_10_lists = {}
     for terp in TERPS_TO_PLOT:
-        # Sort by the current terpene, descending
-        df_sorted = df_filtered.sort_values(terp, ascending=False)
-
-        # Get unique products by 'Name_Clean'
-        df_unique = df_sorted.drop_duplicates('Name_Clean')
-
-        # Get the top 10
-        top_10 = df_unique.nlargest(10, terp)
+        # Get the top 10 for this terpene from the deduplicated list
+        top_10 = df_deduped.nlargest(10, terp)
 
         # Format the strings
         product_strings = []
@@ -1098,9 +1102,9 @@ def plot_value_panel_chart(data, category_name, save_dir):
 
     # --- 2. Get Top 25 Unique Products ---
 
-    # FIX 2: Find top 25 *unique* products based on Name_Clean
+    # FIX 2: Find top 25 *unique* products using helper function
     # This prevents the "multiple bar" issue.
-    df_unique = df_filtered.drop_duplicates('Name_Clean')
+    df_unique = _deduplicate_for_charts(df_filtered)
     df_top25 = df_unique.nlargest(25, 'Value_Score')
 
     if df_top25.empty:
