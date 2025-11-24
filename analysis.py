@@ -1,39 +1,27 @@
 # analysis.py
-# -----------------------------------------------------------------------------
-# This module is the "Data Science" brain of the project.
-#
-# After all the scrapers have run and collected thousands of raw products,
-# this script takes that messy data and turns it into clean, useful insights.
-#
-# It performs two main jobs:
-# 1. Data Cleaning:
-#    - Fixing bad data (e.g., converting "3.5g" text to the number 3.5).
-#    - Standardizing brand names (e.g., "GTI" -> "Rythm").
-#    - removing "clutter" from product names.
-#
-# 2. Visualization:
-#    - Creating beautiful charts and graphs to answer questions like:
-#      "Which brand has the highest terpenes?"
-#      "What is the best value flower?"
-#    - Saving these charts as images in the `figures/` folder.
-# -----------------------------------------------------------------------------
+# This module is responsible for all post-scraping data processing.
+# It takes the combined, raw DataFrame from main.py and performs:
+# 1. Data Cleaning: Converting data types, standardizing values.
+# 2. Brand Consolidation: Merging brand name variations.
+# 3. Product Name Cleaning: Removing clutter from product names.
+# 4. Plotting and Visualization: Generating various plots to analyze the data,
+#    which are then saved to the `figures/` directory.
 
-import pandas as pd # Data manipulation
-import warnings # To silence annoying but harmless warnings
-import re # Regex for text patterns
-import os # File system operations
-import datetime # Date handling
-import matplotlib.pyplot as plt # Core plotting library
-import seaborn as sns # Pretty plotting library built on top of matplotlib
-import numpy as np # Math functions
-import matplotlib.colors as mcolors # Color handling
-from matplotlib.colors import LinearSegmentedColormap # Custom color maps
-
-# --- Constants ---
+import pandas as pd
+import warnings
+import re
+import os
+import datetime
+import pdb
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+import matplotlib.patches as mpatches
+from matplotlib.colors import LinearSegmentedColormap
+import matplotlib.colors as mcolors
 
 # A list of ALL standardized terpenes we expect from the scrapers.
-# We use this list to make sure every product has these columns,
-# even if the value is 0.
+# This list is used to convert all columns to numeric and fill NaNs.
 TERPENE_COLUMNS = [
     'alpha-Terpinene', 'alpha-Bisabolol', 'beta-Caryophyllene', 'beta-Myrcene',
     'Camphene', 'Carene', 'Caryophyllene Oxide', 'Eucalyptol', 'Farnesene',
@@ -45,44 +33,76 @@ TERPENE_COLUMNS = [
 # A predefined list of key cannabinoid columns.
 CANNABINOID_COLUMNS = ['THC', 'THCa', 'CBD', 'CBDa', 'CBG', 'CBGa', 'CBN', 'THCv']
 
-# --- Cleaning Functions ---
-
 def _fix_weights_from_name(df):
     """
-    Retroactively fixes weights by reading the product 'Name'.
-
-    Sometimes the scraper misses the weight field, or the website has it wrong.
-    But the product Name usually has it right (e.g., "Blue Dream [3.5g]").
-    This function looks for that pattern and updates the 'Weight' column.
+    Retroactively fixes weights by parsing the product 'Name' field.
+    This corrects errors from scrapers (like iHeartJane) that provide
+    unreliable weight_str data.
     """
     print("  - Retroactively fixing weights from product 'Name' field...")
     
-    # Regex to find weights in brackets.
-    # pattern matches: "[number] [unit]" like "[3.5g]" or "[500mg]"
+    # Regex to find weights in brackets (e.g., [4000mg], [7g], [0.5g])
+    # Group 1: The number (e.g., "4000")
+    # Group 2: The unit (e.g., "mg" or "g")
     pattern = re.compile(r'\[([\d\.]+)\s*(mg|g)\]', re.IGNORECASE)
 
     def parse_weight_from_name(name):
-        # Search the product name for the pattern
         match = pattern.search(str(name))
         if not match:
-            return None  # No weight found
+            return None  # No weight found in name
 
         try:
-            value = float(match.group(1)) # The number part
-            unit = match.group(2).lower() # The unit part (g or mg)
+            value = float(match.group(1))
+            unit = match.group(2).lower()
             
             if unit == 'mg':
-                return value / 1000.0  # Convert mg to grams
+                return value / 1000.0  # Convert mg to g
             elif unit == 'g':
                 return value
         except:
             return None # Failed to parse
         return None
 
-    # Apply this logic to every single row in the dataframe
+    # Apply this function to every row to get the "correct" weight
+    # This creates a new Series of corrected weights
     corrected_weights = df['Name'].apply(parse_weight_from_name)
 
-    # Only update rows where we actually found a new weight
+    # Overwrite the old 'Weight' only where we found a new, valid weight
+    # 'corrected_weights.notna()' creates a boolean mask
+    # 'df.loc[mask, 'Weight']' selects the 'Weight' column only for those rows
+    mask = corrected_weights.notna()
+    df.loc[mask, 'Weight'] = corrected_weights[mask]
+    
+    count = mask.sum()
+    if count > 0:
+        print(f"    - Corrected {count} product weights based on 'Name'.")
+        
+    return df
+
+def parse_weight_from_name(name):
+    match = pattern.search(str(name))
+    if not match:
+        return None  # No weight found in name
+
+    try:
+        value = float(match.group(1))
+        unit = match.group(2).lower()
+        
+        if unit == 'mg':
+            return value / 1000.0  # Convert mg to g
+        elif unit == 'g':
+            return value
+    except:
+        return None # Failed to parse
+    return None
+
+    # Apply this function to every row to get the "correct" weight
+    # This creates a new Series of corrected weights
+    corrected_weights = df['Name'].apply(parse_weight_from_name)
+
+    # Overwrite the old 'Weight' only where we found a new, valid weight
+    # 'corrected_weights.notna()' creates a boolean mask
+    # 'df.loc[mask, 'Weight']' selects the 'Weight' column only for those rows
     mask = corrected_weights.notna()
     df.loc[mask, 'Weight'] = corrected_weights[mask]
     
@@ -94,27 +114,30 @@ def _fix_weights_from_name(df):
     
 def _clean_product_names(df):
     """
-    Creates a 'Name_Clean' column by stripping junk from the Name.
+    Creates a 'Name_Clean' column by stripping clutter from the 'Name' column.
     
-    We want "Blue Dream [3.5g] - Indica" to just become "Blue Dream".
-    This helps us group products together later.
+    This function removes:
+    1. Weight patterns (e.g., "3.5g", "500mg")
+    2. General clutter (e.g., "live", "vape", "indica")
+    3. Special characters
+    4. Row-specific brand names (e.g., removes "Insa" ONLY from Insa products)
     """
     print("Creating 'Name_Clean' column...")
     
     # Start with a copy of the 'Name' column
     df['Name_Clean'] = df['Name'].astype(str).copy()
     
-    # --- 1. Define Junk Patterns ---
+    # --- 1. Define General Clutter Patterns ---
     
-    # Pattern for weights (3.5g, 500mg, 1/8 oz)
+    # Pattern for weights (from our analysis)
     weight_pattern = re.compile(
-        r'(\d+\.?\d*\s*(g|mg|ml))|'
-        r'(\d+\s*(gram|milligram))|'
-        r'(1/8\s*oz|1/4\s*oz|1/2\s*oz)',
+        r'(\d+\.?\d*\s*(g|mg|ml))|'  # 3.5g, 500mg, 1ml
+        r'(\d+\s*(gram|milligram))|' # 3 gram
+        r'(1/8\s*oz|1/4\s*oz|1/2\s*oz)', # 1/8 oz
         re.IGNORECASE
     )
     
-    # List of marketing fluff words to remove
+    # Pattern for general clutter (from our analysis)
     general_clutter_words = [
         'live resin budder', 'live sauce', 'live resin badder', 'live budder',
         'live sauce', 'refresh', 'live badder', 'badder', 'crumble',
@@ -126,29 +149,27 @@ def _clean_product_names(df):
         'disposable', 'dispo',
         'Rise', 'Rest', 'LLR',
         'cart', 'cartridge',
-        'co2','1oz', 'buds', 'bud', 
+        'co2','1oz', 'buds', 'bud',
         'flower', 'littles', 'pre',
     ]
     
-    # Combine all fluff words into one big regex pattern
     general_clutter_pattern = re.compile(r'\b(' + '|'.join(general_clutter_words) + r')\b', re.IGNORECASE)
 
-    # Pattern for special characters (|, -, (, ), etc.)
+    # Pattern for special characters and extra spaces
     char_pattern = re.compile(r'[|/()\[\]{}:-]+', re.IGNORECASE)
+    space_pattern = re.compile(r'\s{2,}') # 2 or more spaces
     
-    # Pattern to clean up extra spaces (e.g., "Blue   Dream" -> "Blue Dream")
-    space_pattern = re.compile(r'\s{2,}')
-
-    # --- 2. Apply Cleaning ---
+    # --- 2. Apply General Cleaning Steps ---
     print("  - Removing general clutter (weights, types, etc.)...")
     df['Name_Clean'] = df['Name_Clean'].str.replace(weight_pattern, '', regex=True)
     df['Name_Clean'] = df['Name_Clean'].str.replace(general_clutter_pattern, '', regex=True)
     df['Name_Clean'] = df['Name_Clean'].str.replace(char_pattern, ' ', regex=True)
 
-    # --- 3. Remove Brand Name from Product Name ---
-    # If the brand is "Insa" and the product is "Insa Blue Dream", we want just "Blue Dream".
+    # --- 3. Apply Row-Specific Brand Cleaning ---
     print("  - Removing row-specific brand names...")
     
+    # This function is applied to each row.
+    # It builds a specific regex for ONLY that row's brand.
     def remove_brand_from_name(row):
         name = row['Name_Clean']
         brand = str(row['Brand'])
@@ -156,28 +177,37 @@ def _clean_product_names(df):
         if pd.isna(brand) or not brand:
             return name
         
-        # Create a regex for this specific brand name
+        # Create a regex pattern for just this row's brand
+        # \b ensures we match "Insa" but not "Insane"
         brand_pattern = re.compile(r'\b(' + re.escape(brand) + r')\b', re.IGNORECASE)
+        
+        # Remove the brand from the name
         return brand_pattern.sub('', name)
 
+    # Use .apply() to run this function on every row
     df['Name_Clean'] = df.apply(remove_brand_from_name, axis=1)
     
-    # --- 4. Final Polish ---
-    # Remove extra whitespace
+    # --- 4. Final Cleanup ---
+    # Clean up extra spaces created by the removals
     df['Name_Clean'] = df['Name_Clean'].str.replace(space_pattern, ' ', regex=True).str.strip()
     
+    print("Calculating Total_Terps by summing all final terpene columns...")
+
+    return df
+
     print("  - 'Name_Clean' column created successfully.")
     return df
 
 def _reclean_brands(df):
     """
-    Performs a final cleanup of the 'Brand' column.
-    This catches any inconsistencies that might have slipped through
-    the individual scrapers.
+    Performs a final, aggressive cleaning of the 'Brand' column
+    in the combined DataFrame to fix inconsistencies from different scrapers
+    before plotting.
     """
     print("  - Performing final re-cleaning of 'Brand' column...")
     
-    # Dictionary mapping "Dirty Name" -> "Clean Name"
+    # 1. Define the standardization map based on PDB debugging
+    # This map handles Unicode (™), casing, and complex renaming.
     RECLEAN_BRAND_MAP = {
         'Cresco ': 'Cresco',
         'FarmaceuticalRx': 'FarmaceuticalRX',
@@ -195,12 +225,15 @@ def _reclean_brands(df):
         'RYTHM': 'Rythm',
         'Flower by Edie Parker': 'Edie Parker',
         'Black Buddha Cannabis': 'Black Buddha'
+        # Any other 'dirty' names can be added here
     }
 
-    # Apply the map
+    # 2. Apply the map
+    # .replace() is the most efficient way to apply this map
     df['Brand'] = df['Brand'].replace(RECLEAN_BRAND_MAP)
     
-    # Remove rows that have no brand (we can't analyze them properly)
+    # 3. Fix the 'None' crash
+    # Drop any rows that are *still* None/NaN after mapping
     original_count = len(df)
     df = df.dropna(subset=['Brand'])
     removed_count = original_count - len(df)
@@ -211,366 +244,997 @@ def _reclean_brands(df):
 
 def _convert_to_numeric(df):
     """
-    Converts text columns to numbers (floats) so we can do math on them.
-    Also handles 'NaN' (Not a Number) values.
+    Converts key columns to a numeric type for calculations and analysis.
+
+    This function iterates through predefined lists of columns (terpenes,
+    cannabinoids, weight, price) and forces them to a numeric type. Any
+    value that cannot be converted (e.g., an empty string) becomes `NaN`.
+    It then calculates the 'dollars per gram' (dpg) metric and fills `NaN`
+    values in terpene columns with 0.
+
+    Args:
+        df (pd.DataFrame): The DataFrame to process.
+
+    Returns:
+        pd.DataFrame: The DataFrame with specified columns converted to numeric types.
     """
     print("Converting data types to numeric...")
     numeric_cols = TERPENE_COLUMNS + CANNABINOID_COLUMNS + ['Weight', 'Price']
 
-    # Ensure 'dpg' column exists
+    # Ensure 'dpg' (dollars per gram) column exists before calculations
     if 'dpg' not in df.columns:
         df['dpg'] = pd.Series(dtype='float64')
 
     for col in numeric_cols:
         if col in df.columns:
-            # Convert to number. If it fails, set it to NaN.
+            # `pd.to_numeric` with `errors='coerce'` is a robust way to convert.
+            # It handles various data types and turns failures into Not a Number (NaN).
             df[col] = pd.to_numeric(df[col], errors='coerce')
 
-    # Calculate Dollars Per Gram (DPG)
+    # Calculate 'dpg' only after Price and Weight are numeric
     df['dpg'] = df['Price'] / df['Weight']
 
-    # Fill missing terpene values with 0 (assumption: missing means not present)
+    # For aggregation and analysis, NaN in terpene columns is not useful.
+    # We replace it with 0, assuming that a missing value means zero concentration.
+    # We use .reindex() to add any missing terpene columns as 0, preventing KeyErrors.
     df = df.reindex(columns=df.columns.union(TERPENE_COLUMNS), fill_value=0)
     df[TERPENE_COLUMNS] = df[TERPENE_COLUMNS].fillna(0)
 
-    # --- Pinene Aggregation ---
-    # Combine Alpha and Beta Pinene into one "Pinene" total
+    # --- Pinene Aggregation (as planned) ---
     print("Aggregating Pinene columns...")
+    # Sum 'alpha-Pinene' and 'beta-Pinene' into a new 'Pinene' column
     df['Pinene'] = df['alpha-Pinene'] + df['beta-Pinene']
+    
+    # Drop the original source columns
     df = df.drop(columns=['alpha-Pinene', 'beta-Pinene'])
+    # --- End Aggregation ---
 
     # --- Total Terps Calculation ---
-    # Sum up all the individual terpenes
-    print("Calculating Total_Terps...")
+    # Create the final list of columns to sum
     terps_to_sum = [col for col in TERPENE_COLUMNS if col not in ['alpha-Pinene', 'beta-Pinene']]
-    terps_to_sum.append('Pinene')
+    terps_to_sum.append('Pinene') # Add our new aggregated column
+
+    print("Calculating Total_Terps by summing all final terpene columns...")
     df['Total_Terps'] = df[terps_to_sum].sum(axis=1)
+    # --- End Calculation ---
 
     # --- TAC Calculation ---
-    # Sum up all the cannabinoids
+    # Fill NaNs with 0 for all cannabinoid columns
     df[CANNABINOID_COLUMNS] = df[CANNABINOID_COLUMNS].fillna(0)
-    print("Calculating TAC...")
+    
+    # Calculate TAC by summing all individual cannabinoids
+    print("Calculating TAC by summing all CANNABINOID_COLUMNS...")
     df['TAC'] = df[CANNABINOID_COLUMNS].sum(axis=1)
+    # --- End Calculation ---
 
     return df
 
 def run_analysis(dataframe):
     """
-    The Master Function.
+    The main orchestration function for the analysis module.
 
-    This function controls the entire analysis process:
-    1. Cleans the data.
-    2. Filters out bad data.
-    3. Loops through categories (Flower, Vape, Concentrate).
-    4. Generates all the plots.
+    It executes the cleaning and plotting functions in the correct order. This ensures that
+    the data is properly prepared before visualization, and that all generated plots are
+    saved to a date-stamped directory.
 
     Args:
-        dataframe (pd.DataFrame): The raw data from the scrapers.
+        dataframe (pd.DataFrame): The raw, combined DataFrame from the scrapers.
 
     Returns:
-        pd.DataFrame: The final, clean data.
+        pd.DataFrame: The fully cleaned and processed DataFrame.
     """
     print("\n--- Starting Data Analysis Module ---")
     
-    # Turn off pandas warnings (they are noisy)
+    # Suppress common warnings from pandas/seaborn for cleaner output
     warnings.filterwarnings('ignore', category=FutureWarning)
     warnings.filterwarnings('ignore', category=UserWarning)
     
     # --- Step 1: Data Cleaning ---
+    # Create a new, cleaned dataframe to avoid modifying the original
     cleaned_df = dataframe.copy()
     
+    # --- START WEIGHT FIX ---
     cleaned_df = _fix_weights_from_name(cleaned_df)
+    
+    # Convert types first (critical for all other operations)
     cleaned_df = _convert_to_numeric(cleaned_df)
+    
+    # --- Product Name Cleaning ---
+    # Create the 'Name_Clean' column for de-duplication
     cleaned_df = _clean_product_names(cleaned_df)
+
+    # --- Brand Re-Cleaning ---
     cleaned_df = _reclean_brands(cleaned_df)
     
-    # Remove products with 0% TAC (bad data)
-    initial_count = len(cleaned_df)
-    cleaned_df = cleaned_df[cleaned_df['TAC'] > 0].copy()
-    if len(cleaned_df) < initial_count:
-        print(f"  - Dropped {initial_count - len(cleaned_df)} products with 0% TAC.")
+    # --- START DEBUG: PRINT DPG OUTLIERS ---
+    print("\n--- Checking for DPG Outliers ---")
+    
+    # Filter for Vapes with DPG > 95
+    vape_outliers = cleaned_df[
+        (cleaned_df['Type'] == 'Vaporizers') &
+        (cleaned_df['dpg'] > 95)
+    ]
+    if not vape_outliers.empty:
+        print(f"\nFound {len(vape_outliers)} VAPE outliers (DPG > 95):")
+        # Print the relevant columns for debugging
+        print(vape_outliers[['Name', 'Brand', 'Store', 'Price', 'Weight_Str', 'Weight', 'dpg']].to_string())
+    
+    # Filter for Concentrates with DPG > 75
+    conc_outliers = cleaned_df[
+        (cleaned_df['Type'] == 'Concentrates') &
+        (cleaned_df['dpg'] > 75)
+    ]
+    if not conc_outliers.empty:
+        print(f"\nFound {len(conc_outliers)} CONCENTRATE outliers (DPG > 75):")
+        # Print the relevant columns for debugging
+        print(conc_outliers[['Name', 'Brand', 'Store', 'Price', 'Weight_Str', 'Weight', 'dpg']].to_string())
         
-    # Filter extreme terpene outliers (> 18% is likely an error)
-    cleaned_df = cleaned_df[cleaned_df['Total_Terps'] <= 18].copy()
+    print("\n--- DPG Outlier Check Complete ---")
+    # --- END DEBUG ---
+    
+    # --- START DEBUG: FIND NJ BRAND SOURCE ---
+    print("\n--- Checking for NJ/Out-of-State Brands ---")
+    
+    nj_brands = [
+        "AYR Wellness NJ LLC",
+        "GTI New Jersey, LLC",
+        "Jetty Extracts",
+        "Superflux"
+    ]
+    
+    # Create a regex pattern to find any of these brands
+    nj_pattern = '|'.join(nj_brands)
+    
+    # Filter the DataFrame for any rows where the Brand contains one of these strings
+    # na=False ensures that rows with no Brand don't cause an error
+    nj_outliers = cleaned_df[
+        cleaned_df['Brand'].str.contains(nj_pattern, case=False, na=False)
+    ]
+    
+    if not nj_outliers.empty:
+        print(f"Found {len(nj_outliers)} products from out-of-state brands:")
+        # Print the 'Store' and 'Brand' for the first 50 outliers
+        print(nj_outliers[['Store', 'Brand', 'Name']].head(50).to_string())
+    else:
+        print("...No NJ-specific brands found in this dataset.")
+        
+    print("--- NJ Brand Check Complete ---")
+    # --- END DEBUG ---
     
     print(f"Data cleaning complete.")
 
-    # --- Step 2: Plotting ---
+    # --- 4. Remove Terpene Outliers ---
+    # (User requested to remove any products with > 18% total terpenes as errors)
+    original_count = len(cleaned_df)
+    cleaned_df = cleaned_df[cleaned_df['Total_Terps'] <= 18].copy()
+    removed_count = original_count - len(cleaned_df)
+    if removed_count > 0:
+        print(f"Removed {removed_count} products with Total_Terps > 18%.")
     
-    # Create folder for today's plots
+    # --- Step 2: Plotting Orchestration ---
+    # Create the date-stamped save directory
     today_str = datetime.date.today().strftime('%Y-%m-%d')
     save_dir = os.path.join('figures', today_str)
     os.makedirs(save_dir, exist_ok=True)
     print(f"\nSaving all plots to: {save_dir}")
     
+    # Define the product categories we want to generate plots for
     CATEGORIES_TO_PLOT = ['Flower', 'Concentrates', 'Vaporizers']
     
+    # Loop over product categories to generate plots:
     for category in CATEGORIES_TO_PLOT:
         print(f"\n--- Analyzing Category: {category.upper()} ---")
 
-        # Filter data for just this category
+        # Filter the DataFrame for the specific category
         category_df = cleaned_df[cleaned_df['Type'] == category].copy()
         
-        # Exclude specific subtypes (like "Ground Flower" or "Infused")
+        # --- START USER FILTER: Remove subtypes we don't want to plot ---
+        # (e.g., "Infused Ground Flower", "Ground", "Infused")
+        
+        # Define the keywords to exclude
         exclude_keywords = ['infused', 'ground', 'flower']
+        
+        # Create a case-insensitive regex pattern (e.g., 'infused|ground|flower')
         pattern = '|'.join(exclude_keywords)
+        
+        # Filter the category_df to *remove* rows where Subtype matches the pattern
+        # `na=False` skips rows where Subtype is blank (NaN)
+        # `~` is the "NOT" operator, so it inverts the selection
         category_df = category_df[
             ~category_df['Subtype'].str.contains(pattern, case=False, na=False)
         ]
+        # --- END USER FILTER ---
 
         if category_df.empty:
-            print(f"No data found for category '{category}'. Skipping.")
+            print(f"No data found for category '{category}'. Skipping plots.")
             continue
         
-        # Generate the 5 Standard Plots
+        # --- Call plotting functions ---
+        # Plot 1: Brand vs. Total Terpenes Violin Plot
         plot_brand_violin(category_df, category, save_dir)
+
+        # Plot 2: Top 50 Terpiest Products Heatmap
         plot_top_50_heatmap(category_df, category, save_dir)
+
+        # Plot 3: Dominant Terpene Summary Figure
         plot_dominant_terp_summary(category_df, category, save_dir)
+
+        # Plot 4: Value (DPG) vs. Terps Scatter Plot
         plot_value_scatterplot(category_df, category, save_dir)
+
+        # Plot 5: Top 25 Value Panel Chart
         plot_value_panel_chart(category_df, category, save_dir)
 
-        plt.close('all') # Cleanup memory
-
+        # Close any open figures to conserve memory
+        plt.close('all')
     print("\nAnalysis module executed.")
+    # Return the cleaned dataframe
     return cleaned_df
-
-# --- Plotting Functions ---
 
 def plot_brand_violin(data, category_name, save_dir):
     """
-    Creates a Violin Plot: Distribution of Terpenes by Brand.
-    Shows which brands tend to have higher or lower terpenes.
+    Generates and saves a violin plot of Total Terps vs. Brand.
+
+    This plot helps visualize the distribution of terpene content for each brand.
+    Brands with fewer than a minimum number of samples are excluded to ensure
+    statistical significance and readability of the plot.
+
+    Args:
+        data (pd.DataFrame): The data for a specific product category.
+        category_name (str): The name of the category (e.g., 'flower').
+        save_dir (str): The directory to save the plot image.
     """
     print(f"  > Plotting Brand Violin for {category_name}...")
 
-    # Only keep products with some terpenes
+    # --- Exclude products with 0 terps ---
     data = data[data['Total_Terps'] > 0].copy()
-    if data.empty: return
+    if data.empty:
+        print(f"    SKIPPING: No products found with Total_Terps > 0 for {category_name}.")
+        return
 
-    # Only include brands with at least 10 products (for statistical relevance)
+    # Define the minimum number of products a brand must have to be included
     MIN_SAMPLES = 10
-    brand_counts = data['Brand'].value_counts()
-    brands_to_keep = brand_counts[brand_counts >= MIN_SAMPLES].index
-    if len(brands_to_keep) < 2: return
 
+    # --- 1. Filter and Prepare Data ---
+
+    # Calculate product counts for each brand
+    brand_counts = data['Brand'].value_counts()
+
+    # Get a list of brands that meet the minimum sample requirement
+    brands_to_keep = brand_counts[brand_counts >= MIN_SAMPLES].index
+
+    if len(brands_to_keep) < 2:
+        print(f"    SKIPPING: Not enough brands (min 2) with >{MIN_SAMPLES} samples for {category_name}.")
+        return
+
+    # Filter the main DataFrame to only include these brands
     df_filtered = data[data['Brand'].isin(brands_to_keep)].copy()
 
-    # Sort brands by median terpene content
+    # --- 2. Create Sorting Order ---
+
+    # Calculate the median 'Total_Terps' for each brand and sort
     brand_order = df_filtered.groupby('Brand')['Total_Terps'].median().sort_values().index
 
-    # Create labels with counts: "Brand (N=15)"
+    # --- 3. Create Brand Labels with Counts (e.g., "Brand (N=5)") ---
+
+    # Get the counts for the *filtered* list of brands
     final_counts = df_filtered['Brand'].value_counts()
+
+    # Create new labels
     new_labels = [f"{brand} (N={final_counts[brand]})" for brand in brand_order]
 
-    # Draw Plot
+    # --- 4. Plotting ---
+
+    # Set plot style
     sns.set_style("whitegrid")
+
+    # Define figure size
+    # Adjust height dynamically based on the number of brands
     plot_height = max(7, len(brand_order) * 0.5)
     plt.figure(figsize=(12, plot_height))
 
+    # Create the violin plot
     ax = sns.violinplot(
         data=df_filtered,
-        x='Total_Terps',
-        y='Brand',
-        order=brand_order,
+        x='Total_Terps', # Use Total_Terps on x-axis for horizontal plot
+        y='Brand', # Use Brand on y-axis
+        order=brand_order, # Apply the sorted brand order
         palette='hsv',
-        inner='box',
-        orient='h',
+        inner='box', # Show a boxplot inside the violins
+        orient='h', # Specify horizontal orientation
         cut=0
     )
+
+    # Update y-tick labels to include counts
     ax.set_yticklabels(new_labels)
 
+    # --- 5. Style and Save ---
+
+    # Set titles and labels
     plt.title(f'Total Terpenes by Brand for {category_name.title()}', fontsize=16)
     plt.xlabel('Total Terpenes (%)', fontsize=18)
     plt.ylabel('Brand', fontsize=18)
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=10)
+
+    # Ensure layout is tight
     plt.tight_layout()
 
+    # Define the output filename
     filename = os.path.join(save_dir, f'brand_terp_violin_{category_name}.png')
-    plt.savefig(filename, dpi=150)
+
+    # Save the figure
+    try:
+        plt.savefig(filename, dpi=150)
+        print(f"    SUCCESS: Saved plot to {filename}")
+    except Exception as e:
+        print(f"    ERROR: Failed to save plot to {filename}. Reason: {e}")
+
+    # Close the plot to free memory
     plt.close()
 
 def plot_value_scatterplot(data, category_name, save_dir):
     """
-    Creates a Scatter Plot: Price vs. Terpenes.
-    Identifies "Good Value" products (High Terps, Low Price).
+    Generates a scatter plot of Price per Gram (DPG) vs. Total Terpenes,
+    using custom bi-colored markers for brand discrimination. This helps to
+    visually identify which brands offer better value (higher terpenes for a
+    lower price).
+
+    Args:
+        data (pd.DataFrame): The data for the specific product category.
+        category_name (str): The name of the category (e.g., 'flower').
+        save_dir (str): The directory where the plot image will be saved.
     """
     print(f"  > Plotting Value Scatter Plot for {category_name}...")
 
-    df_plot = data.dropna(subset=['Brand']).copy()
-    if df_plot.empty: return
+    # --- 1. Filter Data for Plotting ---
+
+    # We must have valid DPG and Total_Terps to plot
+    df_filtered = data[
+        (data['dpg'].notna()) & (data['dpg'] > 0) &
+        (data['Total_Terps'].notna()) & (data['Total_Terps'] > 0)
+    ].copy()
+
+    # --- 2. Remove Extreme Outliers for Readability ---
+    # This functionality has been removed / commented-out.
+    df_plot = df_filtered.copy()
+
+    # Calculate the 95th percentile for DPG and Terps
+    # dpg_limit = df_filtered['dpg'].quantile(0.95)
+    # terp_limit = df_filtered['Total_Terps'].quantile(0.95)
+
+    # Filter to keep only data within these "reasonable" limits
+    # df_plot = df_filtered[
+    #     (df_filtered['dpg'] <= dpg_limit) &
+    #     (df_filtered['Total_Terps'] <= terp_limit)
+    # ]
+    
+    # Remove any rows with a None/NaN brand before sorting
+    df_plot = df_plot.dropna(subset=['Brand'])
+
+    if df_plot.empty:
+        print(f"    SKIPPING: No valid DPG vs. Terpene data found for {category_name}.")
+        return
+
+    # --- 3. Create Bi-Color & Fillstyle Map ---
 
     unique_brands = sorted(df_plot['Brand'].unique())
+    n_brands = len(unique_brands)
 
-    # Setup colors
+    # Set legend columns dynamically based on number of brands
+    if n_brands > 60:
+        ncol = 3
+    elif n_brands > 30:
+        ncol = 2
+    else:
+        ncol = 1
+
+    # Generate 15 perceptually distinct hues by sampling the 'hsv' colormap
     n_hues = 15
+    # We use np.linspace to get 15 evenly spaced values from 0 to 1
+    # and plt.cm.hsv() to convert those values to RGB colors.
+    # We add 1 to n_hues and slice [:-1] to avoid duplicating the red at 0 and 1.
     custom_colors = plt.cm.hsv(np.linspace(0, 1, n_hues + 1))[:-1]
-    grays = [(0,0,0), (0.25,0.25,0.25), (0.75,0.75,0.75), (1,1,1)]
 
+    # 4 Grays (Secondary)
+    grays = [
+        (0.0, 0.0, 0.0), # Dark
+        (0.25, 0.25, 0.25), # Mid-dark
+        (0.75, 0.75, 0.75), # Mid-light
+        (1, 1, 1)  # Light
+    ]
+
+    # We will hard-code the fillstyle to 'left'
+    # 'left' = hue (color) on the left, gray (markerfacecoloralt) on the right
+
+    # Create the map for each brand
     brand_style_map = {}
     for i, brand in enumerate(unique_brands):
         brand_style_map[brand] = {
             'color': custom_colors[i % len(custom_colors)],
-            'alt_color': grays[i % len(grays)]
+            'markerfacecoloralt': grays[i % len(grays)],
+            'fillstyle': 'left'
         }
 
-    # Draw Plot
+    # --- 4. Plotting (Loop once per Brand, vectorized call) ---
+
     sns.set_style("whitegrid")
     fig, ax = plt.subplots(figsize=(15, 10))
 
+    # Loop once per brand (fast) and plot all its data
     for brand in unique_brands:
         brand_df = df_plot[df_plot['Brand'] == brand]
+        if brand_df.empty:
+            continue
+
         style = brand_style_map[brand]
+
         ax.plot(
             brand_df['dpg'],
             brand_df['Total_Terps'],
-            marker='o', linestyle='None', markersize=9, alpha=0.7,
-            label=brand, color=style['color'],
-            fillstyle='left', markerfacecoloralt=style['alt_color'],
-            markeredgewidth=0.5, markeredgecolor='black'
+            marker='o',
+            linestyle='None', # This makes it a scatter plot
+            markersize=9,
+            alpha=0.7,
+            label=brand,
+            color=style['color'], # This is `markerfacecolor`
+            fillstyle=style['fillstyle'],
+            markerfacecoloralt=style['markerfacecoloralt'],
+            markeredgewidth=0.5, # Add a thin edge
+            markeredgecolor='black'
         )
+
+    # --- 5. Style and Save ---
 
     ax.set_title(f'Value Plot: Price per Gram vs. Total Terpenes for {category_name.title()}', fontsize=16)
     ax.set_xlabel('Price per Gram (DPG)', fontsize=12)
     ax.set_ylabel('Total Terpenes (%)', fontsize=12)
 
-    # Dynamic Legend Columns
-    ncol = 3 if len(unique_brands) > 60 else (2 if len(unique_brands) > 30 else 1)
-    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', ncol=ncol)
+    # Move the legend outside the plot
+    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0., ncol=ncol)
+
+    # Add annotations for the "Value Quadrants"
+    xlim = ax.get_xlim()
+    ylim = ax.get_ylim()
+    x_mid = (xlim[0] + xlim[1]) / 2
+    y_mid = (ylim[0] + ylim[1]) / 2
+
+    ax.text(xlim[0] + (x_mid * 0.05), y_mid, 'Higher\nValue\n(High Terps,\nLow Price)',
+            fontsize=12, color='gray', ha='left', va='center', alpha=0.5)
+    ax.text(xlim[1] - (x_mid * 0.05), y_mid, 'Lower\nValue\n(Low Terps,\nHigh Price)',
+            fontsize=12, color='gray', ha='right', va='center', alpha=0.5)
+
+    # Ensure layout accounts for the external legend
     plt.tight_layout()
 
+    # Define the output filename
     filename = os.path.join(save_dir, f'value_scatterplot_{category_name}.png')
-    plt.savefig(filename, dpi=150, bbox_inches='tight')
+
+    # Save the figure
+    try:
+        plt.savefig(filename, dpi=150, bbox_inches='tight')
+        print(f"    SUCCESS: Saved plot to {filename}")
+    except Exception as e:
+        print(f"    ERROR: Failed to save plot to {filename}. Reason: {e}")
+
+    # Close the plot to free memory
     plt.close()
 
 def plot_top_50_heatmap(data, category_name, save_dir):
     """
-    Creates a Heatmap: Top 50 Terpiest Products.
-    Shows the terpene profile breakdown for the best products.
+    Generates a heatmap of the top 50 products with the highest total terpenes.
+
+    This provides a detailed look at the terpene profiles of the most potent
+    products available in a given category. Outliers (e.g., infused flower) are
+    filtered out to ensure the comparison is meaningful.
+
+    Args:
+        data (pd.DataFrame): The data for a specific product category.
+        category_name (str): The name of the category.
+        save_dir (str): The directory to save the plot.
     """
     print(f"  > Plotting Top 50 Heatmap for {category_name}...")
 
-    # Filters to ensure we pick valid "Flower" or "Concentrates"
+    # --- 1. Define Terpenes and Category-Specific Filters ---
+
+    # Define the subset of terpenes we want to plot in the heatmap
+    TERPS_TO_PLOT = [
+        'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
+        'Linalool', 'Pinene', 'Humulene', 'alpha-Bisabolol', 'Ocimene'
+    ]
+
+    # Category-specific filters to remove outliers (e.g., infused flower)
     filters = {
-        'Flower': ((data['Total_Terps'] > 2) & (data['Total_Terps'] < 6)),
-        'Concentrates': (data['Total_Terps'] > 5),
-        'Vaporizers': (data['Total_Terps'] > 5)
+        'Flower': (
+            (data['Total_Terps'] > 2) &
+            (data['Total_Terps'] < 6) &
+            (data['TAC'] < 45) &
+            (~data['Subtype'].str.contains('Infused', case=False, na=False))
+        ),
+        'Concentrates': (
+            (data['Total_Terps'] > 5)
+        ),
+        'Vaporizers': (
+            (data['Total_Terps'] > 5)  # Use same logic as concentrates
+        )
     }
 
-    if category_name not in filters: return
+    # --- 2. Filter Data ---
+
+    if category_name not in filters:
+        print(f"    SKIPPING: No filter logic defined for category '{category_name}'.")
+        return
+
     df_filtered = data[filters[category_name]].copy()
 
-    # Get Top 50 Unique Products
-    top_50 = df_filtered.sort_values('Total_Terps', ascending=False).drop_duplicates('Name_Clean').head(50)
-    if top_50.empty: return
+    if df_filtered.empty:
+        print(f"    SKIPPING: No products met the filter criteria for {category_name}.")
+        return
 
-    # Create Labels
-    y_labels = [f"{row['Name_Clean']} | {row['Brand']} | {row['Total_Terps']:.2f}%" for _, row in top_50.iterrows()]
+    # --- 3. Find Top 50 Unique Products ---
 
-    # Select Terpenes to Display
-    plot_terps = ['beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene', 'Linalool', 'Pinene', 'Humulene', 'alpha-Bisabolol', 'Ocimene']
-    heatmap_data = top_50[plot_terps]
+    # First, get unique products by 'Name_Clean', keeping the one with the highest terps
+    df_unique = df_filtered.sort_values('Total_Terps', ascending=False) \
+        .drop_duplicates('Name_Clean')
+
+    # Now, get the top 50 from that unique list
+    top_50_df = df_unique.nlargest(50, 'Total_Terps').sort_values('Total_Terps', ascending=False)
+
+    if top_50_df.empty:
+        print(f"    SKIPPING: No unique products available for heatmap in {category_name}.")
+        return
+
+    # --- 4. Prepare Data for Plotting ---
+
+    # Create the Y-axis labels (e.g., "Strain | Brand | 3.5% terps | 22.1% TAC")
+    y_labels = []
+    for index, row in top_50_df.iterrows():
+        # Create the raw label string
+        label_str = (f"{row['Name_Clean']} | {row['Brand']} | "
+                     f"{row['Total_Terps']:.2f}% terps | {row['TAC']:.1f}% TAC")
+        
+        # Clean up any repeating "|" characters
+        clean_label = re.sub(r'\|+', '|', label_str)
+        y_labels.append(clean_label)
+
+    # Get just the terpene data for the heatmap
+    heatmap_data = top_50_df[TERPS_TO_PLOT]
+
+    # Sort the terpene columns (X-axis) by their mean value, descending
+    # (This groups the most prominent terpenes together)
+    terp_order = heatmap_data.mean().sort_values(ascending=False).index
+    heatmap_data_sorted = heatmap_data[terp_order]
+
+    # --- 5. Plotting ---
+
+    sns.set_style("white")  # Use a white background for heatmaps
+
+    # Make plot height dynamic based on number of products
+    plot_height = max(10, len(top_50_df) * 0.3)
+    fig = plt.figure(figsize=(18, plot_height))
+
+    # Create the heatmap
+    ax = sns.heatmap(
+        heatmap_data_sorted,
+        yticklabels=y_labels,
+        cmap='Greys', # <-- FIX 3: Changed to black-to-white
+        annot=True,  # Show the values
+        fmt=".2f",  # Format values to 2 decimal places
+        linewidths=.5,
+        annot_kws={"size": 10},  # Smaller font for annotations
+    )
+
+    # --- 6. Style and Save ---
+
+    plt.title(f'Top {len(top_50_df)} Terpiest {category_name.title()} Products', fontsize=18)
+    plt.ylabel('Product | Brand | Profile', fontsize=16)
+    plt.xticks(rotation=45, ha='right', fontsize=10)
+    plt.yticks(fontsize=13)
+
+    # Force a draw so matplotlib can calculate the actual rendered size
+    fig.canvas.draw()
     
-    # Draw Plot
-    sns.set_style("white")
-    fig = plt.figure(figsize=(18, max(10, len(top_50)*0.3)))
-    sns.heatmap(heatmap_data, yticklabels=y_labels, cmap='Greys', annot=True, fmt=".2f", linewidths=.5)
+    # Get the renderer to calculate text bounding boxes
+    renderer = fig.canvas.get_renderer()
     
-    plt.title(f'Top {len(top_50)} Terpiest {category_name.title()} Products', fontsize=18)
-    plt.tight_layout()
+    # Find the maximum label height in pixels
+    max_height_pixels = 0
+    for label in ax.get_xticklabels():
+        bbox = label.get_window_extent(renderer=renderer)
+        if bbox.height > max_height_pixels:
+            max_height_pixels = bbox.height
 
+    # Convert pixel height to a fraction of the total figure height
+    fig_height_pixels = fig.get_window_extent().height
+
+    # Add 20px padding
+    total_bottom_pixels = max_height_pixels + 20
+
+    # Calculate the new bottom margin (0.0 = 0% height)
+    new_bottom_margin = (total_bottom_pixels / fig_height_pixels)
+
+    # Find the maximum label width in pixels
+    max_width_pixels = 0
+    for label in ax.get_yticklabels():
+        bbox = label.get_window_extent(renderer=renderer)
+        if bbox.width > max_width_pixels:
+            max_width_pixels = bbox.width
+
+    # Convert pixel width to a fraction of the total figure width
+    fig_width_pixels = fig.get_window_extent().width
+    new_left_margin = (max_width_pixels / fig_width_pixels)
+
+    # Add a small 2% padding to the right of the text
+    new_left_margin += 0.02
+
+    # Manually adjust subplot spacing
+    fig.subplots_adjust(left=new_left_margin, top=0.95, bottom=new_bottom_margin, right=0.98)
+
+    # Define the output filename
     filename = os.path.join(save_dir, f'top_50_heatmap_{category_name}.png')
-    plt.savefig(filename, dpi=150)
+
+    # Save the figure
+    try:
+        plt.savefig(filename, dpi=150)
+        print(f"    SUCCESS: Saved plot to {filename}")
+    except Exception as e:
+        print(f"    ERROR: Failed to save plot to {filename}. Reason: {e}")
+
+    # Close the plot to free memory
     plt.close()
 
 def plot_dominant_terp_summary(data, category_name, save_dir):
     """
-    Creates a Dashboard: Dominant Terpene Pie Chart + Top 10 Lists.
+    Generates and saves the dominant terpene pie chart and top 10 lists.
+
+    This provides a high-level overview of the terpene landscape for a product category.
+    It shows which terpenes are most frequently dominant and lists the top products
+    for each key terpene.
+
+    Args:
+        data (pd.DataFrame): The data for a specific product category.
+        category_name (str): The name of the category.
+        save_dir (str): The directory to save the plot.
     """
     print(f"  > Plotting Dominant Terp Summary for {category_name}...")
+
+    # --- 1. Define Terpenes and Apply Filters ---
+
+    # Define the subset of terpenes we want to analyze
+    TERPS_TO_PLOT = [
+        'beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene',
+        'Linalool', 'Pinene', 'Humulene', 'alpha-Bisabolol', 'Ocimene'
+    ]
+
+    # Use the same category-specific filters as the heatmap
+    filters = {
+        'Flower': (
+            (data['Total_Terps'] > 0.25) &
+            (data['Total_Terps'] < 6) &
+            (data['TAC'] < 45) &
+            (~data['Subtype'].str.contains('Infused', case=False, na=False))
+        ),
+        'Concentrates': (
+            (data['Total_Terps'] > 0.25)
+        ),
+        'Vaporizers': (
+            (data['Total_Terps'] > 0.25)
+        )
+    }
+
+    if category_name not in filters:
+        print(f"    SKIPPING: No filter logic defined for category '{category_name}'.")
+        return
+
+    df_filtered = data[filters[category_name]].copy()
+
+    # Ensure we only have data for the terpenes we want to plot
+    df_terpenes = df_filtered[TERPS_TO_PLOT].copy()
+
+    if df_terpenes.empty:
+        print(f"    SKIPPING: No products met the filter criteria for {category_name}.")
+        return
+
+    # --- 2. Calculate Data for Pie Chart ---
+
+    # Find the name of the dominant (highest value) terpene for each product
+    dominant_terpenes = df_terpenes.idxmax(axis=1)
+
+    # Count the occurrences of each dominant terpene
+    pie_data = dominant_terpenes.value_counts()
+
+    # Create a color map for consistent colors across plots
+    n_colors = len(TERPS_TO_PLOT)
+
+    # Use plt.cm.hsv (which needs np) to get n+1 colors,
+    # then slice off the last one [:-1] to avoid the wrap-around.
+    terp_palette = plt.cm.tab10(np.linspace(0, 1, n_colors))
+    color_map = {terp: color for terp, color in zip(TERPS_TO_PLOT, terp_palette)}
     
-    terps_to_analyze = ['beta-Myrcene', 'Limonene', 'beta-Caryophyllene', 'Terpinolene', 'Linalool', 'Pinene', 'Humulene', 'alpha-Bisabolol', 'Ocimene']
+    # Get colors in the correct order for the pie chart
+    pie_colors = [color_map.get(terp, '#B0B0B0') for terp in pie_data.index]
 
-    # Filter out low-terp products
-    df_filtered = data[data['Total_Terps'] > 0.25].copy()
-    if df_filtered.empty: return
+    # --- 3. Calculate "Top 10" Lists ---
 
-    # --- Pie Chart Data ---
-    dominant_terps = df_filtered[terps_to_analyze].idxmax(axis=1)
-    pie_data = dominant_terps.value_counts()
-
-    # --- Top 10 Lists Data ---
     top_10_lists = {}
-    for terp in terps_to_analyze:
-        top = df_filtered.sort_values(terp, ascending=False).drop_duplicates('Name_Clean').head(10)
-        top_10_lists[terp] = [f"{row[terp]:.2f}% | {row['Brand'][:10]} | {row['Name_Clean'][:25]}" for _, row in top.iterrows()]
+    for terp in TERPS_TO_PLOT:
+        # Sort by the current terpene, descending
+        df_sorted = df_filtered.sort_values(terp, ascending=False)
 
-    # Draw Plot
-    fig = plt.figure(figsize=(21, 16))
+        # Get unique products by 'Name_Clean'
+        df_unique = df_sorted.drop_duplicates('Name_Clean')
+
+        # Get the top 10
+        top_10 = df_unique.nlargest(10, terp)
+
+        # Format the strings
+        product_strings = []
+        for _, row in top_10.iterrows():
+            brand_short = row['Brand'][:10] # Abbreviate brand name
+            name_short = row['Name_Clean'][:25] # Abbreviate strain name
+
+            s = (f"{row[terp]:.2f}% | {brand_short} | "
+                 f"{name_short} | {row['TAC']:.1f}% TAC")
+            product_strings.append(s)
+
+        top_10_lists[terp] = product_strings
+
+    # --- 4. Plotting ---
+
+    sns.set_style("white")
+    fig = plt.figure(figsize=(21 , 16))
+
+    # --- A. Pie Chart Axes (Left Side) ---
+    # Make axes visually square by accounting for figsize ratio (20:16)
+    FIG_W = 20
+    FIG_H = 16
+    AXES_W_NORM = 0.35 # Use 60% of the figure height
+    AXES_H_NORM = AXES_W_NORM * (FIG_W / FIG_H) # Calculate width to be square
     
-    # Pie Chart (Left)
-    ax_pie = fig.add_axes([0.01, 0.5, 0.35, 0.35])
-    ax_pie.pie(pie_data, labels=None, startangle=90, colors=plt.cm.tab10.colors)
-    ax_pie.set_title(f'Dominant Terpene Distribution', fontsize=24)
-    ax_pie.legend([f"{n} ({p:.1f}%)" for n, p in zip(pie_data.index, (pie_data/pie_data.sum()*100))], loc="lower center", bbox_to_anchor=(0.5, -0.3))
+    ax_pie = fig.add_axes([0.01, 0.5, AXES_W_NORM, AXES_H_NORM])
 
-    # Lists (Right)
+    # Position pie chart
+    patches, texts = ax_pie.pie(
+        pie_data,
+        colors=pie_colors,
+        startangle=90,
+        # center=(0.5, 0.5) # Center the pie in the axis
+    )
+
+    # Add descriptive text
+    ax_pie.set_title(f'Dominant Terpene for {category_name.title()}', fontsize=28, pad=24)
+    ax_pie.text(0.5, 1, 'Pie shows the % of products where a given terpene is dominant.',
+                ha='center', va='center', transform=ax_pie.transAxes,
+                fontsize=16, style='italic', color='#555555')
+
+
+    # Add the legend below the chart
+    legend_labels = [f"{name} ({perc:.1f}%)" for name, perc in zip(pie_data.index, (pie_data / pie_data.sum() * 100))]
+    ax_pie.legend(patches, legend_labels,
+                  loc="upper center", # Position legend at bottom
+                  bbox_to_anchor=(0.5, 0), # Place it below the axis
+                  fontsize=26,
+                  ncol=1,
+                  frameon=False) # No bounding box
+
+    # --- B. Text List Axes (Right Side) ---
     ax_text = fig.add_axes([0.36, 0.0, 0.64, 1.0])
-    ax_text.axis('off')
+    ax_text.axis('off') # Hide axes
+
+    # --- C. Draw the Text Lists ---
+    num_columns = 2 # We will lay out the 9 lists in 2 columns
     
-    y_pos = 0.95
-    x_pos = 0.0
-    for i, terp in enumerate(terps_to_analyze):
-        if i == 5: # Start new column
-            x_pos = 0.5
-            y_pos = 0.95
+    # Use np.ceil to get 5 rows (ceil(9 / 2) = 5)
+    terps_per_column = int(np.ceil(len(TERPS_TO_PLOT) / num_columns))
 
-        ax_text.text(x_pos, y_pos, terp, fontweight='bold', fontsize=20, color='blue')
-        y_pos -= 0.03
-        for line in top_10_lists[terp]:
-            ax_text.text(x_pos, y_pos, line, fontsize=12, family='monospace')
-            y_pos -= 0.02
-        y_pos -= 0.04
+    x_start_positions = [0.0, 0.5] # X-position for Column 1, Column 2
+    y_pos = 0.95 # Start at the top
+    y_step_header = 0.04
+    y_step_line = 0.02
 
+    current_terp_index = 0
+    
+    for col in range(num_columns):
+        x_pos = x_start_positions[col]
+        y_pos = 0.95 # Reset Y for each new column
+
+        for i in range(terps_per_column):
+            if current_terp_index >= len(TERPS_TO_PLOT):
+                break
+            terp_name = TERPS_TO_PLOT[current_terp_index]
+
+            # Draw Header (e.g., "beta-Myrcene")
+            ax_text.text(x_pos, y_pos, terp_name,
+                         fontweight='bold', fontsize=24, color=color_map[terp_name])
+            y_pos -= (y_step_line * 1.5) # Extra space after header
+
+            # Draw Top 10 List
+            for line in top_10_lists[terp_name]:
+                ax_text.text(x_pos, y_pos, line, fontsize=14, family='monospace')
+                y_pos -= y_step_line
+
+            y_pos -= y_step_header # Extra space between lists
+            current_terp_index += 1
+
+    # --- 5. Save Figure ---
+
+    # Define the output filename
     filename = os.path.join(save_dir, f'dominant_terp_summary_{category_name}.png')
-    plt.savefig(filename, dpi=150, bbox_inches='tight')
+
+    # Save the figure
+    try:
+        plt.savefig(filename, dpi=150, bbox_inches='tight')
+        print(f"    SUCCESS: Saved plot to {filename}")
+    except Exception as e:
+        print(f"    ERROR: Failed to save plot to {filename}. Reason: {e}")
+
+    # Close the plot to free memory
     plt.close()
 
 def plot_value_panel_chart(data, category_name, save_dir):
     """
-    Creates a 3-Panel Chart: Value Score, Price, and Terpenes.
-    Shows the Top 25 "Best Value" products.
+    Generates a 3-panel chart of the Top 25 "Best Value" products,
+    showing Value Score, Price (DPG), and Total Terpenes. This allows for a
+    multi-faceted view of what makes a product a good value.
+
+    Args:
+        data (pd.DataFrame): The data for the specific product category.
+        category_name (str): The name of the category (e.g., 'flower').
+        save_dir (str): The directory where the plot image will be saved.
     """
     print(f"  > Plotting Top 25 Value Panel Chart for {category_name}...")
 
-    df = data[(data['dpg'] > 0) & (data['Total_Terps'] > 0)].copy()
-    df['Value_Score'] = df['Total_Terps'] / df['dpg']
+    # --- 1. Define Filters and Calculate Value Score ---
+
+    # We must have valid DPG and Total_Terps to calculate value
+    df_filtered = data[
+        (data['dpg'].notna()) & (data['dpg'] > 0) &
+        (data['Total_Terps'].notna()) & (data['Total_Terps'] > 0)
+    ].copy()
+
+    # Calculate the "Value Score" (Terps per Dollar)
+    # A higher score is better
+    df_filtered['Value_Score'] = df_filtered['Total_Terps'] / df_filtered['dpg']
+
+    # --- 2. Get Top 25 Unique Products ---
+
+    # FIX 2: Find top 25 *unique* products based on Name_Clean
+    # This prevents the "multiple bar" issue.
+    df_unique = df_filtered.drop_duplicates('Name_Clean')
+    df_top25 = df_unique.nlargest(25, 'Value_Score')
+
+    if df_top25.empty:
+        print(f"    SKIPPING: No products with valid Value Score for {category_name}.")
+        return
+
+    # Sort by score ascending for plotting (so #1 is at the top)
+    df_top25 = df_top25.sort_values('Value_Score', ascending=True)
+
+    # --- 3. Create Y-Axis Labels ---
+
+    # Create labels: "Brand | Name_Clean"
+    y_labels = [
+        f"{row['Brand']} | {row['Name_Clean']}"
+        for _, row in df_top25.iterrows()
+    ]
+
+    # --- 4. Plotting ---
+
+    sns.set_style("white")
+
+    # Create a figure with 3 subplots that share a Y-axis
+    fig, (ax1, ax2, ax3) = plt.subplots(
+        1, 3,
+        figsize=(20, 14),
+        sharey=True # This links all three Y-axes
+    )
+
+    # Set a main title for the entire figure
+    fig.suptitle(f'Top 25 "High Terps & Low Dollars Per Gram" Products: {category_name.title()}',
+                 fontsize=26, y=0.98)
     
-    top_25 = df.drop_duplicates('Name_Clean').nlargest(25, 'Value_Score').sort_values('Value_Score', ascending=True)
-    if top_25.empty: return
+    # --- FIX 1 & 3: Define Custom Gray-to-Hue Colormaps ---
+    
+    # Base gray color
+    gray = (0.5, 0.5, 0.5)
+    
+    # Panel 1: Gray to Green (for Value Score)
+    cmap1 = LinearSegmentedColormap.from_list('gray_to_green',
+                                              [gray, sns.color_palette('Greens')[-1]])
+    norm1 = mcolors.Normalize(vmin=df_top25['Value_Score'].min(),
+                              vmax=df_top25['Value_Score'].max())
+    colors1 = [cmap1(norm1(val)) for val in df_top25['Value_Score']]
+    
+    # Panel 2: Red (Low DPG) to Gray (High DPG)
+    cmap2 = LinearSegmentedColormap.from_list('red_to_gray',
+                                              [sns.color_palette('Reds')[-1], gray])
+    norm2 = mcolors.Normalize(vmin=df_top25['dpg'].min(),
+                              vmax=df_top25['dpg'].max())
+    colors2 = [cmap2(norm2(val)) for val in df_top25['dpg']]
+    
+    # Panel 3: Gray to Blue (for Total Terps)
+    cmap3 = LinearSegmentedColormap.from_list('gray_to_blue',
+                                              [gray, sns.color_palette('Blues')[-1]])
+    norm3 = mcolors.Normalize(vmin=df_top25['Total_Terps'].min(),
+                              vmax=df_top25['Total_Terps'].max())
+    colors3 = [cmap3(norm3(val)) for val in df_top25['Total_Terps']]
+    
 
-    y_labels = [f"{row['Brand']} | {row['Name_Clean']}" for _, row in top_25.iterrows()]
+    # --- Plot 1: Value Score (Terps per Dollar) ---
+    bars1 = ax1.barh(y_labels, df_top25['Value_Score'],
+                     color=colors1) # Use value-mapped colors
+    # FIX 4: Update x-label
+    ax1.set_xlabel('Value Score (Terps / DPG)', fontsize=22)
+    ax1.bar_label(bars1, fmt='%.2f', label_type='center',
+                  color='white', fontweight='bold', padding=2, fontsize=18)
 
-    # Draw Plot
-    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(20, 14), sharey=True)
-    fig.suptitle(f'Top 25 Best Value Products: {category_name.title()}', fontsize=26)
+    # --- Plot 2: Price per Gram (DPG) ---
+    bars2 = ax2.barh(y_labels, df_top25['dpg'],
+                     color=colors2) # Use value-mapped colors
+    ax2.set_xlabel('Price per Gram (DPG $)', fontsize=22)
+    ax2.bar_label(bars2, fmt='$%.0f', label_type='center',
+                  color='white', fontweight='bold', padding=2, fontsize=18)
 
-    # Panel 1: Value Score
-    ax1.barh(y_labels, top_25['Value_Score'], color='green')
-    ax1.set_xlabel('Value Score (Terps / Price)', fontsize=18)
+    # --- Plot 3: Total Terpenes ---
+    bars3 = ax3.barh(y_labels, df_top25['Total_Terps'],
+                     color=colors3) # Use value-mapped colors
+    ax3.set_xlabel('Total Terpenes (%)', fontsize=22)
+    ax3.bar_label(bars3, fmt='%.1f%%', label_type='center',
+                  color='white', fontweight='bold', padding=2, fontsize=18)
 
-    # Panel 2: Price
-    ax2.barh(y_labels, top_25['dpg'], color='red')
-    ax2.set_xlabel('Price per Gram ($)', fontsize=18)
+    # --- 5. Style and Save ---
 
-    # Panel 3: Terpenes
-    ax3.barh(y_labels, top_25['Total_Terps'], color='blue')
-    ax3.set_xlabel('Total Terpenes (%)', fontsize=18)
-
-    # Cleanup styling
+    # FIX 2: Remove all axis ticks, tick labels, and spines
     for ax in [ax1, ax2, ax3]:
+        ax.set_xticks([])
+        ax.set_xticklabels([])
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
+        ax.spines['bottom'].set_visible(False)
+        ax.spines['left'].set_visible(False)
     
-    plt.tight_layout()
+    # Keep the y-tick LABELS but hide the ticks
+    ax1.tick_params(axis='y', length=0)
+    
+    # FIX 3: Color the y-axis labels to match the Value Score
+    for label, color in zip(ax1.get_yticklabels(), colors1):
+        label.set_color(color)
+        
+    # FIX 4: Set Y-axis label font size
+    ax1.tick_params(axis='y', labelsize=16)
+
+    # Force a draw so matplotlib can calculate the actual rendered size of labels
+    fig.canvas.draw()
+    
+    # Get the renderer to calculate text bounding boxes
+    renderer = fig.canvas.get_renderer()
+    
+    # Find the maximum label width in pixels
+    max_width_pixels = 0
+    for label in ax1.get_yticklabels():
+        bbox = label.get_window_extent(renderer=renderer)
+        if bbox.width > max_width_pixels:
+            max_width_pixels = bbox.width
+    
+    # Convert pixel width to a fraction of the total figure width
+    fig_width_pixels = fig.get_window_extent().width
+    new_left_margin = (max_width_pixels / fig_width_pixels)
+    
+    # Add a small 2% padding to the right of the text
+    new_left_margin += 0.02
+
+    # Manually adjust subplot spacing
+    fig.subplots_adjust(left=new_left_margin, top=0.95, bottom=0.05, right=0.98, wspace=0.35)
+
+    # Define the output filename
     filename = os.path.join(save_dir, f'top_25_value_panel_{category_name}.png')
-    plt.savefig(filename, dpi=150)
+
+    # Save the figure
+    try:
+        plt.savefig(filename, dpi=150)
+        print(f"    SUCCESS: Saved plot to {filename}")
+    except Exception as e:
+        print(f"    ERROR: Failed to save plot to {filename}. Reason: {e}")
+    
+    # Close the plot to free memory
     plt.close()
