@@ -150,8 +150,11 @@ def _clean_product_names(df):
         'cart', 'cartridge',
         'co2','1oz', 'buds', 'bud',
         'flower', 'littles', 'pre',
+        'smalls', 'small', 'popcorn', 'sevens', 'quarters', 'fine grind',
+        'ready to roll', 'ro'
     ]
     
+    # Ensure regex is case-insensitive (already set via re.IGNORECASE)
     general_clutter_pattern = re.compile(r'\b(' + '|'.join(general_clutter_words) + r')\b', re.IGNORECASE)
 
     # Pattern for special characters and extra spaces
@@ -161,6 +164,8 @@ def _clean_product_names(df):
     # --- 2. Apply General Cleaning Steps ---
     print("  - Removing general clutter (weights, types, etc.)...")
     df['Name_Clean'] = df['Name_Clean'].str.replace(weight_pattern, '', regex=True)
+    # Fix R.O. specifically because \b fails on trailing dot
+    df['Name_Clean'] = df['Name_Clean'].str.replace(r'\br\.o\.', '', regex=True, flags=re.IGNORECASE)
     df['Name_Clean'] = df['Name_Clean'].str.replace(general_clutter_pattern, '', regex=True)
     df['Name_Clean'] = df['Name_Clean'].str.replace(char_pattern, ' ', regex=True)
 
@@ -311,11 +316,11 @@ def _convert_to_numeric(df):
 def _deduplicate_for_charts(df):
     """
     Helper function to deduplicate products for charts.
-    Groups by ['Name_Clean', 'Brand'] and keeps the row with the highest 'Total_Terps'.
+    Groups by ['Brand', 'Name_Clean'] and keeps the row with the maximum 'Total_Terps'.
     """
     # Sort by Total_Terps descending so that drop_duplicates keeps the highest
     return df.sort_values('Total_Terps', ascending=False) \
-             .drop_duplicates(subset=['Name_Clean', 'Brand'])
+             .drop_duplicates(subset=['Brand', 'Name_Clean'])
 
 def run_analysis(dataframe):
     """
