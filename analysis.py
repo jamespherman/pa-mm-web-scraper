@@ -316,11 +316,41 @@ def _convert_to_numeric(df):
 def _deduplicate_for_charts(df):
     """
     Helper function to deduplicate products for charts.
-    Groups by ['Brand', 'Name_Clean'] and keeps the row with the maximum 'Total_Terps'.
+    Groups by ['Brand', 'Name_Clean'] and aggregates:
+    - Total_Terps: max
+    - dpg: min
+    - Store: unique list
+    - Other columns: taken from the row with min 'dpg' (best price), except terpene profile which follows max terps.
     """
-    # Sort by Total_Terps descending so that drop_duplicates keeps the highest
-    return df.sort_values('Total_Terps', ascending=False) \
-             .drop_duplicates(subset=['Brand', 'Name_Clean'])
+    # 1. Base: Max Terps (Prioritize Quality for Profile)
+    # Sort by Total_Terps descending
+    df_sorted_terps = df.sort_values('Total_Terps', ascending=False)
+    base_df = df_sorted_terps.drop_duplicates(subset=['Brand', 'Name_Clean']).set_index(['Brand', 'Name_Clean'])
+
+    # 2. Price/Weight/DPG: Min DPG (Prioritize Value for Price)
+    # Sort by dpg ascending
+    df_sorted_dpg = df.sort_values('dpg', ascending=True)
+    min_dpg_df = df_sorted_dpg.drop_duplicates(subset=['Brand', 'Name_Clean']).set_index(['Brand', 'Name_Clean'])
+
+    # 3. Stores: Unique List
+    # groupby().unique() returns numpy array. Map to list.
+    store_series = df.groupby(['Brand', 'Name_Clean'])['Store'].unique().apply(list)
+
+    # Update Base with Min DPG info
+    cols_to_update = ['dpg', 'Price', 'Weight']
+    # Check if cols exist to be safe
+    cols_to_update = [c for c in cols_to_update if c in base_df.columns]
+
+    for col in cols_to_update:
+        base_df[col] = min_dpg_df[col]
+
+    base_df['Store'] = store_series
+
+    # Recalculate Value_Score if present
+    if 'Value_Score' in base_df.columns:
+         base_df['Value_Score'] = base_df['Total_Terps'] / base_df['dpg']
+
+    return base_df.reset_index()
 
 def run_analysis(dataframe):
     """
@@ -1082,9 +1112,9 @@ def plot_dominant_terp_summary(data, category_name, save_dir):
 
 def plot_value_panel_chart(data, category_name, save_dir):
     """
-    Generates a 3-panel chart of the Top 25 "Best Value" products,
-    showing Value Score, Price (DPG), and Total Terpenes. This allows for a
-    multi-faceted view of what makes a product a good value.
+    Generates a 4-panel chart of the Top 25 "Best Value" products,
+    showing Value Score, Price (DPG), Total Terpenes, and Store Availability.
+    This allows for a multi-faceted view of what makes a product a good value.
 
     Args:
         data (pd.DataFrame): The data for the specific product category.
@@ -1127,15 +1157,27 @@ def plot_value_panel_chart(data, category_name, save_dir):
         for _, row in df_top25.iterrows()
     ]
 
+    # Create Store Labels for Panel 4
+    store_labels = []
+    for stores in df_top25['Store']:
+        if isinstance(stores, list):
+            if len(stores) == 1:
+                store_labels.append(stores[0])
+            else:
+                store_labels.append(f"{stores[0]} + {len(stores)-1} others")
+        else:
+             # Fallback if it's not a list (shouldn't happen with new logic)
+             store_labels.append(str(stores))
+
     # --- 4. Plotting ---
 
     sns.set_style("white")
 
-    # Create a figure with 3 subplots that share a Y-axis
-    fig, (ax1, ax2, ax3) = plt.subplots(
-        1, 3,
-        figsize=(20, 14),
-        sharey=True # This links all three Y-axes
+    # Create a figure with 4 subplots that share a Y-axis
+    fig, (ax1, ax2, ax3, ax4) = plt.subplots(
+        1, 4,
+        figsize=(24, 14), # Increased width to accommodate 4th panel
+        sharey=True # This links all Y-axes
     )
 
     # Set a main title for the entire figure
@@ -1191,10 +1233,26 @@ def plot_value_panel_chart(data, category_name, save_dir):
     ax3.bar_label(bars3, fmt='%.1f%%', label_type='center',
                   color='white', fontweight='bold', padding=2, fontsize=18)
 
+    # --- Plot 4: Store Information ---
+    # We use a dummy barh to set the layout but make it invisible.
+    ax4.barh(y_labels, [0]*len(y_labels), color='white')
+
+    ax4.set_xlabel('Available At', fontsize=22)
+
+    # Iterate through the rows and place text
+    for i, label in enumerate(y_labels):
+        # The store label corresponding to this row
+        store_text = store_labels[i]
+
+        # Place text at x=0 (left align) and y=i
+        # We add a small offset to x maybe? No, 0 is fine if we set limits.
+        ax4.text(0, i, store_text,
+                 ha='left', va='center', fontsize=16, color='black')
+
     # --- 5. Style and Save ---
 
     # FIX 2: Remove all axis ticks, tick labels, and spines
-    for ax in [ax1, ax2, ax3]:
+    for ax in [ax1, ax2, ax3, ax4]:
         ax.set_xticks([])
         ax.set_xticklabels([])
         ax.spines['top'].set_visible(False)
@@ -1233,7 +1291,8 @@ def plot_value_panel_chart(data, category_name, save_dir):
     new_left_margin += 0.02
 
     # Manually adjust subplot spacing
-    fig.subplots_adjust(left=new_left_margin, top=0.95, bottom=0.05, right=0.98, wspace=0.35)
+    # Reduced wspace to make room for 4th panel
+    fig.subplots_adjust(left=new_left_margin, top=0.95, bottom=0.05, right=0.98, wspace=0.2)
 
     # Define the output filename
     filename = os.path.join(save_dir, f'top_25_value_panel_{category_name}.png')
