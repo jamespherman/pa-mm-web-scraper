@@ -32,6 +32,7 @@ from google_sheets_writer import write_to_google_sheet
 
 # Import the function that performs data analysis and creates charts.
 from analysis import run_analysis
+from infographic_generator import generate_pdf_report
 
 # --- Define Scopes for Google API ---
 # "Scopes" are like permissions. They tell Google exactly what this program
@@ -284,6 +285,10 @@ if __name__ == "__main__":
         cleaned_df = run_analysis(combined_df)
         print("\n--- Analysis Complete ---")
         print("Cleaned DataFrame shape:", cleaned_df.shape)
+
+        # --- PDF Generation Handoff ---
+        if cleaned_df is not None and not cleaned_df.empty:
+            generate_pdf_report(cleaned_df)
     else:
         print("\nNo data was loaded or scraped. Skipping analysis.")
 
