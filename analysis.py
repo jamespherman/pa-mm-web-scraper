@@ -1244,9 +1244,9 @@ def plot_value_panel_chart(data, category_name, save_dir):
         # The store label corresponding to this row
         store_text = store_labels[i]
 
-        # Place text at x=0 (left align) and y=i
-        # We add a small offset to x maybe? No, 0 is fine if we set limits.
-        ax4.text(0, i, store_text,
+        # Place text at x=0.05 (close to left edge) using axis coordinates for x
+        # and data coordinates for y.
+        ax4.text(0.05, i, store_text, transform=ax4.get_yaxis_transform(),
                  ha='left', va='center', fontsize=16, color='black')
 
     # --- 5. Style and Save ---
