@@ -15,9 +15,14 @@
 # -----------------------------------------------------------------------------
 
 import datetime  # Used to get the current date (e.g., for file naming).
+import glob      # Used to find files matching a pattern.
+import os        # Used to interact with the operating system (e.g., checking files).
 import gspread   # A library to interact with Google Sheets.
 import pandas as pd # A powerful library for data manipulation (like Excel for Python).
 import json      # Used for working with JSON data formats.
+
+# Configuration Variable
+USE_LATEST_SCRAPE = False
 
 # Import the specific functions that run the scrapers for each dispensary.
 # These functions are defined in other files in the `scrapers/` directory.
@@ -130,23 +135,86 @@ def main():
             scopes=SCOPES
         )
 
-        # --- "LOAD" Logic ---
-        # Try to open a spreadsheet with today's name.
-        # If this line works, it means we already ran the scraper today!
-        spreadsheet = gc.open(spreadsheet_title)
-        print(f"Found existing sheet: '{spreadsheet_title}'. Loading data.")
+        if USE_LATEST_SCRAPE:
+            print("USE_LATEST_SCRAPE is True. Skipping scrape process...")
 
-        # Access the first tab (worksheet) of the spreadsheet.
-        worksheet = spreadsheet.worksheet("Sheet1")
+            # 1. Search for local files in 'data/' or 'raw_data/'
+            search_dirs = ['data', 'raw_data']
+            files = []
+            for d in search_dirs:
+                if os.path.exists(d):
+                    # Find all CSV and JSON files
+                    files.extend(glob.glob(os.path.join(d, '*.csv')))
+                    files.extend(glob.glob(os.path.join(d, '*.json')))
 
-        # Download all the data from that sheet.
-        data = worksheet.get_all_records()
+            # Sort by modification time (newest first)
+            files.sort(key=os.path.getmtime, reverse=True)
 
-        # Convert the data into a pandas DataFrame (our standard table format).
-        combined_df = pd.DataFrame(data)
-        print(f"Data loaded successfully from Google Sheet ({len(combined_df)} rows).")
+            if files:
+                latest_file = files[0]
+                print(f"LOADING DATA FROM LOCAL FILE: {latest_file}...")
+                if latest_file.endswith('.csv'):
+                    combined_df = pd.read_csv(latest_file)
+                elif latest_file.endswith('.json'):
+                    combined_df = pd.read_json(latest_file)
+                print(f"Data loaded successfully from {latest_file} ({len(combined_df)} rows).")
+            else:
+                # 2. If no local files, check for the most recent Google Sheet
+                print("No local export files found. Searching for most recent Google Sheet...")
+
+                # List all spreadsheets
+                all_sheets = gc.list_spreadsheet_files()
+
+                # Filter for sheets matching our naming convention
+                # Expected format: PA_Scraped_Data_YYYY-MM-DD
+                scraped_sheets = []
+                for sheet in all_sheets:
+                    if sheet['name'].startswith('PA_Scraped_Data_'):
+                        try:
+                            # Parse the date part to ensure it's valid and for sorting
+                            date_part = sheet['name'].replace('PA_Scraped_Data_', '')
+                            date_obj = datetime.datetime.strptime(date_part, '%Y-%m-%d').date()
+                            scraped_sheets.append({'sheet': sheet, 'date': date_obj})
+                        except ValueError:
+                            continue # Skip files that don't match the date format exactly
+
+                if scraped_sheets:
+                    # Sort by date descending
+                    scraped_sheets.sort(key=lambda x: x['date'], reverse=True)
+                    latest_sheet_info = scraped_sheets[0]
+                    target_sheet_name = latest_sheet_info['sheet']['name']
+
+                    print(f"LOADING DATA FROM GOOGLE SHEET: {target_sheet_name}...")
+                    spreadsheet = gc.open(target_sheet_name)
+                    worksheet = spreadsheet.worksheet("Sheet1")
+                    data = worksheet.get_all_records()
+                    combined_df = pd.DataFrame(data)
+                    print(f"Data loaded successfully from Google Sheet ({len(combined_df)} rows).")
+                else:
+                    print("No previous scraped data found on Google Sheets.")
+                    return None
+
+        else:
+            # --- "LOAD" Logic (Default) ---
+            # Try to open a spreadsheet with today's name.
+            # If this line works, it means we already ran the scraper today!
+            spreadsheet = gc.open(spreadsheet_title)
+            print(f"Found existing sheet: '{spreadsheet_title}'. Loading data.")
+
+            # Access the first tab (worksheet) of the spreadsheet.
+            worksheet = spreadsheet.worksheet("Sheet1")
+
+            # Download all the data from that sheet.
+            data = worksheet.get_all_records()
+
+            # Convert the data into a pandas DataFrame (our standard table format).
+            combined_df = pd.DataFrame(data)
+            print(f"Data loaded successfully from Google Sheet ({len(combined_df)} rows).")
 
     except gspread.exceptions.SpreadsheetNotFound:
+        # If we are in USE_LATEST_SCRAPE mode, we shouldn't be here unless something failed unexpectedly
+        # or if we fell through. But typically SpreadsheetNotFound comes from gc.open().
+
         # --- "SCRAPE" Logic ---
         # If the spreadsheet was NOT found (SpreadsheetNotFound error),
         # it means we need to scrape fresh data.
